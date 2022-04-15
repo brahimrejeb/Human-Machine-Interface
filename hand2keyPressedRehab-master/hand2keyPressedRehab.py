@@ -403,7 +403,7 @@ class Interface(Tk):
         data = "[" + str(self.slider_value[0]) + "," + str(self.slider_value[1]) + "," + str(self.slider_value[2]) + "," + str(self.slider_value[3])+"," + str(self.slider_value[4])+"]"
         self.config.set("drawing", "bar_origin_threshold",data)
        
-        data = "['" + str(self.labels_buttons[0]) +"','"  + str(self.labels_buttons[1])  +"','" + str(self.labels_buttons[2])  +"','" + str(self.labels_buttons[3])+"','" + str(self.labels_buttons[4])+"]"
+        data = "['" + str(self.labels_buttons[0]) +"','"  + str(self.labels_buttons[1])  +"','" + str(self.labels_buttons[2])  +"','" + str(self.labels_buttons[3])+"','" + str(self.labels_buttons[4])+"']"
         self.config.set("options", "labels_buttons",data)
 
 
