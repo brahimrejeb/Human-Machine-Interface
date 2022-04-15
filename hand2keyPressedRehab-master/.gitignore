@@ -1,0 +1,28 @@
+
+# Ignore Data folder  - keep tracking of the improvement 
+/Data
+
+# Ignore Sound folder  - will be done automatically for the first time
+/Sound
+
+# Ignore pycache
+/__pycache__
+
+
+# Ignore LeapSDK
+/LeapSDK
+
+
+# Ignore Leap Files
+Leap.py
+Leap.lib
+Leap.dll
+LeapPython.pyd
+
+# Ignore jupyter notebook
+.ipynb_checkpoints
+
+# Ignore File type
+*.bat
+*.pyc 
+*.ipynb
