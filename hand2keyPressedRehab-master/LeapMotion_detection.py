@@ -1,7 +1,7 @@
 ###########################################################
-# hand2keyPressedRehab 
+# hand2keyPressedRehab
 # 16/07/2020 Lausanne,Switzerland
-# LeapMotion Solution 
+# LeapMotion Solution
 # Contact: hackahealth.geneva@gmail.com
 # Autors: Sixto Alcoba-Banqueri (include your names if you do any collaboration in the code)
 ###########################################################
@@ -12,12 +12,12 @@ import _thread
 import time
 import numpy as np
 
-class LeapMotionListener(Leap.Listener): 
+class LeapMotionListener(Leap.Listener):
 	finger_names=['Thumb','Index','Middle','Ring','Pinky']
 	bone_names=['Metacarpal','Proximal','Intermediate','Distal']
 	distance = [None,None,None,None,None]
 	print_one = True
-	
+
 	def on_init(self,controller):
 		print ("Initialized")
 
@@ -39,7 +39,7 @@ class LeapMotionListener(Leap.Listener):
 		self.distance[2]= None
 		self.distance[3]= None
 		self.distance[4]= None
-        
+
 		for finger in frame.fingers:
 
 			if finger.type== Leap.Finger.TYPE_INDEX:
@@ -63,7 +63,7 @@ class LeapMotionListener(Leap.Listener):
 				Ring_found=True
 
 
-			if(Index_found and Thumb_found and Middle_found and Pinky_found and Ring_found): 
+			if(Index_found and Thumb_found and Middle_found and Pinky_found and Ring_found):
 					self.distance[0]= Thumb_distal_bone.center.distance_to(Index_distal_bone.center)
 					self.distance[1]= Thumb_distal_bone.center.distance_to(Middle_distal_bone.center)
 					self.distance[2]= Thumb_distal_bone.center.distance_to(Ring_distal_bone.center)
@@ -79,7 +79,7 @@ def main():
 	print ("Press enter to quit")
 	try:
 		line = sys.stdin.readline()
-	except KeyboardInterrupt : 
+	except KeyboardInterrupt :
 		pass
 	finally:
 		controller.remove_listener(listener)

@@ -27,9 +27,8 @@ from pynput.keyboard import Key,KeyCode, Controller
 from PIL import Image, ImageTk 
 
 # LIST CMD 
-OPTIONS = {'None','Alt','Win',
-   'Ctrl','Tab','Shift','Caps','Esc'}
-
+OPTIONS = ['None','Alt','Win',
+   'Ctrl','Tab','Shift','Caps','Esc']
 # DICTIONARY TO USE 
 DICT_PYNPUT_KEYBOARD = {'none':None,'alt':Key.alt_l,'win': Key.cmd,
    'del': Key.delete,'down':Key.down,'ctrl':Key.ctrl_l,
@@ -67,13 +66,14 @@ class Interface(Tk):
         # OPTIONS PARAMS
         self.hand2use = self.config.get("options","hand2use")
         self.labels_buttons = ast.literal_eval(self.config.get("options", "labels_buttons"))
-        self.labels_one_finger = ast.literal_eval(self.config.get("options", "labels_one_finger"))
         self.use_setup = self.config.getboolean("options","use_setup") # False only for checking script
         self.close_cmd = self.config.getboolean("options","close_cmd")
         self.use_sound = self.config.getboolean("options","use_sound")
         self.show_visualizer = self.config.getboolean("options","show_visualizer")
         self.record_data = self.config.getboolean("options","record_data")
         self.path_leap_folder = ast.literal_eval(self.config.get("options", "path_leap_folder"))
+        self.show_finger_use = self.config.getboolean("options","show_finger_use")
+        self.current_key= self.config.getint("options","current_key")
 
         # DRAWING PARAMS
         self.circle_radius = self.config.getint("drawing","circle_radius")
@@ -199,67 +199,38 @@ class Interface(Tk):
         check_button = Checkbutton(btm_frame4,bg='Sky Blue', text="Visualizer", variable=self.var3,command=self.check_vis_use).grid(row=0,column = 2,padx=10)
 
         self.var4 = BooleanVar()
-        self.var4.set(self.show_visualizer)
+        self.var4.set(self.show_finger_use)
         check_button = Checkbutton(btm_frame4,bg='Sky Blue', text="Use shifter", variable=self.var4,command=self.check_finger_use).grid(row=0,column = 2,padx=10)
+        if self.hand2use == 'right':
+            self._list = [self.on_button4, self.on_button3, self.on_button2, self.on_button1, self.on_button]
+            self.updata_value_list = [self.updata_value, self.updata_value1, self.updata_value2, self.updata_value3,
+                                      self.updata_value4]
 
-        #the user has chosen the shifter
-        if check_finger_use:
-             if self.hand2use == 'right':
-                self.on_button_list = [self.one_finger_button,self.one_finger_button1,self.one_finger_button1,self.one_finger_button1,self.one_finger_button1]
-                self.updata_value_list = [self.one_finger_button,self.one_finger_button1,self.one_finger_button1,self.one_finger_button1,self.one_finger_button1]
+        elif self.hand2use == 'left':
+            self.on_button_list = [self.on_button, self.on_button1, self.on_button2, self.on_button3, self.on_button4]
+            self.updata_value_list = [self.updata_value4, self.updata_value3, self.updata_value2, self.updata_value1,
+                                      self.updata_value]
 
-            elif self.hand2use == 'left':
-                self.on_button_list = [self.one_finger_button1,self.one_finger_button1,self.one_finger_button1,self.one_finger_button1,self.one_finger_button]
-                self.updata_value_list =[self.one_finger_button1,self.one_finger_button1,self.one_finger_button1,self.one_finger_button1,self.one_finger_button]
-
-
-
-            # create the sliders
-            for i in range(2):
-                l2 = Label(btm_frame2, bg='Sky Blue', text=self.slider_name[i].lower(),font=("Helvetica", 11))
-                w2 = Scale(btm_frame2,bg='Sky Blue', from_=0, to=100, orient=HORIZONTAL,length=450,command=self.updata_value_list[i])
-                w2.set(self.slider_value[i])
-                l2.grid(row=i, column=0,padx=10)
-                w2.grid(row=i, column=1,padx=50)
-                for i in range(5):
-                    var = StringVar(value=self.labels_fingers[i])
-                    o_vars.append(var)
-                    self.o[i] = OptionMenu(btm_frame3, var, *OPTIONS,command=self.on_button_list[i])
-                    self.o[i].grid(row=0, column=i)
-
-        #the user has chosen not to use the shifter
-        else:
-            #Label(self, text='Please select buttons to use', bg='#aaa').grid(row=0,columnspan=3)
-        
-            if self.hand2use == 'right':
-                self._list = [self.on_button4,self.on_button3,self.on_button2,self.on_button1,self.on_button]
-                self.updata_value_list = [self.updata_value,self.updata_value1,self.updata_value2,self.updata_value3,self.updata_value4]
-
-            elif self.hand2use == 'left':
-                self.on_button_list = [self.on_button,self.on_button1,self.on_button2,self.on_button3,self.on_button4]
-                self.updata_value_list = [self.updata_value4,self.updata_value3,self.updata_value2,self.updata_value1,self.updata_value]
-
-
-            # create the sliders
-            for i in range(5):
-                l2 = Label(btm_frame2, bg='Sky Blue', text=self.slider_name[i].lower(),font=("Helvetica", 11))
-                w2 = Scale(btm_frame2,bg='Sky Blue', from_=0, to=100, orient=HORIZONTAL,length=450,command=self.updata_value_list[i])
-                w2.set(self.slider_value[i])
-                l2.grid(row=i, column=0,padx=10)
-                w2.grid(row=i, column=1,padx=50)
-                for i in range(5):
-                    var = StringVar(value=self.labels_fingers[i])
-                    o_vars.append(var)
-                    self.o[i] = OptionMenu(btm_frame3, var, *OPTIONS,command=self.on_button_list[i])
-                    self.o[i].grid(row=0, column=i)
-
-
-        
-        
         # create the listmenu
         o_vars = []
         self.o_vars = []
-        self.o = [None,None,None,None,None]
+        self.o = [None, None, None, None, None]
+        for i in range(5):
+            l2 = Label(btm_frame2, bg='Sky Blue', text=self.slider_name[i].lower(),font=("Helvetica", 11))
+            w2 = Scale(btm_frame2,bg='Sky Blue', from_=0, to=100, orient=HORIZONTAL,length=450,command=self.updata_value_list[i])
+            w2.set(self.slider_value[i])
+            l2.grid(row=i, column=0,padx=10)
+            w2.grid(row=i, column=1,padx=50)
+            for i in range(5):
+                var = StringVar(value=self.labels_fingers[i])
+                o_vars.append(var)
+                self.o[i] = OptionMenu(btm_frame3, var, *OPTIONS,command=self.on_button_list[i])
+                self.o[i].grid(row=0, column=i)
+
+
+        
+        
+
         
 
        
@@ -514,6 +485,13 @@ class Interface(Tk):
                     cv2.circle(img, (coord,self.circle_y), self.circle_radius, self.circle_color, self.circle_thickness)
             
             # Keyboard Pressing/Release Process
+            if self.check_finger_use:
+                if self.decisionPressButton[0]:
+                    self.current_key+=1
+                    self.current_key= self.current_key % len(OPTIONS)
+                    for index in range(1, len(self.labels_buttons)):
+                        self.labels_buttons[index]= OPTIONS[self.current_key]
+            print(self.labels_buttons)
             self.press_key_on_keyboard(self.keyboard,self.decisionPressButton,self.last_decisionPressButton,self.labels_buttons)
             self.last_decisionPressButton = self.decisionPressButton[:]
             
