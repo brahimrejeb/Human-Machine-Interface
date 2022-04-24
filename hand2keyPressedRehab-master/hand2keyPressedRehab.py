@@ -48,6 +48,12 @@ DEFAULT_DATA_HEADER_LEFT = "PINKY,RING,MIDDLE,INDEX,THUMB,TH_PK,TH_RG,TH_MID,TH_
 DEFAULT_DATA_HEADER_RIGHT= "THUMB,INDEX,MIDDLE,RING,PINKY,TH_THB,TH_IN,TH_MID,TH_RG,TH_PK"
 
 class Interface(Tk):
+    '''
+    Initialisation of the paramter of the simulation
+    Recording of the Data in a file
+    Sound feedback
+    Drawing of the interface
+    '''
     def __init__(self,config_file):
 
         # READ CONFIG FILE
@@ -63,15 +69,18 @@ class Interface(Tk):
         self.win_posX = self.config.getint("window","posX")
         self.win_posY = self.config.getint("window","posY")
 
-        # OPTIONS PARAMS
+        # DEFAULT PARAMS
         self.hand2use = self.config.get("options","hand2use")
         self.labels_buttons = ast.literal_eval(self.config.get("options", "labels_buttons"))
-        self.use_setup = self.config.getboolean("options","use_setup") # False only for checking script
+        # False only for checking script
+        self.use_setup = self.config.getboolean("options","use_setup") 
         self.close_cmd = self.config.getboolean("options","close_cmd")
+        # by default the sound is on
         self.use_sound = self.config.getboolean("options","use_sound")
         self.show_visualizer = self.config.getboolean("options","show_visualizer")
         self.record_data = self.config.getboolean("options","record_data")
         self.path_leap_folder = ast.literal_eval(self.config.get("options", "path_leap_folder"))
+        #by default the application is used with the shifter mode
         self.show_finger_use = self.config.getboolean("options","show_finger_use")
         self.current_key= self.config.getint("options","current_key")
 
@@ -184,23 +193,29 @@ class Interface(Tk):
         #self.v1 = Label(top_frame)
         self.v1.grid(padx=10)
         
-        #selection buttons
+        #selection buttons of the interface
+        #sound
         self.var1 = BooleanVar()
         self.var1.set(self.use_sound)
         check_button = Checkbutton(btm_frame4,bg='Sky Blue', text="Sound", variable=self.var1,command=self.check_sound_use).grid(row=0,column = 0,padx=10)
 
+        #which button is pressed
         self.var2 = BooleanVar()
         self.var2.set(self.use_setup)
         check_button = Checkbutton(btm_frame4,bg='Sky Blue', text="Press Button", variable=self.var2,command=self.check_setup_use).grid(row=0,column = 1,padx=80)
 
-
+        #
         self.var3 = BooleanVar()
         self.var3.set(self.show_visualizer)
         check_button = Checkbutton(btm_frame4,bg='Sky Blue', text="Visualizer", variable=self.var3,command=self.check_vis_use).grid(row=0,column = 2,padx=10)
 
+        #shifter is used
         self.var4 = BooleanVar()
         self.var4.set(self.show_finger_use)
         check_button = Checkbutton(btm_frame4,bg='Sky Blue', text="Use shifter", variable=self.var4,command=self.check_finger_use).grid(row=0,column = 2,padx=10)
+        
+        #labeling of the fingers hands depending on which hand is used
+        #+labeling each fingers with which key it is pressing
         if self.hand2use == 'right':
             self._list = [self.on_button4, self.on_button3, self.on_button2, self.on_button1, self.on_button]
             self.updata_value_list = [self.updata_value, self.updata_value1, self.updata_value2, self.updata_value3,
@@ -215,6 +230,7 @@ class Interface(Tk):
         o_vars = []
         self.o_vars = []
         self.o = [None, None, None, None, None]
+        
         for i in range(5):
             l2 = Label(btm_frame2, bg='Sky Blue', text=self.slider_name[i].lower(),font=("Helvetica", 11))
             w2 = Scale(btm_frame2,bg='Sky Blue', from_=0, to=100, orient=HORIZONTAL,length=450,command=self.updata_value_list[i])
@@ -247,38 +263,62 @@ class Interface(Tk):
         # RUN MAIN LOOP
         self.mainloop()
     
-    def check_sound_use(self):self.use_sound = self.var1.get()
-    def check_setup_use(self):self.use_setup = self.var2.get()
-    def check_finger_use(self):self.use_fingers = self.var4.get()
+    def check_sound_use(self):
+        '''
+        Boolean variable, determine whether sound is ON or OFF
+        '''
+        self.use_sound = self.var1.get()
+        
+    def check_setup_use(self):
+        '''
+        Boolean variable, determine whether button is pressed or not
+        '''
+        self.use_setup = self.var2.get()
+        
     def check_vis_use(self):
+        '''
+        Boolean variable
+        '''
         self.show_visualizer = self.var3.get()
         if self.show_visualizer:
             self.move_leap_motion_visualizer()
         else: 
             print("close visualization")
             subprocess.call(["taskkill","/F","/IM",'Visualizer.exe'])
+    
+     def check_finger_use(self):
+        '''
+        Boolean variable, determine whether shifter is ON or OFF
+        '''
+        self.use_fingers = self.var4.get()
             
             # subprocess.Popen(['C:\\Program Files (x86)\\Leap Motion\\Core Services\\Visualizer.exe', '-new-tab'])
         
-    
+    '''
+    not used in the code, I don't know what it is used for
+    Maybe to get the values of the thresholds for each finger
+    '''    
     def updata_value(self,selection):self.slider_value[0] = int(selection)
     def updata_value1(self,selection):self.slider_value[1] = int(selection)
     def updata_value2(self,selection):self.slider_value[2] = int(selection)
     def updata_value3(self,selection):self.slider_value[3] = int(selection)
     def updata_value4(self,selection):self.slider_value[4] = int(selection)
     
+    '''
+    What value is pressed by each finger, value store into a list 
+    '''
     def on_button(self,selection):self.labels_buttons[0] = selection
     def on_button1(self,selection):self.labels_buttons[1] = selection
     def on_button2(self,selection):self.labels_buttons[2] = selection
     def on_button3(self,selection):self.labels_buttons[3] = selection
     def on_button4(self,selection):self.labels_buttons[4] = selection
-        
-    def one_finger_button(self, selection):self.labels_one_finger[0] = selection
-    def one_finger_button1(self, selection):self.labels_one_finger[1] = selection
-        
+             
 
     # def exitui(self):
     def on_close(self):
+        '''
+        closing of the interface
+        '''
         # stop the drawing thread.
         
         print("**** Exit interface ****")
@@ -303,6 +343,9 @@ class Interface(Tk):
         self.destroy()
 
     def loading_sound_on_computer(self,OPTIONS):
+        '''
+        allow to load the sound on the computer by creating a new folder
+        '''
         engine = pyttsx3.init(driverName='sapi5')
         print("*** Creating Sound folder ****")
         folderData = ".\Sound"
@@ -316,9 +359,17 @@ class Interface(Tk):
         print("File saved!")
 
     def write_in_text_file(self,filehandle,distance,threshold):
+        '''
+        write the values of the distance made by the fingers, with the linked threshold
+        '''
         filehandle.write(",".join(str(item) for item in np.concatenate((distance,threshold))) + "\n")
 
     def define_labels_fingers_based_onhand(self,DEFAULT_LABELS_FINGERS):
+        '''
+        label each fingers based on which hand it is
+        print which hand is used on the terminal
+        return the fingers labels in the right way
+        '''
         if self.hand2use == 'right':
             print("R")
             labels_fingers = DEFAULT_LABELS_FINGERS
@@ -329,12 +380,14 @@ class Interface(Tk):
         return labels_fingers
     
     def press_key_on_keyboard(self,keyboard,decisionPressButton,last_decisionPressButton,labels_buttons):
-        """
+        '''
         Function to Emulate keyboard
         input: 
         decisionPressButton: array of pinching detection for the different fingers
         labels_buttons: array of labels to press when detection 
-        """
+        
+        if the button was activated the last time the programm call this loop, the button is released
+        '''
         for index, (n_choice, o_choice) in enumerate(zip(decisionPressButton, last_decisionPressButton)):
             fn_button = DICT_PYNPUT_KEYBOARD[labels_buttons[index].lower()]
             if fn_button is not None:
@@ -384,6 +437,7 @@ class Interface(Tk):
     #     self.keyboard.press(KeyCode.from_char('='))
     #     self.keyboard.release(KeyCode.from_char('='))
     # # [LEAP MOTION] - initiation
+    
     def initialize_leap_motion(self):
         try:
             listener = LeapMotionListener()
