@@ -212,7 +212,7 @@ class Interface(Tk):
         #shifter is used
         self.var4 = BooleanVar()
         self.var4.set(self.show_finger_use)
-        check_button = Checkbutton(btm_frame4,bg='Sky Blue', text="Use shifter", variable=self.var4,command=self.check_finger_use).grid(row=0,column = 2,padx=10)
+        check_button = Checkbutton(btm_frame4,bg='Sky Blue', text="Use shifter", variable=self.var4,command=self.check_finger_use).grid(row=0,column = 3,padx=10)
         
         #labeling of the fingers hands depending on which hand is used
         #+labeling each fingers with which key it is pressing
@@ -286,11 +286,11 @@ class Interface(Tk):
             print("close visualization")
             subprocess.call(["taskkill","/F","/IM",'Visualizer.exe'])
     
-     def check_finger_use(self):
+    def check_finger_use(self):
         '''
         Boolean variable, determine whether shifter is ON or OFF
         '''
-        self.use_fingers = self.var4.get()
+        self.check_finger_use = self.var4.get()
             
             # subprocess.Popen(['C:\\Program Files (x86)\\Leap Motion\\Core Services\\Visualizer.exe', '-new-tab'])
         
