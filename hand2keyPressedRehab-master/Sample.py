@@ -6,10 +6,10 @@
 # between Leap Motion and you, your company or other organization.             #
 ################################################################################
 
-import Leap, sys, time
+import LeapC, sys, time
 
 
-class SampleListener(Leap.Listener):
+class SampleListener(LeapC.Listener):
     finger_names = ['Thumb', 'Index', 'Middle', 'Ring', 'Pinky']
     bone_names = ['Metacarpal', 'Proximal', 'Intermediate', 'Distal']
 

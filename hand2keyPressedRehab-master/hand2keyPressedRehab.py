@@ -5,7 +5,7 @@
 # Autors: Bastien Orset (include your names if you do any collaboration in the code)
 ###########################################################
 
-import cv2
+
 import numpy as np
 import ctypes
 import os
@@ -20,7 +20,7 @@ from pygame import mixer
 from tkinter import *
 import subprocess
 import pyttsx3
-
+import cv2
 from gtts import gTTS
 from LeapMotion_detection import LeapMotionListener
 from pynput.keyboard import Key,KeyCode, Controller
@@ -55,6 +55,9 @@ class Interface(Tk):
     Drawing of the interface
     '''
     def __init__(self,config_file):
+
+        # Initialisation : 
+        self.init=True
 
         # READ CONFIG FILE
         self.config_file = config_file
@@ -135,7 +138,8 @@ class Interface(Tk):
             self.move_leap_motion_visualizer()
         
         self.listener,self.controller = self.initialize_leap_motion()
-        self.distance = self.read_values_from_devices(self.listener,self.controller)
+        self.palm, self.distance  = self.read_values_from_devices(self.listener,self.controller)
+
         
         # [INTERFACE] - DRAWING PARAMETERS 
         self.circle_y = int(self.img_h/2)+10
@@ -146,8 +150,9 @@ class Interface(Tk):
         self.last_decisionPressButton = self.decisionPressButton[:]
         self.distance_rest = [None,None,None,None,None]
 
-        self.distance_rest_default = [100.0,100.0,100.0,100.0,100.0]
+        self.distance_rest_default = [1.0,1.0,1.0,1.0,25.0]#[3.0,3.0,3.0,3.0,100.0]
         self.distance_rest = self.distance_rest_default[:]
+        self.subtracted = [0.0,0.0,0.0,0.0,0.0]
 
         # [INTERFACE] - PARAMS INITIALIZATION
         self.nButton = len(self.labels_buttons)
@@ -449,8 +454,10 @@ class Interface(Tk):
         return listener,controller
 
     def read_values_from_devices(self,listener,controller):
-        distance = listener.on_frame(controller)
-        return distance
+        palm, distance = listener.on_frame(controller)
+        print('read distance',distance)
+        print('read palm position', palm)
+        return palm, distance
 
     def loading_pic_from_folder(self,pathFolderPicture,dim_pic):
         """NOT USED in this version"""
@@ -465,8 +472,12 @@ class Interface(Tk):
         return pic_img
 
     def update_config_file(self):
-        data = "[" + str(self.slider_value[0]) + "," + str(self.slider_value[1]) + "," + str(self.slider_value[2]) + "," + str(self.slider_value[3])+"," + str(self.slider_value[4])+"]"
-        self.config.set("drawing", "bar_origin_threshold",data)
+        if self.hand2use == 'right':
+            data = "[" + str(self.slider_value[0]) + "," + str(self.slider_value[1]) + "," + str(self.slider_value[2]) + "," + str(self.slider_value[3])+"," + str(self.slider_value[4])+"]"
+            self.config.set("drawing", "bar_origin_threshold",data)
+        if self.hand2use =='left':
+            data = "[" + str(self.slider_value[4]) + "," + str(self.slider_value[3]) + "," + str(self.slider_value[2]) + "," + str(self.slider_value[1])+"," + str(self.slider_value[0])+"]"
+            self.config.set("drawing", "bar_origin_threshold",data)
        
         data = "['" + str(self.labels_buttons[0]) +"','"  + str(self.labels_buttons[1])  +"','" + str(self.labels_buttons[2])  +"','" + str(self.labels_buttons[3])+"','" + str(self.labels_buttons[4])+"']"
         self.config.set("options", "labels_buttons",data)
@@ -483,14 +494,52 @@ class Interface(Tk):
         print("**** Start Running interface ****")
         img = np.zeros((self.img_h,self.img_v,3), np.uint8)
         counter_no_data = 0
+        counter_init = 0
         while self._thread is not None:
-            
+
+            if self.init and not None in self.distance :
+                counter_init +=1
+                if counter_init == 10:
+                    self.distance_init=self.distance.copy()
+                    self.palm_init = self.palm.copy()
+                    counter_init = 0
+                
+                    self.init=False
+                
+                    print('self.distance_init',self.distance_init)
+                    print('self.palm.init',self.palm_init)
+                
             self.key = cv2.waitKeyEx(1)
+
+
             if self.hand2use == 'right':
-                self.distance_hand = self.distance[:] 
+                self.distance_hand = self.distance[:] #- self.distance_init[:]
+                if not None in self.distance_hand and not self.init :
+                    self.subtracted = list()
+                    #print('distance_hand',self.distance_hand)
+                    for item1, item2 in zip(self.distance_init, self.distance_hand):
+                        item = item1 - item2
+                        self.subtracted.append(item)
             elif self.hand2use == 'left':
-                self.distance_hand = self.distance[::-1]
-            
+                self.distance_hand = self.distance[::-1]# - self.distance_init[::-1]
+                if not None in self.distance_hand and not self.init :
+                    #print('distance_hand',self.distance_hand)
+                    self.subtracted = list()
+                    for item1, item2 in zip(self.distance_init[::-1], self.distance_hand):
+                        item = item1 - item2
+                        self.subtracted.append(item)
+
+            # Check if we need to redo initialisation : 
+            if not self.init: 
+                if not None in self.palm and not None in self.palm_init:
+                    array_actual_palm= np.array(self.palm)
+                    array_init_palm= np.array(self.palm_init)
+                    dist=np.linalg.norm(array_init_palm-array_actual_palm)
+                    if dist> 80:
+                        self.init=True
+                        counter_init=0
+                        print('init because of distance')
+
             if None in self.distance_hand:
                 self.calibrated = False
                 counter_no_data += 1 
@@ -501,11 +550,17 @@ class Interface(Tk):
                     cv2.putText(img,"Waiting for LeapMotion ...",(self.circle_first_coord+20,self.circle_y),cv2.FONT_HERSHEY_SIMPLEX,0.8,(255,255,255))
                     img_ = Image.fromarray(img)
                     nimg = ImageTk.PhotoImage(image=img_)
-                    self.v1.n_img = nimg
+                    self.v1.n_img = nimg   
                     self.v1.configure(image=nimg)
+                    # make initialisation 
+                    self.init=True
+                    counter_init=0
                 continue
             else: 
                 counter_no_data = 0
+                #print('substracted',self.subtracted)
+                #print('distance_init',self.distance_init)
+               # print('difference', difference)
             
             # if (not self.calibrated and None not in self.distance_hand):
             #     # if s2 == 1: 
@@ -522,7 +577,7 @@ class Interface(Tk):
                 cv2.putText(img,self.labels_fingers[i],(coord-30,self.circle_y-50),cv2.FONT_HERSHEY_SIMPLEX,0.8,self.text_color)
                
                 #Bar Plot Visualization - continuous
-                self.bar_h[i] = 1-self.distance_hand[i]/self.distance_rest[i]
+                self.bar_h[i] = self.subtracted[i]/self.distance_rest[i] # 1-self.distance_hand[i]/self.distance_rest[i]
                 self.threshold[i] = (self.slider_value[i]/100.0)
                 cv2.rectangle(img, (coord-30,self.img_h), (coord+30,self.img_h-int(self.bar_h[i]*self.bar_max)), self.bar_color, -1) 
                 cv2.line(img, (coord-20,self.img_h-int(self.threshold[i]*self.bar_max)), (coord+20,self.img_h-int(self.threshold[i]*self.bar_max)), self.bar_color_th, 3) 
@@ -540,12 +595,13 @@ class Interface(Tk):
             
             # Keyboard Pressing/Release Process
             if self.check_finger_use:
-                if self.decisionPressButton[0]:
+                if self.decisionPressButton[4] and not self.last_decisionPressButton[4]:
                     self.current_key+=1
                     self.current_key= self.current_key % len(OPTIONS)
-                    for index in range(1, len(self.labels_buttons)):
+                    self.labels_buttons[4]= OPTIONS[0]
+                    for index in range(0, len(self.labels_buttons)-1):
                         self.labels_buttons[index]= OPTIONS[self.current_key]
-            print(self.labels_buttons)
+            #print('label button',self.labels_buttons)
             self.press_key_on_keyboard(self.keyboard,self.decisionPressButton,self.last_decisionPressButton,self.labels_buttons)
             self.last_decisionPressButton = self.decisionPressButton[:]
             

@@ -16,6 +16,7 @@ class LeapMotionListener(Leap.Listener):
 	finger_names=['Thumb','Index','Middle','Ring','Pinky']
 	bone_names=['Metacarpal','Proximal','Intermediate','Distal']
 	distance = [None,None,None,None,None]
+	palm = [None,None,None]
 	print_one = True
 
 	def on_init(self,controller):
@@ -39,37 +40,70 @@ class LeapMotionListener(Leap.Listener):
 		self.distance[2]= None
 		self.distance[3]= None
 		self.distance[4]= None
+		
+		self.palm[0]=None
+		self.palm[1]=None
+		self.palm[2]=None
 
 		for finger in frame.fingers:
 
-			if finger.type== Leap.Finger.TYPE_INDEX:
-				Index_distal_bone = finger.bone(Leap.Bone.TYPE_DISTAL)
-				Index_found=True
-
 			if finger.type== Leap.Finger.TYPE_THUMB:
 				Thumb_distal_bone = finger.bone(Leap.Bone.TYPE_DISTAL)
+				Thumb_proximal_bone = finger.bone(Leap.Bone.TYPE_INTERMEDIATE)  # for thumb we use intermediate and proximal because there is no metacarpal
+				Thumb_meta_bone = finger.bone(Leap.Bone.TYPE_PROXIMAL) 
 				Thumb_found=True
+
+			if finger.type== Leap.Finger.TYPE_INDEX:
+				Index_distal_bone = finger.bone(Leap.Bone.TYPE_DISTAL) 
+				Index_proximal_bone = finger.bone(Leap.Bone.TYPE_PROXIMAL) 
+				Index_meta_bone = finger.bone(Leap.Bone.TYPE_METACARPAL) 
+				Index_found=True
+
 
 			if finger.type== Leap.Finger.TYPE_MIDDLE:
 				Middle_distal_bone = finger.bone(Leap.Bone.TYPE_DISTAL)
+				Middle_proximal_bone = finger.bone(Leap.Bone.TYPE_PROXIMAL)
+				Middle_meta_bone = finger.bone(Leap.Bone.TYPE_METACARPAL)  
 				Middle_found=True
 
-			if finger.type== Leap.Finger.TYPE_PINKY:
-				Pinky_distal_bone = finger.bone(Leap.Bone.TYPE_DISTAL)
-				Pinky_found=True
 
 			if finger.type== Leap.Finger.TYPE_RING:
 				Ring_distal_bone = finger.bone(Leap.Bone.TYPE_DISTAL)
+				Ring_proximal_bone = finger.bone(Leap.Bone.TYPE_PROXIMAL)
+				Ring_meta_bone = finger.bone(Leap.Bone.TYPE_METACARPAL)  
 				Ring_found=True
 
 
+			if finger.type== Leap.Finger.TYPE_PINKY:
+				Pinky_distal_bone = finger.bone(Leap.Bone.TYPE_DISTAL)
+				Pinky_proximal_bone = finger.bone(Leap.Bone.TYPE_PROXIMAL) 
+				Pinky_meta_bone = finger.bone(Leap.Bone.TYPE_METACARPAL) 
+				Pinky_found=True
+			
+
+
 			if(Index_found and Thumb_found and Middle_found and Pinky_found and Ring_found):
-					self.distance[0]= Thumb_distal_bone.center.distance_to(Index_distal_bone.center)
-					self.distance[1]= Thumb_distal_bone.center.distance_to(Middle_distal_bone.center)
-					self.distance[2]= Thumb_distal_bone.center.distance_to(Ring_distal_bone.center)
-					self.distance[3]= Thumb_distal_bone.center.distance_to(Pinky_distal_bone.center)
-					self.distance[4]= Thumb_distal_bone.center.distance_to(Thumb_distal_bone.center)
-		return self.distance
+#					self.distance[0]= Thumb_distal_bone.center.distance_to(Thumb_distal_bone.center)
+#					self.distance[1]= Thumb_distal_bone.center.distance_to(Index_distal_bone.center)
+#					self.distance[2]= Thumb_distal_bone.center.distance_to(Middle_distal_bone.center)
+#					self.distance[3]= Thumb_distal_bone.center.distance_to(Ring_distal_bone.center)
+#					self.distance[4]= Thumb_distal_bone.center.distance_to(Pinky_distal_bone.center)
+					for hand in frame.hands:
+						self.distance[0] = Thumb_distal_bone.center.distance_to(hand.palm_position) # distance between tip of the thumb and palm position
+						self.distance[1] = (Index_distal_bone.next_joint-Index_proximal_bone.prev_joint).angle_to(Index_meta_bone.prev_joint-Index_proximal_bone.prev_joint)
+						self.distance[2] = (Middle_distal_bone.next_joint-Middle_proximal_bone.prev_joint).angle_to(Middle_meta_bone.prev_joint-Middle_proximal_bone.prev_joint)
+						self.distance[3] = (Ring_distal_bone.next_joint-Ring_proximal_bone.prev_joint).angle_to(Ring_meta_bone.prev_joint-Ring_proximal_bone.prev_joint)
+						self.distance[4] = (Pinky_distal_bone.next_joint-Pinky_proximal_bone.prev_joint).angle_to(Pinky_meta_bone.prev_joint-Pinky_proximal_bone.prev_joint)
+					
+						self.palm[0]=hand.palm_position.x
+						self.palm[1]=hand.palm_position.y
+						self.palm[2]=hand.palm_position.z
+						#
+			
+		#print('distance-leap fichier', self.distance)
+		#print('palm-leap fichier', self.palm)
+		return self.palm, self.distance
+
 
 
 def main():
