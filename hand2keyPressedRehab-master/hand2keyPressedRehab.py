@@ -51,9 +51,11 @@ DICT_PYNPUT_KEYBOARD = {'none':None,'alt':Key.alt_l,'win': Key.cmd,
 }
 
 # LABELS FINGERS
+NB_INPUTS=5
 DEFAULT_LABELS_FINGERS = ['thumb','index','middle','ring','pinky']
 DEFAULT_DATA_HEADER_LEFT = "PINKY,RING,MIDDLE,INDEX,THUMB,TH_PK,TH_RG,TH_MID,TH_IN,TH_THB"
 DEFAULT_DATA_HEADER_RIGHT= "THUMB,INDEX,MIDDLE,RING,PINKY,TH_THB,TH_IN,TH_MID,TH_RG,TH_PK"
+
 
 class Interface(Tk):
     '''
@@ -159,7 +161,6 @@ class Interface(Tk):
         self.nButton = len(self.labels_buttons)
         self.calibrated = False
         self.slider_value = self.bar_origin_threshold[:]
-        print(self.slider_value)
         self.threshold = self.bar_origin_threshold[:]
         self.slider_name = [x.lower() for x in self.labels_fingers]
         if self.hand2use == 'left':
@@ -171,59 +172,21 @@ class Interface(Tk):
 
         self.threshold = mainwin.bar_origin_threshold
 
-        # BUTTON INTERFACE - TKINTER
-        Tk.__init__(self)
-        self.title('Hand2keyPressedRehab')
-        self.geometry('650x900+10+600')
-        # self.geometry('450x600+10+10')
-        self.configure(background="Sky Blue")
-        self.resizable(1,1)
-
-        path_icon = os.path.join(r'.\Icon','HackaHealth_Logo_tkinter.ico')
-        self.wm_iconbitmap(path_icon)
-        
-        self.top_frame = Frame(self, bg='Sky Blue', width=650, height=500, padx=10,pady=10)
-        btm_frame2 = Frame(self, bg='Sky Blue', width=650, height=100)
-        btm_frame3 = Frame(self, bg='Sky Blue', width=650, height=200)
-        btm_frame4 = Frame(self, bg='Sky Blue', width=650, height=100)
-        
-        # layout all of the main containers
-        self.grid_rowconfigure(1, weight=1)
-        self.grid_columnconfigure(0, weight=1)
-
-        self.top_frame.grid(row=0, sticky="nsew")
-        btm_frame2.grid(row=2, sticky="nsew")
-        btm_frame3.grid(row=1,sticky="nsew")
-        btm_frame4.grid(row=4, sticky="nsew")
-
-
-        self.v1  = Label(self.top_frame, text="Leap Motion not detected",font=("Helvetica", 11),padx=100)
-        #self.v1 = Label(top_frame)
-        self.v1.grid(padx=10)
-
         # selection buttons of the interface
         # sound
-        self.var1 = BooleanVar()
-        self.var1.set(self.use_sound)
-        mainwin.dia.Sound.setChecked(self.var1.get())
+        mainwin.dia.Sound.setChecked(self.use_sound)
         # check_button = Checkbutton(btm_frame4,bg='Sky Blue', text="Sound", variable=self.var1,command=self.check_sound_use).grid(row=0,column = 0,padx=10)
 
         # which button is pressed
-        self.var2 = BooleanVar()
-        self.var2.set(self.use_setup)
-        mainwin.dia.PressButton.setChecked(self.var2.get())
+        mainwin.dia.PressButton.setChecked(self.use_setup)
         # check_button = Checkbutton(btm_frame4,bg='Sky Blue', text="Press Button", variable=self.var2,command=self.check_setup_use).grid(row=0,column = 1,padx=80)
 
-        #
-        self.var3 = BooleanVar()
-        self.var3.set(self.show_visualizer)
-        mainwin.dia.Visualizer.setChecked(self.var3.get())
+        #show visualizer or not
+        mainwin.dia.Visualizer.setChecked(self.show_visualizer)
         # check_button = Checkbutton(btm_frame4,bg='Sky Blue', text="Visualizer", variable=self.var3,command=self.check_vis_use).grid(row=0,column = 2,padx=10)
 
         # shifter is used
-        self.var4 = BooleanVar()
-        self.var4.set(self.show_finger_use)
-        mainwin.dia.ShifterButton.setChecked(self.var4.get())
+        mainwin.dia.ShifterButton.setChecked(self.show_finger_use)
         # check_button = Checkbutton(btm_frame4,bg='Sky Blue', text="Use shifter", variable=self.var4,command=self.check_finger_use).grid(row=0,column = 3,padx=10)
 
         #labeling of the fingers hands depending on which hand is used
@@ -242,26 +205,25 @@ class Interface(Tk):
         o_vars = []
         self.o_vars = []
         self.o = [None, None, None, None, None]
-        
-        for i in range(5):
-            l2 = Label(btm_frame2, bg='Sky Blue', text=self.slider_name[i].lower(),font=("Helvetica", 11))
-            w2 = Scale(btm_frame2,bg='Sky Blue', from_=0, to=100, orient=HORIZONTAL,length=450,command=self.updata_value_list[i])
-            w2.set(self.slider_value[i])
-            l2.grid(row=i, column=0,padx=10)
-            w2.grid(row=i, column=1,padx=50)
-            for i in range(5):
-                var = StringVar(value=self.labels_fingers[i])
-                o_vars.append(var)
-                self.o[i] = OptionMenu(btm_frame3, var, *OPTIONS,command=self.on_button_list[i])
-                self.o[i].grid(row=0, column=i)
 
 
-        
-        
+        mainwin.ThumbValue.setValue(self.slider_value[0])
+        mainwin.IndexValue.setValue(self.slider_value[1])
+        mainwin.MiddleValue.setValue(self.slider_value[2])
+        mainwin.RingValue.setValue(self.slider_value[3])
+        mainwin.PinkyValue.setValue(self.slider_value[4])
+        #for i in range(NB_INPUTS):
+        #    l2 = Label(btm_frame2, bg='Sky Blue', text=self.slider_name[i].lower(),font=("Helvetica", 11))
+        #    w2 = Scale(btm_frame2,bg='Sky Blue', from_=0, to=100, orient=HORIZONTAL,length=450,command=self.updata_value_list[i])
+        #    w2.set(self.slider_value[i])
+        #    l2.grid(row=i, column=0,padx=10)
+        #    w2.grid(row=i, column=1,padx=50)
+        #    for i in range(5):
+        #        var = StringVar(value=self.labels_fingers[i])
+        #        o_vars.append(var)
+        #        self.o[i] = OptionMenu(btm_frame3, var, *OPTIONS,command=self.on_button_list[i])
+        #        self.o[i].grid(row=0, column=i)
 
-        
-
-       
         #var2 = IntVar()
         #Checkbutton(btm_frame4, text="Button", variable=var2).grid(row=0,column = 2)
         #Button(btm_frame4, text='Calibration',height=2,width=30).grid(row=0,padx=60)
@@ -271,44 +233,43 @@ class Interface(Tk):
         self._thread.start()
         
 
-        self.protocol("WM_DELETE_WINDOW",self.on_close)
+        #self.protocol("WM_DELETE_WINDOW",self.on_close)
         # RUN MAIN LOOP
-        self.mainloop()
+        #self.mainloop()
     
-    def check_sound_use(self):
+    def check_sound_use(self,mainwin):
         '''
         Boolean variable, determine whether sound is ON or OFF
         '''
-        self.use_sound = self.var1.get()
+        self.use_sound = mainwin.dia.Sound.isChecked()
         
-    def check_setup_use(self):
+    def check_setup_use(self,mainwin):
         '''
         Boolean variable, determine whether button is pressed or not
         '''
-        self.use_setup = self.var2.get()
+        self.use_setup = mainwin.dia.PressButton.isChecked()
         
-    def check_vis_use(self):
+    def check_vis_use(self,mainwin):
         '''
         Boolean variable
         '''
-        self.show_visualizer = self.var3.get()
+        self.show_visualizer = mainwin.dia.Visualizer.isChecked()
         if self.show_visualizer:
             self.move_leap_motion_visualizer()
         else: 
             print("close visualization")
             subprocess.call(["taskkill","/F","/IM",'Visualizer.exe'])
     
-    def check_finger_use(self):
+    def check_finger_use(self,mainwin):
         '''
         Boolean variable, determine whether shifter is ON or OFF
         '''
-        self.check_finger_use = self.var4.get()
+        self.check_finger_use = mainwin.dia.ShifterButton.isChecked()
             
             # subprocess.Popen(['C:\\Program Files (x86)\\Leap Motion\\Core Services\\Visualizer.exe', '-new-tab'])
         
     '''
-    not used in the code, I don't know what it is used for
-    Maybe to get the values of the thresholds for each finger
+    get the values of the slider threshold for each finger
     '''    
     def updata_value(self,selection):self.slider_value[0] = int(selection)
     def updata_value1(self,selection):self.slider_value[1] = int(selection)
@@ -516,7 +477,7 @@ class Interface(Tk):
                 mainwin.PinkyKey.show()
                 mainwin.WristKey.show()
 
-    def run_loop(self):
+    def run_loop(self,mainwin):
         print("**** Start Running interface ****")
         img = np.zeros((self.img_h,self.img_v,3), np.uint8)
         counter_no_data = 0
@@ -620,7 +581,7 @@ class Interface(Tk):
                     cv2.circle(img, (coord,self.circle_y), self.circle_radius, self.circle_color, self.circle_thickness)
             
             # Keyboard Pressing/Release Process
-            if self.check_finger_use:
+            if self.check_finger_use(mainwin):
                 if self.decisionPressButton[4] and not self.last_decisionPressButton[4]:
                     self.current_key+=1
                     self.current_key= self.current_key % len(OPTIONS)
