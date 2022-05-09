@@ -118,39 +118,222 @@
     </item>
     <item row="1" column="2">
      <layout class="QVBoxLayout" name="KeysLayout">
+      <property name="spacing">
+       <number>20</number>
+      </property>
       <item>
-       <widget class="QLabel" name="ThumbKey">
-        <property name="text">
-         <string>None</string>
-        </property>
+       <widget class="QComboBox" name="ThumbKey">
+        <item>
+         <property name="text">
+          <string>None</string>
+         </property>
+        </item>
+        <item>
+         <property name="text">
+          <string>Alt</string>
+         </property>
+        </item>
+        <item>
+         <property name="text">
+          <string>Win</string>
+         </property>
+        </item>
+        <item>
+         <property name="text">
+          <string>Ctrl</string>
+         </property>
+        </item>
+        <item>
+         <property name="text">
+          <string>Tab</string>
+         </property>
+        </item>
+        <item>
+         <property name="text">
+          <string>Shift</string>
+         </property>
+        </item>
+        <item>
+         <property name="text">
+          <string>Caps</string>
+         </property>
+        </item>
+        <item>
+         <property name="text">
+          <string>Esc</string>
+         </property>
+        </item>
        </widget>
       </item>
       <item>
-       <widget class="QLabel" name="IndexKey">
-        <property name="text">
-         <string>None</string>
-        </property>
+       <widget class="QComboBox" name="IndexKey">
+        <item>
+         <property name="text">
+          <string>None</string>
+         </property>
+        </item>
+        <item>
+         <property name="text">
+          <string>Alt</string>
+         </property>
+        </item>
+        <item>
+         <property name="text">
+          <string>Win</string>
+         </property>
+        </item>
+        <item>
+         <property name="text">
+          <string>Ctrl</string>
+         </property>
+        </item>
+        <item>
+         <property name="text">
+          <string>Tab</string>
+         </property>
+        </item>
+        <item>
+         <property name="text">
+          <string>Shift</string>
+         </property>
+        </item>
+        <item>
+         <property name="text">
+          <string>Caps</string>
+         </property>
+        </item>
+        <item>
+         <property name="text">
+          <string>Esc</string>
+         </property>
+        </item>
        </widget>
       </item>
       <item>
-       <widget class="QLabel" name="MiddleKey">
-        <property name="text">
-         <string>None</string>
-        </property>
+       <widget class="QComboBox" name="MiddleKey">
+        <item>
+         <property name="text">
+          <string>None</string>
+         </property>
+        </item>
+        <item>
+         <property name="text">
+          <string>Alt</string>
+         </property>
+        </item>
+        <item>
+         <property name="text">
+          <string>Win</string>
+         </property>
+        </item>
+        <item>
+         <property name="text">
+          <string>Tab</string>
+         </property>
+        </item>
+        <item>
+         <property name="text">
+          <string>Shift</string>
+         </property>
+        </item>
+        <item>
+         <property name="text">
+          <string>Caps</string>
+         </property>
+        </item>
+        <item>
+         <property name="text">
+          <string>Esc</string>
+         </property>
+        </item>
        </widget>
       </item>
       <item>
-       <widget class="QLabel" name="RingKey">
-        <property name="text">
-         <string>None</string>
-        </property>
+       <widget class="QComboBox" name="RingKey">
+        <item>
+         <property name="text">
+          <string>None</string>
+         </property>
+        </item>
+        <item>
+         <property name="text">
+          <string>Alt</string>
+         </property>
+        </item>
+        <item>
+         <property name="text">
+          <string>Win</string>
+         </property>
+        </item>
+        <item>
+         <property name="text">
+          <string>Ctrl</string>
+         </property>
+        </item>
+        <item>
+         <property name="text">
+          <string>Tab</string>
+         </property>
+        </item>
+        <item>
+         <property name="text">
+          <string>Shift</string>
+         </property>
+        </item>
+        <item>
+         <property name="text">
+          <string>Caps</string>
+         </property>
+        </item>
+        <item>
+         <property name="text">
+          <string>Esc</string>
+         </property>
+        </item>
        </widget>
       </item>
       <item>
-       <widget class="QLabel" name="PinkyKey">
-        <property name="text">
-         <string>None</string>
-        </property>
+       <widget class="QComboBox" name="PinkyKey">
+        <item>
+         <property name="text">
+          <string>None</string>
+         </property>
+        </item>
+        <item>
+         <property name="text">
+          <string>Alt</string>
+         </property>
+        </item>
+        <item>
+         <property name="text">
+          <string>Win</string>
+         </property>
+        </item>
+        <item>
+         <property name="text">
+          <string>Ctrl</string>
+         </property>
+        </item>
+        <item>
+         <property name="text">
+          <string>Tab</string>
+         </property>
+        </item>
+        <item>
+         <property name="text">
+          <string>Shift</string>
+         </property>
+        </item>
+        <item>
+         <property name="text">
+          <string>Caps</string>
+         </property>
+        </item>
+        <item>
+         <property name="text">
+          <string>Esc</string>
+         </property>
+        </item>
        </widget>
       </item>
      </layout>
@@ -158,13 +341,47 @@
     <item row="2" column="0" colspan="2">
      <layout class="QHBoxLayout" name="CurrentKeyLayout">
       <item>
-       <widget class="QLabel" name="CurrentKey">
-        <property name="text">
-         <string>None</string>
-        </property>
-        <property name="alignment">
-         <set>Qt::AlignCenter</set>
-        </property>
+       <widget class="QComboBox" name="comboBox_2">
+        <item>
+         <property name="text">
+          <string>None</string>
+         </property>
+        </item>
+        <item>
+         <property name="text">
+          <string>Alt</string>
+         </property>
+        </item>
+        <item>
+         <property name="text">
+          <string>Win</string>
+         </property>
+        </item>
+        <item>
+         <property name="text">
+          <string>Ctrl</string>
+         </property>
+        </item>
+        <item>
+         <property name="text">
+          <string>Tab</string>
+         </property>
+        </item>
+        <item>
+         <property name="text">
+          <string>Shift</string>
+         </property>
+        </item>
+        <item>
+         <property name="text">
+          <string>Caps</string>
+         </property>
+        </item>
+        <item>
+         <property name="text">
+          <string>Esc</string>
+         </property>
+        </item>
        </widget>
       </item>
      </layout>
@@ -180,7 +397,7 @@
      <x>0</x>
      <y>0</y>
      <width>675</width>
-     <height>22</height>
+     <height>21</height>
     </rect>
    </property>
    <widget class="QMenu" name="menuSetting_2">
