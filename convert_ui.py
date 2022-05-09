@@ -9,8 +9,6 @@
 
 
 from PyQt5 import QtCore, QtGui, QtWidgets
-import Settings
-from Settings import Ui_Dialog
 
 
 class Ui_AnglesValues(object):
@@ -173,25 +171,6 @@ class Ui_AnglesValues(object):
         self.retranslateUi(AnglesValues)
         QtCore.QMetaObject.connectSlotsByName(AnglesValues)
 
-
-
-        self.Dialog = QtWidgets.QDialog()
-        self.dia = Ui_Dialog()
-        self.dia.setupUi(self.Dialog)
-        self.Dialog.setWindowIcon(QtGui.QIcon('th.png'))
-        self.actionAcces_setting.triggered.connect(self.Dialog.show)
-
-
-
-        #threshold:
-        self.thresh_thumb=self.dia.ThumbThresh.tickPosition()
-        self.thresh_index = self.dia.IndexThresh.tickPosition()
-        self.thresh_middle = self.dia.MiddleThresh.tickPosition()
-        self.thresh_ring = self.dia.RingThresh.tickPosition()
-        self.thresh_pinky = self.dia.PinkyThresh.tickPosition()
-        self.bar_origin_threshold=[self.thresh_thumb, self.thresh_index, self.thresh_middle, self.thresh_ring, self.thresh_pinky]
-
-
     def retranslateUi(self, AnglesValues):
         _translate = QtCore.QCoreApplication.translate
         AnglesValues.setWindowTitle(_translate("AnglesValues", "Angle Value"))
@@ -254,3 +233,12 @@ class Ui_AnglesValues(object):
         self.menuSetting_2.setTitle(_translate("AnglesValues", "Setting"))
         self.actionAcces_setting.setText(_translate("AnglesValues", "Acces setting"))
 
+
+if __name__ == "__main__":
+    import sys
+    app = QtWidgets.QApplication(sys.argv)
+    AnglesValues = QtWidgets.QMainWindow()
+    ui = Ui_AnglesValues()
+    ui.setupUi(AnglesValues)
+    AnglesValues.show()
+    sys.exit(app.exec_())

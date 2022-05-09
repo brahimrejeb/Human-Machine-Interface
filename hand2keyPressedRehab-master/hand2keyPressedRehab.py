@@ -266,9 +266,9 @@ class Interface(Tk):
         #Checkbutton(btm_frame4, text="Button", variable=var2).grid(row=0,column = 2)
         #Button(btm_frame4, text='Calibration',height=2,width=30).grid(row=0,padx=60)
         
-        #self._thread  = None
-        #self._thread = threading.Thread(target=self.run_loop)
-        #self._thread.start()
+        self._thread  = None
+        self._thread = threading.Thread(target=self.update_mode)
+        self._thread.start()
         
 
         self.protocol("WM_DELETE_WINDOW",self.on_close)
@@ -496,6 +496,25 @@ class Interface(Tk):
             os.remove(self.config_file)  # else rename won't work when target exists
         os.rename(self.config_file+'.bak',self.config_file)
         print("[CONFIG_FILE] Ini file has been updated")
+
+    def update_mode(self):
+        while self._thread is not None:
+            if (mainwin.ModeSelector.currentText()=='Simple Mode'):
+                mainwin.CurrentKey.setHidden(False)
+                mainwin.ThumbKey.hide()
+                mainwin.IndexKey.hide()
+                mainwin.MiddleKey.hide()
+                mainwin.RingKey.hide()
+                mainwin.PinkyKey.hide()
+                mainwin.WristKey.hide()
+            else:
+                mainwin.CurrentKey.setHidden(True)
+                mainwin.ThumbKey.show()
+                mainwin.IndexKey.show()
+                mainwin.MiddleKey.show()
+                mainwin.RingKey.show()
+                mainwin.PinkyKey.show()
+                mainwin.WristKey.show()
 
     def run_loop(self):
         print("**** Start Running interface ****")

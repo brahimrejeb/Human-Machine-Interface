@@ -19,7 +19,7 @@
   <widget class="QWidget" name="centralwidget">
    <layout class="QGridLayout" name="gridLayout">
     <item row="0" column="0" colspan="3">
-     <widget class="QComboBox" name="comboBox">
+     <widget class="QComboBox" name="ModeSelector">
       <item>
        <property name="text">
         <string>Simple Mode</string>
@@ -72,6 +72,13 @@
         </property>
        </widget>
       </item>
+      <item>
+       <widget class="QProgressBar" name="WristValue">
+        <property name="value">
+         <number>24</number>
+        </property>
+       </widget>
+      </item>
      </layout>
     </item>
     <item row="1" column="1">
@@ -111,6 +118,13 @@
        <widget class="QLabel" name="PinkyLabel">
         <property name="text">
          <string>Pinky</string>
+        </property>
+       </widget>
+      </item>
+      <item>
+       <widget class="QLabel" name="WristLabel">
+        <property name="text">
+         <string>Wrist</string>
         </property>
        </widget>
       </item>
@@ -336,12 +350,8 @@
         </item>
        </widget>
       </item>
-     </layout>
-    </item>
-    <item row="2" column="0" colspan="2">
-     <layout class="QHBoxLayout" name="CurrentKeyLayout">
       <item>
-       <widget class="QComboBox" name="comboBox_2">
+       <widget class="QComboBox" name="WristKey">
         <item>
          <property name="text">
           <string>None</string>
@@ -382,6 +392,17 @@
           <string>Esc</string>
          </property>
         </item>
+       </widget>
+      </item>
+     </layout>
+    </item>
+    <item row="2" column="0" colspan="2">
+     <layout class="QHBoxLayout" name="CurrentKeyLayout">
+      <item>
+       <widget class="QLabel" name="CurrentKey">
+        <property name="text">
+         <string>None</string>
+        </property>
        </widget>
       </item>
      </layout>
