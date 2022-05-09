@@ -15,7 +15,7 @@
   </property>
   <layout class="QVBoxLayout" name="verticalLayout">
    <item>
-    <layout class="QVBoxLayout" name="verticalLayout_2">
+    <layout class="QVBoxLayout" name="SettingLayout">
      <item>
       <widget class="QLabel" name="SettingTitle">
        <property name="palette">
@@ -207,7 +207,7 @@
     </layout>
    </item>
    <item>
-    <layout class="QVBoxLayout" name="verticalLayout_3">
+    <layout class="QVBoxLayout" name="ThLayout">
      <item>
       <widget class="QLabel" name="label">
        <property name="font">
