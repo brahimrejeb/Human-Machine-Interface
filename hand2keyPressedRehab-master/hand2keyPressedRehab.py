@@ -24,7 +24,15 @@ import cv2
 from gtts import gTTS
 from LeapMotion_detection import LeapMotionListener
 from pynput.keyboard import Key,KeyCode, Controller
-from PIL import Image, ImageTk 
+from PIL import Image, ImageTk
+from PyQt5 import QtCore, QtGui, QtWidgets
+
+import Settings
+from Settings import Ui_Dialog
+import mainwindows
+from mainwindows import Ui_AnglesValues
+
+
 
 # LIST CMD 
 OPTIONS = ['None','Alt','Win',
@@ -54,7 +62,7 @@ class Interface(Tk):
     Sound feedback
     Drawing of the interface
     '''
-    def __init__(self,config_file):
+    def __init__(self,mainwin,config_file):
 
         # Initialisation : 
         self.init=True
@@ -64,13 +72,6 @@ class Interface(Tk):
         self.config = configparser.ConfigParser()
         self.config.read(self.config_file)
 
-        # WINDOW PARAMS
-        self.window_name = "Feedback"
-        self.img_h = self.config.getint("window","img_h")
-        self.img_v = self.config.getint("window","img_v")
-        self.refresh_rate = self.config.getint("window","refresh_rate")
-        self.win_posX = self.config.getint("window","posX")
-        self.win_posY = self.config.getint("window","posY")
 
         # DEFAULT PARAMS
         self.hand2use = self.config.get("options","hand2use")
@@ -88,17 +89,21 @@ class Interface(Tk):
         self.current_key= self.config.getint("options","current_key")
 
         # DRAWING PARAMS
-        self.circle_radius = self.config.getint("drawing","circle_radius")
-        self.circle_color = ast.literal_eval(self.config.get("drawing", "circle_color"))
-        self.circle_thickness = self.config.getint("drawing","circle_thickness")
-        self.circle_first_coord = self.config.getint("drawing","circle_first_coord")
-        self.circle_space = self.config.getint("drawing","circle_space")
-        self.text_color = ast.literal_eval(self.config.get("drawing", "text_color"))
-        self.text_color_selec = ast.literal_eval(self.config.get("drawing", "text_color_selec"))
-        self.bar_color = ast.literal_eval(self.config.get("drawing", "bar_color"))
-        self.bar_color_th = ast.literal_eval(self.config.get("drawing", "bar_color_th"))
         self.bar_origin_threshold = ast.literal_eval(self.config.get("drawing", "bar_origin_threshold"))
 
+        # Initialisation our window:
+        mainwin.CurrentKey.setText(OPTIONS[self.current_key])
+        # DATA RECORDING
+        if self.record_data:
+            self.folderData = ".\Data"
+            if not os.path.exists(self.folderData):
+                os.makedirs(self.folderData)
+            timestr = time.strftime("%Y%m%d-%H%M%S")
+            self.file_object = open(os.path.join(self.folderData, timestr + '.txt'), "w+")
+            if self.hand2use == 'left':
+                self.file_object.write(DEFAULT_DATA_HEADER_LEFT + "\n")
+            else:
+                self.file_object.write(DEFAULT_DATA_HEADER_RIGHT + "\n")
         
         # DATA RECORDING
         if self.record_data:
@@ -141,11 +146,7 @@ class Interface(Tk):
         self.palm, self.distance  = self.read_values_from_devices(self.listener,self.controller)
 
         
-        # [INTERFACE] - DRAWING PARAMETERS 
-        self.circle_y = int(self.img_h/2)+10
-        self.center_x = int(self.img_h/2)
-        self.bar_max = int(self.img_h/3)
-        self.bar_h = np.zeros((5))
+        # [INTERFACE] - DRAWING PARAMETERS
         self.decisionPressButton = [False,False,False,False,False]
         self.last_decisionPressButton = self.decisionPressButton[:]
         self.distance_rest = [None,None,None,None,None]
@@ -162,11 +163,13 @@ class Interface(Tk):
         self.threshold = self.bar_origin_threshold[:]
         self.slider_name = [x.lower() for x in self.labels_fingers]
         if self.hand2use == 'left':
-            self.slider_name = self.slider_name[::-1] 
+            self.slider_name = self.slider_name[::-1]
 
         self.key = 0
         self.solution2Use = 0
         self.firstTime = False
+
+        self.threshold = mainwin.bar_origin_threshold
 
         # BUTTON INTERFACE - TKINTER
         Tk.__init__(self)
@@ -197,28 +200,32 @@ class Interface(Tk):
         self.v1  = Label(self.top_frame, text="Leap Motion not detected",font=("Helvetica", 11),padx=100)
         #self.v1 = Label(top_frame)
         self.v1.grid(padx=10)
-        
-        #selection buttons of the interface
-        #sound
+
+        # selection buttons of the interface
+        # sound
         self.var1 = BooleanVar()
         self.var1.set(self.use_sound)
-        check_button = Checkbutton(btm_frame4,bg='Sky Blue', text="Sound", variable=self.var1,command=self.check_sound_use).grid(row=0,column = 0,padx=10)
+        mainwin.dia.Sound.setChecked(self.var1.get())
+        # check_button = Checkbutton(btm_frame4,bg='Sky Blue', text="Sound", variable=self.var1,command=self.check_sound_use).grid(row=0,column = 0,padx=10)
 
-        #which button is pressed
+        # which button is pressed
         self.var2 = BooleanVar()
         self.var2.set(self.use_setup)
-        check_button = Checkbutton(btm_frame4,bg='Sky Blue', text="Press Button", variable=self.var2,command=self.check_setup_use).grid(row=0,column = 1,padx=80)
+        mainwin.dia.PressButton.setChecked(self.var2.get())
+        # check_button = Checkbutton(btm_frame4,bg='Sky Blue', text="Press Button", variable=self.var2,command=self.check_setup_use).grid(row=0,column = 1,padx=80)
 
         #
         self.var3 = BooleanVar()
         self.var3.set(self.show_visualizer)
-        check_button = Checkbutton(btm_frame4,bg='Sky Blue', text="Visualizer", variable=self.var3,command=self.check_vis_use).grid(row=0,column = 2,padx=10)
+        mainwin.dia.Visualizer.setChecked(self.var3.get())
+        # check_button = Checkbutton(btm_frame4,bg='Sky Blue', text="Visualizer", variable=self.var3,command=self.check_vis_use).grid(row=0,column = 2,padx=10)
 
-        #shifter is used
+        # shifter is used
         self.var4 = BooleanVar()
         self.var4.set(self.show_finger_use)
-        check_button = Checkbutton(btm_frame4,bg='Sky Blue', text="Use shifter", variable=self.var4,command=self.check_finger_use).grid(row=0,column = 3,padx=10)
-        
+        mainwin.dia.ShifterButton.setChecked(self.var4.get())
+        # check_button = Checkbutton(btm_frame4,bg='Sky Blue', text="Use shifter", variable=self.var4,command=self.check_finger_use).grid(row=0,column = 3,padx=10)
+
         #labeling of the fingers hands depending on which hand is used
         #+labeling each fingers with which key it is pressing
         if self.hand2use == 'right':
@@ -259,9 +266,9 @@ class Interface(Tk):
         #Checkbutton(btm_frame4, text="Button", variable=var2).grid(row=0,column = 2)
         #Button(btm_frame4, text='Calibration',height=2,width=30).grid(row=0,padx=60)
         
-        self._thread  = None
-        self._thread = threading.Thread(target=self.run_loop)
-        self._thread.start()
+        #self._thread  = None
+        #self._thread = threading.Thread(target=self.run_loop)
+        #self._thread.start()
         
 
         self.protocol("WM_DELETE_WINDOW",self.on_close)
@@ -620,4 +627,12 @@ class Interface(Tk):
     
 if __name__=="__main__":
     config_file = r".\config.ini"
-    interface = Interface(config_file)
+    app = QtWidgets.QApplication(sys.argv)
+
+    AnglesValues = QtWidgets.QMainWindow()
+    AnglesValues.setWindowIcon(QtGui.QIcon('th.png'))
+    mainwin = Ui_AnglesValues()
+    mainwin.setupUi(AnglesValues)
+    AnglesValues.show()
+    interface = Interface(mainwin, config_file)
+    sys.exit(app.exec_())
