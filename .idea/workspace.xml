@@ -3,7 +3,12 @@
   <component name="ChangeListManager">
     <list default="true" id="6b1578af-8641-40f5-849e-aa5768652184" name="Changes" comment="">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/convert_ui.py" beforeDir="false" afterPath="$PROJECT_DIR$/convert_ui.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/hand2key2.ui" beforeDir="false" afterPath="$PROJECT_DIR$/hand2key2.ui" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/hand2keyPressedRehab-master/Settings.py" beforeDir="false" afterPath="$PROJECT_DIR$/hand2keyPressedRehab-master/Settings.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/hand2keyPressedRehab-master/config.ini" beforeDir="false" afterPath="$PROJECT_DIR$/hand2keyPressedRehab-master/config.ini" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/hand2keyPressedRehab-master/hand2keyPressedRehab.py" beforeDir="false" afterPath="$PROJECT_DIR$/hand2keyPressedRehab-master/hand2keyPressedRehab.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/hand2keyPressedRehab-master/mainwindows.py" beforeDir="false" afterPath="$PROJECT_DIR$/hand2keyPressedRehab-master/mainwindows.py" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -25,7 +30,7 @@
     <property name="RunOnceActivity.OpenProjectViewOnStart" value="true" />
     <property name="RunOnceActivity.ShowReadmeOnStart" value="true" />
   </component>
-  <component name="RunManager">
+  <component name="RunManager" selected="Python.main">
     <configuration name="hand2keyPressedRehab" type="PythonConfigurationType" factoryName="Python" temporary="true" nameIsGenerated="true">
       <option name="INTERPRETER_OPTIONS" value="" />
       <option name="PARENT_ENVS" value="true" />
@@ -39,6 +44,27 @@
       <option name="ADD_SOURCE_ROOTS" value="true" />
       <module name="" />
       <option name="SCRIPT_NAME" value="$PROJECT_DIR$/hand2keyPressedRehab-master/hand2keyPressedRehab.py" />
+      <option name="PARAMETERS" value="" />
+      <option name="SHOW_COMMAND_LINE" value="false" />
+      <option name="EMULATE_TERMINAL" value="false" />
+      <option name="MODULE_MODE" value="false" />
+      <option name="REDIRECT_INPUT" value="false" />
+      <option name="INPUT_FILE" value="" />
+      <method v="2" />
+    </configuration>
+    <configuration name="main" type="PythonConfigurationType" factoryName="Python" nameIsGenerated="true">
+      <option name="INTERPRETER_OPTIONS" value="" />
+      <option name="PARENT_ENVS" value="true" />
+      <envs>
+        <env name="PYTHONUNBUFFERED" value="1" />
+      </envs>
+      <option name="SDK_HOME" value="" />
+      <option name="WORKING_DIRECTORY" value="$PROJECT_DIR$" />
+      <option name="IS_MODULE_SDK" value="false" />
+      <option name="ADD_CONTENT_ROOTS" value="true" />
+      <option name="ADD_SOURCE_ROOTS" value="true" />
+      <module name="" />
+      <option name="SCRIPT_NAME" value="$PROJECT_DIR$/main.py" />
       <option name="PARAMETERS" value="" />
       <option name="SHOW_COMMAND_LINE" value="false" />
       <option name="EMULATE_TERMINAL" value="false" />

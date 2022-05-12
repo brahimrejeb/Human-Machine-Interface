@@ -181,7 +181,7 @@ class Ui_AnglesValues(object):
         self.Dialog.setWindowIcon(QtGui.QIcon('th.png'))
         self.actionAcces_setting.triggered.connect(self.Dialog.show)
 
-
+        self.progress_bars=[self.ThumbValue,self.IndexValue,self.MiddleValue,self.RingValue,self.PinkyValue,self.WristValue]
 
         #threshold:
         self.thresh_thumb=self.dia.ThumbThresh.tickPosition()
@@ -189,7 +189,29 @@ class Ui_AnglesValues(object):
         self.thresh_middle = self.dia.MiddleThresh.tickPosition()
         self.thresh_ring = self.dia.RingThresh.tickPosition()
         self.thresh_pinky = self.dia.PinkyThresh.tickPosition()
-        self.bar_origin_threshold=[self.thresh_thumb, self.thresh_index, self.thresh_middle, self.thresh_ring, self.thresh_pinky]
+        self.thresh_wrist = self.dia.WristThresh.tickPosition()
+        self.bar_origin_threshold=[self.thresh_thumb, self.thresh_index, self.thresh_middle, self.thresh_ring, self.thresh_pinky, self.thresh_wrist]
+
+    def update_threshold_sliders(self,values):
+        self.dia.ThumbThresh.setValue(values[0])
+        self.dia.IndexThresh.setValue(values[1])
+        self.dia.MiddleThresh.setValue(values[2])
+        self.dia.RingThresh.setValue(values[3])
+        self.dia.PinkyThresh.setValue(values[4])
+        self.dia.WristThresh.setValue(values[5])
+
+    def update_threshold(self):
+        self.thresh_thumb = self.dia.ThumbThresh.value()
+        self.thresh_index = self.dia.IndexThresh.value()
+        self.thresh_middle = self.dia.MiddleThresh.value()
+        self.thresh_ring = self.dia.RingThresh.value()
+        self.thresh_pinky = self.dia.PinkyThresh.value()
+        self.thresh_wrist = self.dia.PinkyThresh.value()
+        self.bar_origin_threshold = [self.thresh_thumb, self.thresh_index, self.thresh_middle, self.thresh_ring,
+                                     self.thresh_pinky,self.thresh_wrist]
+
+    def update_progress(self,value):
+        self.ThumbValue.setValue(value)
 
 
     def retranslateUi(self, AnglesValues):

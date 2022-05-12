@@ -6,7 +6,7 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>421</width>
+    <width>302</width>
     <height>334</height>
    </rect>
   </property>
@@ -177,13 +177,6 @@
       </widget>
      </item>
      <item>
-      <widget class="QCheckBox" name="ShifterButton">
-       <property name="text">
-        <string>Use shifter</string>
-       </property>
-      </widget>
-     </item>
-     <item>
       <widget class="QCheckBox" name="PressButton">
        <property name="text">
         <string>Press Button</string>
@@ -253,6 +246,13 @@
      </item>
      <item>
       <widget class="QSlider" name="PinkyThresh">
+       <property name="orientation">
+        <enum>Qt::Horizontal</enum>
+       </property>
+      </widget>
+     </item>
+     <item>
+      <widget class="QSlider" name="WristThresh">
        <property name="orientation">
         <enum>Qt::Horizontal</enum>
        </property>

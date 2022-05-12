@@ -51,10 +51,10 @@ DICT_PYNPUT_KEYBOARD = {'none':None,'alt':Key.alt_l,'win': Key.cmd,
 }
 
 # LABELS FINGERS
-NB_INPUTS=5
-DEFAULT_LABELS_FINGERS = ['thumb','index','middle','ring','pinky']
-DEFAULT_DATA_HEADER_LEFT = "PINKY,RING,MIDDLE,INDEX,THUMB,TH_PK,TH_RG,TH_MID,TH_IN,TH_THB"
-DEFAULT_DATA_HEADER_RIGHT= "THUMB,INDEX,MIDDLE,RING,PINKY,TH_THB,TH_IN,TH_MID,TH_RG,TH_PK"
+NB_INPUTS=6
+DEFAULT_LABELS_FINGERS = ['thumb','index','middle','ring','pinky','wrist']
+DEFAULT_DATA_HEADER_LEFT = "WRIST,PINKY,RING,MIDDLE,INDEX,THUMB,TH_WR,TH_PK,TH_RG,TH_MID,TH_IN,TH_THB"
+DEFAULT_DATA_HEADER_RIGHT= "THUMB,INDEX,MIDDLE,RING,PINKY,WRIST,TH_THB,TH_IN,TH_MID,TH_RG,TH_PK,TH_WR"
 
 
 class Interface(Tk):
@@ -64,7 +64,8 @@ class Interface(Tk):
     Sound feedback
     Drawing of the interface
     '''
-    def __init__(self,mainwin,config_file):
+    def __init__(self,config_file):
+        global mainwin
 
         # Initialisation : 
         self.init=True
@@ -87,11 +88,11 @@ class Interface(Tk):
         self.record_data = self.config.getboolean("options","record_data")
         self.path_leap_folder = ast.literal_eval(self.config.get("options", "path_leap_folder"))
         #by default the application is used with the shifter mode
-        self.show_finger_use = self.config.getboolean("options","show_finger_use")
         self.current_key= self.config.getint("options","current_key")
 
         # DRAWING PARAMS
         self.bar_origin_threshold = ast.literal_eval(self.config.get("drawing", "bar_origin_threshold"))
+        self.bar_h = np.zeros((NB_INPUTS))
 
         # Initialisation our window:
         mainwin.CurrentKey.setText(OPTIONS[self.current_key])
@@ -149,28 +150,24 @@ class Interface(Tk):
 
         
         # [INTERFACE] - DRAWING PARAMETERS
-        self.decisionPressButton = [False,False,False,False,False]
+        self.decisionPressButton = [False,False,False,False,False,False]
         self.last_decisionPressButton = self.decisionPressButton[:]
-        self.distance_rest = [None,None,None,None,None]
+        self.distance_rest = [None,None,None,None,None,None]
 
-        self.distance_rest_default = [1.0,1.0,1.0,1.0,25.0]#[3.0,3.0,3.0,3.0,100.0]
+        self.distance_rest_default = [1.0,1.0,1.0,1.0,1.0,25.0]#[3.0,3.0,3.0,3.0,100.0]
         self.distance_rest = self.distance_rest_default[:]
-        self.subtracted = [0.0,0.0,0.0,0.0,0.0]
+        self.subtracted = [0.0,0.0,0.0,0.0,0.0,0.0]
 
         # [INTERFACE] - PARAMS INITIALIZATION
         self.nButton = len(self.labels_buttons)
         self.calibrated = False
         self.slider_value = self.bar_origin_threshold[:]
+        mainwin.update_threshold_sliders(values=self.bar_origin_threshold)
         self.threshold = self.bar_origin_threshold[:]
-        self.slider_name = [x.lower() for x in self.labels_fingers]
-        if self.hand2use == 'left':
-            self.slider_name = self.slider_name[::-1]
 
         self.key = 0
         self.solution2Use = 0
         self.firstTime = False
-
-        self.threshold = mainwin.bar_origin_threshold
 
         # selection buttons of the interface
         # sound
@@ -185,26 +182,25 @@ class Interface(Tk):
         mainwin.dia.Visualizer.setChecked(self.show_visualizer)
         # check_button = Checkbutton(btm_frame4,bg='Sky Blue', text="Visualizer", variable=self.var3,command=self.check_vis_use).grid(row=0,column = 2,padx=10)
 
-        # shifter is used
-        mainwin.dia.ShifterButton.setChecked(self.show_finger_use)
+
         # check_button = Checkbutton(btm_frame4,bg='Sky Blue', text="Use shifter", variable=self.var4,command=self.check_finger_use).grid(row=0,column = 3,padx=10)
 
         #labeling of the fingers hands depending on which hand is used
         #+labeling each fingers with which key it is pressing
-        if self.hand2use == 'right':
-            self._list = [self.on_button4, self.on_button3, self.on_button2, self.on_button1, self.on_button]
-            self.updata_value_list = [self.updata_value, self.updata_value1, self.updata_value2, self.updata_value3,
-                                      self.updata_value4]
+        #if self.hand2use == 'right':
+        #    self._list = [self.on_button4, self.on_button3, self.on_button2, self.on_button1, self.on_button]
+        #    self.updata_value_list = [self.updata_value, self.updata_value1, self.updata_value2, self.updata_value3,
+        #                              self.updata_value4]
 
-        elif self.hand2use == 'left':
-            self.on_button_list = [self.on_button, self.on_button1, self.on_button2, self.on_button3, self.on_button4]
-            self.updata_value_list = [self.updata_value4, self.updata_value3, self.updata_value2, self.updata_value1,
-                                      self.updata_value]
+        #elif self.hand2use == 'left':
+        #    self.on_button_list = [self.on_button, self.on_button1, self.on_button2, self.on_button3, self.on_button4]
+        #    self.updata_value_list = [self.updata_value4, self.updata_value3, self.updata_value2, self.updata_value1,
+        #                              self.updata_value]
 
         # create the listmenu
-        o_vars = []
-        self.o_vars = []
-        self.o = [None, None, None, None, None]
+        #o_vars = []
+        #self.o_vars = []
+        #self.o = [None, None, None, None, None]
 
 
         mainwin.ThumbValue.setValue(self.slider_value[0])
@@ -212,6 +208,7 @@ class Interface(Tk):
         mainwin.MiddleValue.setValue(self.slider_value[2])
         mainwin.RingValue.setValue(self.slider_value[3])
         mainwin.PinkyValue.setValue(self.slider_value[4])
+        mainwin.WristValue.setValue(self.slider_value[5])
         #for i in range(NB_INPUTS):
         #    l2 = Label(btm_frame2, bg='Sky Blue', text=self.slider_name[i].lower(),font=("Helvetica", 11))
         #    w2 = Scale(btm_frame2,bg='Sky Blue', from_=0, to=100, orient=HORIZONTAL,length=450,command=self.updata_value_list[i])
@@ -229,7 +226,7 @@ class Interface(Tk):
         #Button(btm_frame4, text='Calibration',height=2,width=30).grid(row=0,padx=60)
         
         self._thread  = None
-        self._thread = threading.Thread(target=self.update_mode)
+        self._thread = threading.Thread(target=self.run_loop)
         self._thread.start()
         
 
@@ -237,19 +234,22 @@ class Interface(Tk):
         # RUN MAIN LOOP
         #self.mainloop()
     
-    def check_sound_use(self,mainwin):
+    def check_sound_use(self):
+        global mainwin
         '''
         Boolean variable, determine whether sound is ON or OFF
         '''
         self.use_sound = mainwin.dia.Sound.isChecked()
         
-    def check_setup_use(self,mainwin):
+    def check_setup_use(self):
+        global mainwin
         '''
         Boolean variable, determine whether button is pressed or not
         '''
         self.use_setup = mainwin.dia.PressButton.isChecked()
         
-    def check_vis_use(self,mainwin):
+    def check_vis_use(self):
+        global mainwin
         '''
         Boolean variable
         '''
@@ -260,35 +260,37 @@ class Interface(Tk):
             print("close visualization")
             subprocess.call(["taskkill","/F","/IM",'Visualizer.exe'])
     
-    def check_finger_use(self,mainwin):
+    def check_mode(self):
+        global mainwin
         '''
         Boolean variable, determine whether shifter is ON or OFF
         '''
-        self.check_finger_use = mainwin.dia.ShifterButton.isChecked()
+        self.check_finger_use = (mainwin.ModeSelector.currentText()=='Simple Mode')
             
             # subprocess.Popen(['C:\\Program Files (x86)\\Leap Motion\\Core Services\\Visualizer.exe', '-new-tab'])
         
     '''
     get the values of the slider threshold for each finger
     '''    
-    def updata_value(self,selection):self.slider_value[0] = int(selection)
-    def updata_value1(self,selection):self.slider_value[1] = int(selection)
-    def updata_value2(self,selection):self.slider_value[2] = int(selection)
-    def updata_value3(self,selection):self.slider_value[3] = int(selection)
-    def updata_value4(self,selection):self.slider_value[4] = int(selection)
+    #def updata_value(self,selection):self.slider_value[0] = int(selection)
+    #def updata_value1(self,selection):self.slider_value[1] = int(selection)
+    #def updata_value2(self,selection):self.slider_value[2] = int(selection)
+    #def updata_value3(self,selection):self.slider_value[3] = int(selection)
+    #def updata_value4(self,selection):self.slider_value[4] = int(selection)
     
     '''
     What value is pressed by each finger, value store into a list 
     '''
-    def on_button(self,selection):self.labels_buttons[0] = selection
-    def on_button1(self,selection):self.labels_buttons[1] = selection
-    def on_button2(self,selection):self.labels_buttons[2] = selection
-    def on_button3(self,selection):self.labels_buttons[3] = selection
-    def on_button4(self,selection):self.labels_buttons[4] = selection
+    #def on_button(self,selection):self.labels_buttons[0] = selection
+    #def on_button1(self,selection):self.labels_buttons[1] = selection
+    #def on_button2(self,selection):self.labels_buttons[2] = selection
+    #def on_button3(self,selection):self.labels_buttons[3] = selection
+    #def on_button4(self,selection):self.labels_buttons[4] = selection
              
 
     # def exitui(self):
     def on_close(self):
+        global app
         '''
         closing of the interface
         '''
@@ -312,8 +314,7 @@ class Interface(Tk):
         self.update_config_file()
         mixer.quit()
 
-        sys.exit()
-        self.destroy()
+        sys.exit(app.exec_())
 
     def loading_sound_on_computer(self,OPTIONS):
         '''
@@ -459,6 +460,7 @@ class Interface(Tk):
         print("[CONFIG_FILE] Ini file has been updated")
 
     def update_mode(self):
+        global mainwin
         while self._thread is not None:
             if (mainwin.ModeSelector.currentText()=='Simple Mode'):
                 mainwin.CurrentKey.setHidden(False)
@@ -477,9 +479,11 @@ class Interface(Tk):
                 mainwin.PinkyKey.show()
                 mainwin.WristKey.show()
 
-    def run_loop(self,mainwin):
+    def run_loop(self):
+        global mainwin
+
         print("**** Start Running interface ****")
-        img = np.zeros((self.img_h,self.img_v,3), np.uint8)
+        #img = np.zeros((self.img_h,self.img_v,3), np.uint8)
         counter_no_data = 0
         counter_init = 0
         while self._thread is not None:
@@ -490,12 +494,12 @@ class Interface(Tk):
                     self.distance_init=self.distance.copy()
                     self.palm_init = self.palm.copy()
                     counter_init = 0
-                
+
                     self.init=False
-                
+
                     print('self.distance_init',self.distance_init)
                     print('self.palm.init',self.palm_init)
-                
+
             self.key = cv2.waitKeyEx(1)
 
 
@@ -517,7 +521,7 @@ class Interface(Tk):
                         self.subtracted.append(item)
 
             # Check if we need to redo initialisation : 
-            if not self.init: 
+            if not self.init:
                 if not None in self.palm and not None in self.palm_init:
                     array_actual_palm= np.array(self.palm)
                     array_init_palm= np.array(self.palm_init)
@@ -529,26 +533,25 @@ class Interface(Tk):
 
             if None in self.distance_hand:
                 self.calibrated = False
-                counter_no_data += 1 
+                counter_no_data += 1
                 if counter_no_data == 1:
                     print("Waiting for values from LeapMotion")
                 elif counter_no_data == 5:
-                    img*=0
-                    cv2.putText(img,"Waiting for LeapMotion ...",(self.circle_first_coord+20,self.circle_y),cv2.FONT_HERSHEY_SIMPLEX,0.8,(255,255,255))
-                    img_ = Image.fromarray(img)
-                    nimg = ImageTk.PhotoImage(image=img_)
-                    self.v1.n_img = nimg   
-                    self.v1.configure(image=nimg)
+                    #cv2.putText(img,"Waiting for LeapMotion ...",(self.circle_first_coord+20,self.circle_y),cv2.FONT_HERSHEY_SIMPLEX,0.8,(255,255,255))
+                    #img_ = Image.fromarray(img)
+                    #nimg = ImageTk.PhotoImage(image=img_)
+                    #self.v1.n_img = nimg
+                    #self.v1.configure(image=nimg)
                     # make initialisation 
                     self.init=True
                     counter_init=0
                 continue
-            else: 
+            else:
                 counter_no_data = 0
                 #print('substracted',self.subtracted)
                 #print('distance_init',self.distance_init)
-               # print('difference', difference)
-            
+            # print('difference', difference)
+
             # if (not self.calibrated and None not in self.distance_hand):
             #     # if s2 == 1: 
             #     #     self.distance_rest = self.distance_hand[:]
@@ -560,28 +563,30 @@ class Interface(Tk):
             # USE PHASE
             for i in range(self.nButton):
                 # Labelling 
-                coord = self.circle_first_coord + i*self.circle_space
-                cv2.putText(img,self.labels_fingers[i],(coord-30,self.circle_y-50),cv2.FONT_HERSHEY_SIMPLEX,0.8,self.text_color)
-               
+                #coord = self.circle_first_coord + i*self.circle_space
+                #cv2.putText(img,self.labels_fingers[i],(coord-30,self.circle_y-50),cv2.FONT_HERSHEY_SIMPLEX,0.8,self.text_color)
+
                 #Bar Plot Visualization - continuous
-                self.bar_h[i] = self.subtracted[i]/self.distance_rest[i] # 1-self.distance_hand[i]/self.distance_rest[i]
-                self.threshold[i] = (self.slider_value[i]/100.0)
-                cv2.rectangle(img, (coord-30,self.img_h), (coord+30,self.img_h-int(self.bar_h[i]*self.bar_max)), self.bar_color, -1) 
-                cv2.line(img, (coord-20,self.img_h-int(self.threshold[i]*self.bar_max)), (coord+20,self.img_h-int(self.threshold[i]*self.bar_max)), self.bar_color_th, 3) 
-            
+                #self.bar_h[i] = self.subtracted[i]/self.distance_rest[i] # 1-self.distance_hand[i]/self.distance_rest[i] #generates a segmentation fault
+                #self.threshold[i] = (self.slider_value[i]/100.0)
+                mainwin.update_progress(100) #test
+                #cv2.rectangle(img, (coord-30,self.img_h), (coord+30,self.img_h-int(self.bar_h[i]*self.bar_max)), self.bar_color, -1)
+                #cv2.line(img, (coord-20,self.img_h-int(self.threshold[i]*self.bar_max)), (coord+20,self.img_h-int(self.threshold[i]*self.bar_max)), self.bar_color_th, 3)
+
                 # Boolean Visualization  - discrete
-                if self.bar_h[i] >= self.threshold[i]:
-                    cv2.circle(img, (coord,self.circle_y), self.circle_radius, self.text_color_selec, self.circle_thickness)
-                    self.decisionPressButton[i] = True
-                    cv2.putText(img,self.labels_buttons[i],(coord-30,self.circle_y-150),cv2.FONT_HERSHEY_SIMPLEX,1,self.text_color_selec)
-                    cv2.rectangle(img, (coord-30-30,self.circle_y-150-50), (coord-40+70,self.circle_y-150+50), self.text_color_selec, 3) 
-                else:
-                    self.decisionPressButton[i] = False
-                    cv2.putText(img,self.labels_buttons[i],(coord-30,self.circle_y-150),cv2.FONT_HERSHEY_SIMPLEX,1,self.text_color_selec)
-                    cv2.circle(img, (coord,self.circle_y), self.circle_radius, self.circle_color, self.circle_thickness)
-            
+            #if self.bar_h[i] >= self.threshold[i]:
+            #    cv2.circle(img, (coord,self.circle_y), self.circle_radius, self.text_color_selec, self.circle_thickness)
+            #    self.decisionPressButton[i] = True
+            #    cv2.putText(img,self.labels_buttons[i],(coord-30,self.circle_y-150),cv2.FONT_HERSHEY_SIMPLEX,1,self.text_color_selec)
+            #    cv2.rectangle(img, (coord-30-30,self.circle_y-150-50), (coord-40+70,self.circle_y-150+50), self.text_color_selec, 3)
+            #else:
+            #    self.decisionPressButton[i] = False
+            #    cv2.putText(img,self.labels_buttons[i],(coord-30,self.circle_y-150),cv2.FONT_HERSHEY_SIMPLEX,1,self.text_color_selec)
+            #    cv2.circle(img, (coord,self.circle_y), self.circle_radius, self.circle_color, self.circle_thickness)
+
+
             # Keyboard Pressing/Release Process
-            if self.check_finger_use(mainwin):
+            if self.check_mode():
                 if self.decisionPressButton[4] and not self.last_decisionPressButton[4]:
                     self.current_key+=1
                     self.current_key= self.current_key % len(OPTIONS)
@@ -591,19 +596,19 @@ class Interface(Tk):
             #print('label button',self.labels_buttons)
             self.press_key_on_keyboard(self.keyboard,self.decisionPressButton,self.last_decisionPressButton,self.labels_buttons)
             self.last_decisionPressButton = self.decisionPressButton[:]
-            
+
             if self.record_data:
                 # print(self.bar_h,self.threshold)
                 self.write_in_text_file(self.file_object,self.bar_h,self.threshold)
-            
-            
-            img_ = Image.fromarray(img)
-            nimg = ImageTk.PhotoImage(image=img_)
-            self.v1.n_img = nimg
-            self.v1.configure(image=nimg)
-            
-            self.after(self.refresh_rate)
-            img*=0
+
+
+            #img_ = Image.fromarray(img)
+            #nimg = ImageTk.PhotoImage(image=img_)
+            #self.v1.n_img = nimg
+            #self.v1.configure(image=nimg)
+
+            #self.after(self.refresh_rate)
+            #img*=0
     
 if __name__=="__main__":
     config_file = r".\config.ini"
@@ -614,5 +619,5 @@ if __name__=="__main__":
     mainwin = Ui_AnglesValues()
     mainwin.setupUi(AnglesValues)
     AnglesValues.show()
-    interface = Interface(mainwin, config_file)
+    interface = Interface(config_file)
     sys.exit(app.exec_())
