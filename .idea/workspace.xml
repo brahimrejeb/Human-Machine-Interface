@@ -3,10 +3,7 @@
   <component name="ChangeListManager">
     <list default="true" id="6b1578af-8641-40f5-849e-aa5768652184" name="Changes" comment="">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/convert_ui.py" beforeDir="false" afterPath="$PROJECT_DIR$/convert_ui.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/hand2key2.ui" beforeDir="false" afterPath="$PROJECT_DIR$/hand2key2.ui" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/hand2keyPressedRehab-master/Settings.py" beforeDir="false" afterPath="$PROJECT_DIR$/hand2keyPressedRehab-master/Settings.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/hand2keyPressedRehab-master/config.ini" beforeDir="false" afterPath="$PROJECT_DIR$/hand2keyPressedRehab-master/config.ini" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/hand2keyPressedRehab-master/LeapMotion_detection.py" beforeDir="false" afterPath="$PROJECT_DIR$/hand2keyPressedRehab-master/LeapMotion_detection.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/hand2keyPressedRehab-master/hand2keyPressedRehab.py" beforeDir="false" afterPath="$PROJECT_DIR$/hand2keyPressedRehab-master/hand2keyPressedRehab.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/hand2keyPressedRehab-master/mainwindows.py" beforeDir="false" afterPath="$PROJECT_DIR$/hand2keyPressedRehab-master/mainwindows.py" afterDir="false" />
     </list>

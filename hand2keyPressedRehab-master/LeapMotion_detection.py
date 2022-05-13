@@ -15,7 +15,7 @@ import numpy as np
 class LeapMotionListener(Leap.Listener):
 	finger_names=['Thumb','Index','Middle','Ring','Pinky']
 	bone_names=['Metacarpal','Proximal','Intermediate','Distal']
-	distance = [None,None,None,None,None]
+	distance = [None,None,None,None,None,None]
 	palm = [None,None,None]
 	print_one = True
 
@@ -35,11 +35,13 @@ class LeapMotionListener(Leap.Listener):
 		Middle_found=False
 		Pinky_found=False
 		Ring_found=False
+		Wrist_found=False
 		self.distance[0]= None
 		self.distance[1]= None
 		self.distance[2]= None
 		self.distance[3]= None
 		self.distance[4]= None
+		self.distance[5] = None
 		
 		self.palm[0]=None
 		self.palm[1]=None
@@ -79,10 +81,15 @@ class LeapMotionListener(Leap.Listener):
 				Pinky_proximal_bone = finger.bone(Leap.Bone.TYPE_PROXIMAL) 
 				Pinky_meta_bone = finger.bone(Leap.Bone.TYPE_METACARPAL) 
 				Pinky_found=True
-			
+
+			if finger.type== Leap.Finger.TYPE_PINKY:
+				Wrist_distal_bone = finger.bone(Leap.Bone.TYPE_DISTAL)
+				Wrist_proximal_bone = finger.bone(Leap.Bone.TYPE_PROXIMAL)
+				Wrist_meta_bone = finger.bone(Leap.Bone.TYPE_METACARPAL)
+				Wrist_found=True
 
 
-			if(Index_found and Thumb_found and Middle_found and Pinky_found and Ring_found):
+			if(Index_found and Thumb_found and Middle_found and Pinky_found and Ring_found and Wrist_found):
 #					self.distance[0]= Thumb_distal_bone.center.distance_to(Thumb_distal_bone.center)
 #					self.distance[1]= Thumb_distal_bone.center.distance_to(Index_distal_bone.center)
 #					self.distance[2]= Thumb_distal_bone.center.distance_to(Middle_distal_bone.center)
@@ -94,6 +101,8 @@ class LeapMotionListener(Leap.Listener):
 						self.distance[2] = (Middle_distal_bone.next_joint-Middle_proximal_bone.prev_joint).angle_to(Middle_meta_bone.prev_joint-Middle_proximal_bone.prev_joint)
 						self.distance[3] = (Ring_distal_bone.next_joint-Ring_proximal_bone.prev_joint).angle_to(Ring_meta_bone.prev_joint-Ring_proximal_bone.prev_joint)
 						self.distance[4] = (Pinky_distal_bone.next_joint-Pinky_proximal_bone.prev_joint).angle_to(Pinky_meta_bone.prev_joint-Pinky_proximal_bone.prev_joint)
+						self.distance[5] = (Pinky_distal_bone.next_joint - Pinky_proximal_bone.prev_joint).angle_to(
+							Pinky_meta_bone.prev_joint - Pinky_proximal_bone.prev_joint)
 					
 						self.palm[0]=hand.palm_position.x
 						self.palm[1]=hand.palm_position.y

@@ -9,8 +9,17 @@
 
 
 from PyQt5 import QtCore, QtGui, QtWidgets
+from PyQt5.QtCore import QThread, pyqtSignal
 import Settings
 from Settings import Ui_Dialog
+import time
+
+class External(QThread):
+    valueChanged=pyqtSignal(int)
+    value=0
+    def run(self):
+        while True:
+            self.valueChanged.emit(self.value)
 
 
 class Ui_AnglesValues(object):
@@ -192,7 +201,7 @@ class Ui_AnglesValues(object):
         self.thresh_wrist = self.dia.WristThresh.tickPosition()
         self.bar_origin_threshold=[self.thresh_thumb, self.thresh_index, self.thresh_middle, self.thresh_ring, self.thresh_pinky, self.thresh_wrist]
 
-    def update_threshold_sliders(self,values):
+    def init_threshold_sliders(self,values):
         self.dia.ThumbThresh.setValue(values[0])
         self.dia.IndexThresh.setValue(values[1])
         self.dia.MiddleThresh.setValue(values[2])
@@ -210,9 +219,13 @@ class Ui_AnglesValues(object):
         self.bar_origin_threshold = [self.thresh_thumb, self.thresh_index, self.thresh_middle, self.thresh_ring,
                                      self.thresh_pinky,self.thresh_wrist]
 
-    def update_progress(self,value):
-        self.ThumbValue.setValue(value)
+    def update_progress(self):
+        self.calc= External()
+        self.calc.valueChanged.connect(self.onValueChanged)
+        self.calc.start()
 
+    def onValueChanged(self):
+        self.ThumbValue.setValue(External.value)
 
     def retranslateUi(self, AnglesValues):
         _translate = QtCore.QCoreApplication.translate

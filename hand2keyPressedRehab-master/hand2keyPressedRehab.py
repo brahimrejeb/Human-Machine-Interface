@@ -31,7 +31,7 @@ import Settings
 from Settings import Ui_Dialog
 import mainwindows
 from mainwindows import Ui_AnglesValues
-
+from mainwindows import External
 
 
 # LIST CMD 
@@ -57,7 +57,7 @@ DEFAULT_DATA_HEADER_LEFT = "WRIST,PINKY,RING,MIDDLE,INDEX,THUMB,TH_WR,TH_PK,TH_R
 DEFAULT_DATA_HEADER_RIGHT= "THUMB,INDEX,MIDDLE,RING,PINKY,WRIST,TH_THB,TH_IN,TH_MID,TH_RG,TH_PK,TH_WR"
 
 
-class Interface(Tk):
+class Interface():
     '''
     Initialisation of the paramter of the simulation
     Recording of the Data in a file
@@ -161,8 +161,8 @@ class Interface(Tk):
         # [INTERFACE] - PARAMS INITIALIZATION
         self.nButton = len(self.labels_buttons)
         self.calibrated = False
-        self.slider_value = self.bar_origin_threshold[:]
-        mainwin.update_threshold_sliders(values=self.bar_origin_threshold)
+        self.slider_value = self.bar_origin_threshold[:] #100- threshold
+        mainwin.init_threshold_sliders(values=self.bar_origin_threshold)
         self.threshold = self.bar_origin_threshold[:]
 
         self.key = 0
@@ -224,7 +224,9 @@ class Interface(Tk):
         #var2 = IntVar()
         #Checkbutton(btm_frame4, text="Button", variable=var2).grid(row=0,column = 2)
         #Button(btm_frame4, text='Calibration',height=2,width=30).grid(row=0,padx=60)
-        
+
+        mainwin.update_progress()
+
         self._thread  = None
         self._thread = threading.Thread(target=self.run_loop)
         self._thread.start()
@@ -462,7 +464,7 @@ class Interface(Tk):
     def update_mode(self):
         global mainwin
         while self._thread is not None:
-            if (mainwin.ModeSelector.currentText()=='Simple Mode'):
+            if mainwin.ModeSelector.currentText()=='Simple Mode':
                 mainwin.CurrentKey.setHidden(False)
                 mainwin.ThumbKey.hide()
                 mainwin.IndexKey.hide()
@@ -561,15 +563,18 @@ class Interface(Tk):
             #     self.calibrated = True
 
             # USE PHASE
+            self.bar_h[0]=self.subtracted[0] / self.distance_rest[0]
+            print(self.subtracted[0] / self.distance_rest[0])
+            External.value=int(self.bar_h[0]*100)
             for i in range(self.nButton):
                 # Labelling 
                 #coord = self.circle_first_coord + i*self.circle_space
                 #cv2.putText(img,self.labels_fingers[i],(coord-30,self.circle_y-50),cv2.FONT_HERSHEY_SIMPLEX,0.8,self.text_color)
 
                 #Bar Plot Visualization - continuous
-                #self.bar_h[i] = self.subtracted[i]/self.distance_rest[i] # 1-self.distance_hand[i]/self.distance_rest[i] #generates a segmentation fault
+                self.bar_h[i] = self.subtracted[i]/self.distance_rest[i] # 1-self.distance_hand[i]/self.distance_rest[i] #generates a segmentation fault
                 #self.threshold[i] = (self.slider_value[i]/100.0)
-                mainwin.update_progress(100) #test
+                #External.value=self.bar_h[0] #test
                 #cv2.rectangle(img, (coord-30,self.img_h), (coord+30,self.img_h-int(self.bar_h[i]*self.bar_max)), self.bar_color, -1)
                 #cv2.line(img, (coord-20,self.img_h-int(self.threshold[i]*self.bar_max)), (coord+20,self.img_h-int(self.threshold[i]*self.bar_max)), self.bar_color_th, 3)
 
