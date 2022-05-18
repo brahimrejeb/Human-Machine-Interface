@@ -43,9 +43,11 @@ DICT_PYNPUT_KEYBOARD = {'none':None,'alt':Key.alt_l,'win': Key.cmd,
 }
 
 # LABELS FINGERS
-DEFAULT_LABELS_FINGERS = ['thumb','index','middle','ring','pinky']
-DEFAULT_DATA_HEADER_LEFT = "PINKY,RING,MIDDLE,INDEX,THUMB,TH_PK,TH_RG,TH_MID,TH_IN,TH_THB"
-DEFAULT_DATA_HEADER_RIGHT= "THUMB,INDEX,MIDDLE,RING,PINKY,TH_THB,TH_IN,TH_MID,TH_RG,TH_PK"
+DEFAULT_LABELS_FINGERS = ['thumb','index','middle','ring','pinky','wrist']
+DEFAULT_DATA_HEADER_LEFT = "WRIST,PINKY,RING,MIDDLE,INDEX,THUMB,TH_WRIST, TH_PK,TH_RG,TH_MID,TH_IN,TH_THB"
+DEFAULT_DATA_HEADER_RIGHT= "THUMB,INDEX,MIDDLE,RING,PINKY,WRIST,TH_THB,TH_IN,TH_MID,TH_RG,TH_PK,TH_WRIST"
+
+NB_INPUT = 6
 
 class Interface(Tk):
     '''
@@ -105,8 +107,8 @@ class Interface(Tk):
             self.folderData = ".\Data"
             if not os.path.exists(self.folderData):
                 os.makedirs(self.folderData)
-            timestr = time.strftime("%Y%m%d-%H%M%S")
-            self.file_object  = open(os.path.join(self.folderData,timestr + '.txt'), "w+") 
+            self.timestr = time.strftime("%Y%m%d-%H%M%S")
+            self.file_object  = open(os.path.join(self.folderData,self.timestr + '.txt'), "w+") 
             if self.hand2use == 'left':
                self.file_object.write(DEFAULT_DATA_HEADER_LEFT + "\n") 
             else:
@@ -145,14 +147,17 @@ class Interface(Tk):
         self.circle_y = int(self.img_h/2)+10
         self.center_x = int(self.img_h/2)
         self.bar_max = int(self.img_h/3)
-        self.bar_h = np.zeros((5))
-        self.decisionPressButton = [False,False,False,False,False]
+        self.bar_h = np.zeros((NB_INPUT))
+        self.decisionPressButton = [False,False,False,False,False,False]
         self.last_decisionPressButton = self.decisionPressButton[:]
-        self.distance_rest = [None,None,None,None,None]
+        self.distance_rest = [None,None,None,None,None,None]
 
-        self.distance_rest_default = [1.0,1.0,1.0,1.0,25.0]#[3.0,3.0,3.0,3.0,100.0]
+        self.distance_rest_default = [-50,1.0,1.0,1.0,1.0,25.0]#[3.0,3.0,3.0,3.0,100.0]
         self.distance_rest = self.distance_rest_default[:]
-        self.subtracted = [0.0,0.0,0.0,0.0,0.0]
+        self.subtracted = [0.0,0.0,0.0,0.0,0.0,0.0]
+
+        # Save best performance:
+        self.performance = [0.0,0.0,0.0,0.0,0.0,0.0]
 
         # [INTERFACE] - PARAMS INITIALIZATION
         self.nButton = len(self.labels_buttons)
@@ -222,27 +227,27 @@ class Interface(Tk):
         #labeling of the fingers hands depending on which hand is used
         #+labeling each fingers with which key it is pressing
         if self.hand2use == 'right':
-            self._list = [self.on_button4, self.on_button3, self.on_button2, self.on_button1, self.on_button]
+            self._list = [self.on_button5, self.on_button4, self.on_button3, self.on_button2, self.on_button1, self.on_button]
             self.updata_value_list = [self.updata_value, self.updata_value1, self.updata_value2, self.updata_value3,
-                                      self.updata_value4]
+                                      self.updata_value4, self.updata_value5]
 
         elif self.hand2use == 'left':
-            self.on_button_list = [self.on_button, self.on_button1, self.on_button2, self.on_button3, self.on_button4]
-            self.updata_value_list = [self.updata_value4, self.updata_value3, self.updata_value2, self.updata_value1,
+            self.on_button_list = [self.on_button, self.on_button1, self.on_button2, self.on_button3, self.on_button4, self.on_button5]
+            self.updata_value_list = [self.updata_value5 ,self.updata_value4, self.updata_value3, self.updata_value2, self.updata_value1,
                                       self.updata_value]
 
         # create the listmenu
         o_vars = []
         self.o_vars = []
-        self.o = [None, None, None, None, None]
+        self.o = [None, None, None, None, None, None]
         
-        for i in range(5):
+        for i in range(NB_INPUT):
             l2 = Label(btm_frame2, bg='Sky Blue', text=self.slider_name[i].lower(),font=("Helvetica", 11))
             w2 = Scale(btm_frame2,bg='Sky Blue', from_=0, to=100, orient=HORIZONTAL,length=450,command=self.updata_value_list[i])
             w2.set(self.slider_value[i])
             l2.grid(row=i, column=0,padx=10)
             w2.grid(row=i, column=1,padx=50)
-            for i in range(5):
+            for i in range(NB_INPUT):
                 var = StringVar(value=self.labels_fingers[i])
                 o_vars.append(var)
                 self.o[i] = OptionMenu(btm_frame3, var, *OPTIONS,command=self.on_button_list[i])
@@ -308,6 +313,7 @@ class Interface(Tk):
     def updata_value2(self,selection):self.slider_value[2] = int(selection)
     def updata_value3(self,selection):self.slider_value[3] = int(selection)
     def updata_value4(self,selection):self.slider_value[4] = int(selection)
+    def updata_value5(self,selection):self.slider_value[5] = int(selection)
     
     '''
     What value is pressed by each finger, value store into a list 
@@ -317,7 +323,7 @@ class Interface(Tk):
     def on_button2(self,selection):self.labels_buttons[2] = selection
     def on_button3(self,selection):self.labels_buttons[3] = selection
     def on_button4(self,selection):self.labels_buttons[4] = selection
-             
+    def on_button5(self,selection):self.labels_buttons[5] = selection      
 
     # def exitui(self):
     def on_close(self):
@@ -342,6 +348,16 @@ class Interface(Tk):
         self.file_object.close()
         self._thread  = None
         self.update_config_file()
+
+        print("PERFORMANCE OF THE DAY: ")
+        print("WRIST :",int(self.performance[0]*100),'%')
+        print("PINKY :",int(self.performance[1]*100),'%')
+        print("RING :",int(self.performance[2]*100),'%')
+        print("MIDDLE :",int(self.performance[3]*100),'%')
+        print("INDEX :",int(self.performance[4]*100),'%')
+        print("THUMB :",int(self.performance[5]*100),'%')
+
+
         mixer.quit()
 
         sys.exit()
@@ -473,13 +489,13 @@ class Interface(Tk):
 
     def update_config_file(self):
         if self.hand2use == 'right':
-            data = "[" + str(self.slider_value[0]) + "," + str(self.slider_value[1]) + "," + str(self.slider_value[2]) + "," + str(self.slider_value[3])+"," + str(self.slider_value[4])+"]"
+            data = "[" + str(self.slider_value[0]) + "," + str(self.slider_value[1]) + "," + str(self.slider_value[2]) + "," + str(self.slider_value[3])+"," + str(self.slider_value[4])+"," + str(self.slider_value[5])+"]"
             self.config.set("drawing", "bar_origin_threshold",data)
         if self.hand2use =='left':
-            data = "[" + str(self.slider_value[4]) + "," + str(self.slider_value[3]) + "," + str(self.slider_value[2]) + "," + str(self.slider_value[1])+"," + str(self.slider_value[0])+"]"
+            data = "[" + str(self.slider_value[5])+ "," + str(self.slider_value[4]) + "," + str(self.slider_value[3]) + "," + str(self.slider_value[2]) + "," + str(self.slider_value[1])+"," + str(self.slider_value[0])+"]"
             self.config.set("drawing", "bar_origin_threshold",data)
        
-        data = "['" + str(self.labels_buttons[0]) +"','"  + str(self.labels_buttons[1])  +"','" + str(self.labels_buttons[2])  +"','" + str(self.labels_buttons[3])+"','" + str(self.labels_buttons[4])+"']"
+        data = "['" + str(self.labels_buttons[0]) +"','"  + str(self.labels_buttons[1])  +"','" + str(self.labels_buttons[2])  +"','" + str(self.labels_buttons[3])+"','" + str(self.labels_buttons[4])+"','" + str(self.labels_buttons[5])+"']"
         self.config.set("options", "labels_buttons",data)
 
 
@@ -575,9 +591,13 @@ class Interface(Tk):
                 # Labelling 
                 coord = self.circle_first_coord + i*self.circle_space
                 cv2.putText(img,self.labels_fingers[i],(coord-30,self.circle_y-50),cv2.FONT_HERSHEY_SIMPLEX,0.8,self.text_color)
-               
+                
                 #Bar Plot Visualization - continuous
                 self.bar_h[i] = self.subtracted[i]/self.distance_rest[i] # 1-self.distance_hand[i]/self.distance_rest[i]
+                
+                if self.bar_h[i] > self.performance[i]:
+                    self.performance[i]=self.bar_h[i]
+
                 self.threshold[i] = (self.slider_value[i]/100.0)
                 cv2.rectangle(img, (coord-30,self.img_h), (coord+30,self.img_h-int(self.bar_h[i]*self.bar_max)), self.bar_color, -1) 
                 cv2.line(img, (coord-20,self.img_h-int(self.threshold[i]*self.bar_max)), (coord+20,self.img_h-int(self.threshold[i]*self.bar_max)), self.bar_color_th, 3) 
@@ -619,5 +639,5 @@ class Interface(Tk):
             img*=0
     
 if __name__=="__main__":
-    config_file = r".\config.ini"
+    config_file = r".\config_backend.ini"
     interface = Interface(config_file)

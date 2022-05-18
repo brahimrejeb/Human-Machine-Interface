@@ -13,9 +13,9 @@ import time
 import numpy as np
 
 class LeapMotionListener(Leap.Listener):
-	finger_names=['Thumb','Index','Middle','Ring','Pinky','Wrist']
+	finger_names=['Thumb','Index','Middle','Ring','Pinky']
 	bone_names=['Metacarpal','Proximal','Intermediate','Distal']
-	distance = [None,None,None,None,None,None]
+	distance = [None,None,None,None,None]
 	palm = [None,None,None]
 	print_one = True
 
@@ -40,8 +40,7 @@ class LeapMotionListener(Leap.Listener):
 		self.distance[2]= None
 		self.distance[3]= None
 		self.distance[4]= None
-		self.distance[5]= None
-
+		
 		self.palm[0]=None
 		self.palm[1]=None
 		self.palm[2]=None
@@ -95,8 +94,7 @@ class LeapMotionListener(Leap.Listener):
 						self.distance[2] = (Middle_distal_bone.next_joint-Middle_proximal_bone.prev_joint).angle_to(Middle_meta_bone.prev_joint-Middle_proximal_bone.prev_joint)
 						self.distance[3] = (Ring_distal_bone.next_joint-Ring_proximal_bone.prev_joint).angle_to(Ring_meta_bone.prev_joint-Ring_proximal_bone.prev_joint)
 						self.distance[4] = (Pinky_distal_bone.next_joint-Pinky_proximal_bone.prev_joint).angle_to(Pinky_meta_bone.prev_joint-Pinky_proximal_bone.prev_joint)
-						self.distance[5] = (hand.palm_position.y)
-
+					
 						self.palm[0]=hand.palm_position.x
 						self.palm[1]=hand.palm_position.y
 						self.palm[2]=hand.palm_position.z
