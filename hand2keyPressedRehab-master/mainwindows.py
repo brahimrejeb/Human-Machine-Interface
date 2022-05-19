@@ -9,18 +9,21 @@
 
 
 from PyQt5 import QtCore, QtGui, QtWidgets
-from PyQt5.QtCore import QThread, pyqtSignal
+from PyQt5.QtCore import QThread, pyqtSignal, QObject
 import Settings
 from Settings import Ui_Dialog
 import time
 
-class External(QThread):
-    valueChanged=pyqtSignal(int)
-    value=0
-    def run(self):
-        while True:
-            self.valueChanged.emit(self.value)
+class External(QObject):
+    NewFingerValues = QtCore.pyqtSignal(list)
 
+#    value=0
+#    def run(self):
+#        while True:
+#            self.valueChanged.emit(self.value)
+
+OPTIONS = ['None','Alt','Win',
+   'Ctrl','Tab','Shift','Caps','Esc']
 
 class Ui_AnglesValues(object):
     def setupUi(self, AnglesValues):
@@ -183,7 +186,7 @@ class Ui_AnglesValues(object):
         QtCore.QMetaObject.connectSlotsByName(AnglesValues)
 
 
-
+        #dialogue window
         self.Dialog = QtWidgets.QDialog()
         self.dia = Ui_Dialog()
         self.dia.setupUi(self.Dialog)
@@ -200,6 +203,21 @@ class Ui_AnglesValues(object):
         self.thresh_pinky = self.dia.PinkyThresh.tickPosition()
         self.thresh_wrist = self.dia.WristThresh.tickPosition()
         self.bar_origin_threshold=[self.thresh_thumb, self.thresh_index, self.thresh_middle, self.thresh_ring, self.thresh_pinky, self.thresh_wrist]
+
+
+        #which key is pressed, simple mode
+        self.currentKeyNumber=0
+
+        #mode selector box
+        self.update_mode()
+        self.ModeSelector.currentIndexChanged.connect(self.update_mode)
+
+
+
+        self.ext=External()
+        self.ext.NewFingerValues.connect(self.ChangingValue)
+
+
 
     def init_threshold_sliders(self,values):
         self.dia.ThumbThresh.setValue(values[0])
@@ -219,13 +237,48 @@ class Ui_AnglesValues(object):
         self.bar_origin_threshold = [self.thresh_thumb, self.thresh_index, self.thresh_middle, self.thresh_ring,
                                      self.thresh_pinky,self.thresh_wrist]
 
-    def update_progress(self):
-        self.calc= External()
-        self.calc.valueChanged.connect(self.onValueChanged)
-        self.calc.start()
+    #def update_progress(self):
+    #    self.calc= External()
+    #    self.calc.valueChanged.connect(self.onValueChanged)
+    #    self.calc.start()
 
-    def onValueChanged(self):
-        self.ThumbValue.setValue(External.value)
+    def ChangingValue(self,value):
+        self.ThumbValue.setValue(value[5])
+        self.IndexValue.setValue(value[4])
+        self.MiddleValue.setValue(value[3])
+        self.RingValue.setValue(value[2])
+        self.PinkyValue.setValue(value[1])
+        self.WristValue.setValue(value[0])
+
+        if self.ModeSelector.currentText() == 'Simple Mode':
+            if self.ThumbValue.value()>= self.thresh_thumb:
+                self.currentKeyNumber+=1
+
+                if self.currentKeyNumber>=len(OPTIONS):
+                    self.currentKeyNumber=0
+                self.CurrentKey.setText(OPTIONS[self.currentKeyNumber])
+
+
+    def update_mode(self):
+        if self.ModeSelector.currentText()=='Simple Mode':
+            self.CurrentKey.setHidden(False)
+            self.ThumbKey.hide()
+            self.IndexKey.hide()
+            self.MiddleKey.hide()
+            self.RingKey.hide()
+            self.PinkyKey.hide()
+            self.WristKey.hide()
+        else:
+            self.CurrentKey.setHidden(True)
+            self.ThumbKey.show()
+            self.IndexKey.show()
+            self.MiddleKey.show()
+            self.RingKey.show()
+            self.PinkyKey.show()
+            self.WristKey.show()
+
+
+
 
     def retranslateUi(self, AnglesValues):
         _translate = QtCore.QCoreApplication.translate
@@ -288,4 +341,3 @@ class Ui_AnglesValues(object):
         self.CurrentKey.setText(_translate("AnglesValues", "None"))
         self.menuSetting_2.setTitle(_translate("AnglesValues", "Setting"))
         self.actionAcces_setting.setText(_translate("AnglesValues", "Acces setting"))
-
