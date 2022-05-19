@@ -6,6 +6,7 @@
 ###########################################################
 
 
+from turtle import left
 import numpy as np
 import ctypes
 import os
@@ -140,7 +141,7 @@ class Interface(Tk):
             self.move_leap_motion_visualizer()
         
         self.listener,self.controller = self.initialize_leap_motion()
-        self.palm, self.distance  = self.read_values_from_devices(self.listener,self.controller)
+        self.palm, self.distance, self.advance_distance, self.distance_performance = self.read_values_from_devices(self.listener,self.controller)
 
         
         # [INTERFACE] - DRAWING PARAMETERS 
@@ -151,11 +152,21 @@ class Interface(Tk):
         self.decisionPressButton = [False,False,False,False,False,False]
         self.last_decisionPressButton = self.decisionPressButton[:]
         self.distance_rest = [None,None,None,None,None,None]
+        
+        self.advanced_mode = False
+        if self.hand2use == 'left' :
+            self.distance_rest_default = [-70,1.5,1.5,1.5,1.5,25.0]#[3.0,3.0,3.0,3.0,100.0]
+            self.advance_distance_rest_default = [200,120,110,100,90,25.0]#[3.0,3.0,3.0,3.0,100.0]
+        elif self.hand2use == 'right' :
+            self.distance_rest_default = [25.0,1.5,1.5,1.5,1.5,-70]#[3.0,3.0,3.0,3.0,100.0]
+            self.advance_distance_rest_default = [25.0,90,100,110,120,200]#[3.0,3.0,3.0,3.0,100.0]
+        if self.advanced_mode:
+            self.distance_rest = self.advance_distance_rest_default[:]
+        else:
+            self.distance_rest = self.distance_rest_default[:]
 
-        self.distance_rest_default = [-50,1.0,1.0,1.0,1.0,25.0]#[3.0,3.0,3.0,3.0,100.0]
-        self.distance_rest = self.distance_rest_default[:]
         self.subtracted = [0.0,0.0,0.0,0.0,0.0,0.0]
-
+        
         # Save best performance:
         self.performance = [0.0,0.0,0.0,0.0,0.0,0.0]
 
@@ -227,7 +238,7 @@ class Interface(Tk):
         #labeling of the fingers hands depending on which hand is used
         #+labeling each fingers with which key it is pressing
         if self.hand2use == 'right':
-            self._list = [self.on_button5, self.on_button4, self.on_button3, self.on_button2, self.on_button1, self.on_button]
+            self.on_button_list = [self.on_button, self.on_button1, self.on_button2, self.on_button3, self.on_button4, self.on_button5]
             self.updata_value_list = [self.updata_value, self.updata_value1, self.updata_value2, self.updata_value3,
                                       self.updata_value4, self.updata_value5]
 
@@ -272,7 +283,17 @@ class Interface(Tk):
         self.protocol("WM_DELETE_WINDOW",self.on_close)
         # RUN MAIN LOOP
         self.mainloop()
-    
+
+
+    def popupmsg(self,msg, title):
+        root = Tk()
+        root.title(title)
+        label = Label(root, text=msg)
+        label.pack(side="top", fill="x", pady=10, padx=50)
+        B1 = Button(root, text="Okay", command = root.destroy)
+        B1.pack()
+        root.mainloop()
+
     def check_sound_use(self):
         '''
         Boolean variable, determine whether sound is ON or OFF
@@ -348,20 +369,37 @@ class Interface(Tk):
         self.file_object.close()
         self._thread  = None
         self.update_config_file()
+        date = self.timestr[6:8]+'/'+self.timestr[4:6]+'/'+self.timestr[:4] + ' ' + 'at' + ' ' + self.timestr[9:11] +'h'+ self.timestr[11:13] + 'm' + ' :'
+        if self.hand2use == 'left' :
+            self.popupmsg('Performance of the day is: \n Wrist: '+str(int(self.performance[0]))+ 'mm\n''Pinky: '+str(int(self.performance[1]))+ 'mm\n' 'Ring: '+str(int(self.performance[2]))+ 'mm\n' 'Middle: '+str(int(self.performance[3]))+ 'mm\n' 'Index: '+str(int(self.performance[4]))+ 'mm\n''Thumb: '+str(int(self.performance[5]))+ 'mm\n','Performance window')
+        else:
+            self.popupmsg('Performance of the day is: \n Wrist: '+str(int(self.performance[5]))+ 'mm\n''Pinky: '+str(int(self.performance[4]))+ 'mm\n' 'Ring: '+str(int(self.performance[3]))+ 'mm\n' 'Middle: '+str(int(self.performance[2]))+ 'mm\n' 'Index: '+str(int(self.performance[1]))+ 'mm\n''Thumb: '+str(int(self.performance[0]))+ 'mm\n','Performance window')
 
-        print("PERFORMANCE OF THE DAY: ")
-        print("WRIST :",int(self.performance[0]*100),'%')
-        print("PINKY :",int(self.performance[1]*100),'%')
-        print("RING :",int(self.performance[2]*100),'%')
-        print("MIDDLE :",int(self.performance[3]*100),'%')
-        print("INDEX :",int(self.performance[4]*100),'%')
-        print("THUMB :",int(self.performance[5]*100),'%')
+
+        destFile = r"performance.txt"
+        with open(destFile, 'a') as f:
+            if self.hand2use == 'left' :
+                f.write(date)
+                f.write(str(round(self.performance[0],2))+'(W),')
+                f.write(str(round(self.performance[1],2))+'(P),')
+                f.write(str(round(self.performance[2],2))+'(R),')
+                f.write(str(round(self.performance[3],2))+'(M),')
+                f.write(str(round(self.performance[4],2))+'(I),')
+                f.write(str(round(self.performance[5],2))+"(T)\n")
+            else:
+                f.write(date)
+                f.write(str(round(self.performance[5],2))+'(W),')
+                f.write(str(round(self.performance[4],2))+'(P),')
+                f.write(str(round(self.performance[3],2))+'(R),')
+                f.write(str(round(self.performance[2],2))+'(M),')
+                f.write(str(round(self.performance[1],2))+'(I),')
+                f.write(str(round(self.performance[0],2))+"(T)\n")
 
 
         mixer.quit()
-
-        sys.exit()
         self.destroy()
+        sys.exit()
+        
 
     def loading_sound_on_computer(self,OPTIONS):
         '''
@@ -470,10 +508,13 @@ class Interface(Tk):
         return listener,controller
 
     def read_values_from_devices(self,listener,controller):
-        palm, distance = listener.on_frame(controller)
+        palm, distance, advance_distance, distance_performance = listener.on_frame(controller)
         print('read distance',distance)
         print('read palm position', palm)
-        return palm, distance
+        #if self.advanced_mode :
+        #    distance = advance_distance
+        
+        return palm, distance, advance_distance, distance_performance
 
     def loading_pic_from_folder(self,pathFolderPicture,dim_pic):
         """NOT USED in this version"""
@@ -512,6 +553,8 @@ class Interface(Tk):
         counter_no_data = 0
         counter_init = 0
         while self._thread is not None:
+            if self.advanced_mode :
+                self.distance = self.advance_distance
 
             if self.init and not None in self.distance :
                 counter_init +=1
@@ -594,9 +637,10 @@ class Interface(Tk):
                 
                 #Bar Plot Visualization - continuous
                 self.bar_h[i] = self.subtracted[i]/self.distance_rest[i] # 1-self.distance_hand[i]/self.distance_rest[i]
-                
-                if self.bar_h[i] > self.performance[i]:
-                    self.performance[i]=self.bar_h[i]
+                if not None in self.distance_performance :
+                    if self.distance_performance[i] > self.performance[i]:
+                        self.performance[i] = self.distance_performance[i]
+                    #self.performance[i]=self.bar_h[i]
 
                 self.threshold[i] = (self.slider_value[i]/100.0)
                 cv2.rectangle(img, (coord-30,self.img_h), (coord+30,self.img_h-int(self.bar_h[i]*self.bar_max)), self.bar_color, -1) 
@@ -615,11 +659,12 @@ class Interface(Tk):
             
             # Keyboard Pressing/Release Process
             if self.check_finger_use:
-                if self.decisionPressButton[4] and not self.last_decisionPressButton[4]:
+                idx_shifter = 5
+                if self.decisionPressButton[idx_shifter] and not self.last_decisionPressButton[idx_shifter]:
                     self.current_key+=1
                     self.current_key= self.current_key % len(OPTIONS)
-                    self.labels_buttons[4]= OPTIONS[0]
-                    for index in range(0, len(self.labels_buttons)-1):
+                    self.labels_buttons[idx_shifter]= OPTIONS[0]
+                    for index in [x for x in range(len(self.labels_buttons)) if x != idx_shifter ]:
                         self.labels_buttons[index]= OPTIONS[self.current_key]
             #print('label button',self.labels_buttons)
             self.press_key_on_keyboard(self.keyboard,self.decisionPressButton,self.last_decisionPressButton,self.labels_buttons)
