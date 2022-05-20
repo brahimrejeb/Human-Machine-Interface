@@ -25,6 +25,7 @@ from gtts import gTTS
 from LeapMotion_detection import LeapMotionListener
 from pynput.keyboard import Key,KeyCode, Controller
 from PIL import Image, ImageTk
+from tkinter import *
 from PyQt5 import QtCore, QtGui, QtWidgets
 
 import Settings
@@ -96,25 +97,15 @@ class Interface():
 
         # Initialisation our window:
         mainwin.CurrentKey.setText(OPTIONS[self.current_key])
+
+
         # DATA RECORDING
         if self.record_data:
             self.folderData = ".\Data"
             if not os.path.exists(self.folderData):
                 os.makedirs(self.folderData)
-            timestr = time.strftime("%Y%m%d-%H%M%S")
-            self.file_object = open(os.path.join(self.folderData, timestr + '.txt'), "w+")
-            if self.hand2use == 'left':
-                self.file_object.write(DEFAULT_DATA_HEADER_LEFT + "\n")
-            else:
-                self.file_object.write(DEFAULT_DATA_HEADER_RIGHT + "\n")
-        
-        # DATA RECORDING
-        if self.record_data:
-            self.folderData = ".\Data"
-            if not os.path.exists(self.folderData):
-                os.makedirs(self.folderData)
-            timestr = time.strftime("%Y%m%d-%H%M%S")
-            self.file_object  = open(os.path.join(self.folderData,timestr + '.txt'), "w+") 
+            self.timestr = time.strftime("%Y%m%d-%H%M%S")
+            self.file_object  = open(os.path.join(self.folderData,self.timestr + '.txt'), "w+")
             if self.hand2use == 'left':
                self.file_object.write(DEFAULT_DATA_HEADER_LEFT + "\n") 
             else:
@@ -146,7 +137,7 @@ class Interface():
         self.visualizer_closed = False
         
         self.listener,self.controller = self.initialize_leap_motion()
-        self.palm, self.distance  = self.read_values_from_devices(self.listener,self.controller)
+        self.palm, self.distance, self.advance_distance, self.distance_performance   = self.read_values_from_devices(self.listener,self.controller)
 
         
         # [INTERFACE] - DRAWING PARAMETERS
@@ -154,9 +145,21 @@ class Interface():
         self.last_decisionPressButton = self.decisionPressButton[:]
         self.distance_rest = [None,None,None,None,None,None]
 
-        self.distance_rest_default = [1.0,1.0,1.0,1.0,1.0,25.0]#[3.0,3.0,3.0,3.0,100.0]
-        self.distance_rest = self.distance_rest_default[:]
+        self.advanced_mode = False
+        if self.hand2use == 'left' :
+            self.distance_rest_default = [-70,1.5,1.5,1.5,1.5,25.0]#[3.0,3.0,3.0,3.0,100.0]
+            self.advance_distance_rest_default = [200,120,110,100,90,25.0]#[3.0,3.0,3.0,3.0,100.0]
+        elif self.hand2use == 'right' :
+            self.distance_rest_default = [25.0,1.5,1.5,1.5,1.5,-70]#[3.0,3.0,3.0,3.0,100.0]
+            self.advance_distance_rest_default = [25.0,90,100,110,120,200]#[3.0,3.0,3.0,3.0,100.0]
+        if self.advanced_mode:
+            self.distance_rest = self.advance_distance_rest_default[:]
+        else:
+            self.distance_rest = self.distance_rest_default[:]
         self.subtracted = [0.0,0.0,0.0,0.0,0.0,0.0]
+
+        # Save best performance:
+        self.performance = [0.0,0.0,0.0,0.0,0.0,0.0]
 
         # [INTERFACE] - PARAMS INITIALIZATION
         self.nButton = len(self.labels_buttons)
@@ -235,7 +238,16 @@ class Interface():
         #self.protocol("WM_DELETE_WINDOW",self.on_close)
         # RUN MAIN LOOP
         #self.mainloop()
-    
+
+    def popupmsg(self,msg, title):
+        root = Tk()
+        root.title(title)
+        label = Label(root, text=msg)
+        label.pack(side="top", fill="x", pady=10, padx=50)
+        B1 = Button(root, text="Okay", command = root.destroy)
+        B1.pack()
+        root.mainloop()
+
     def check_sound_use(self):
         global mainwin
         '''
@@ -297,12 +309,11 @@ class Interface():
 
     # def exitui(self):
     def on_close(self):
-        global app
         '''
         closing of the interface
         '''
         # stop the drawing thread.
-        
+        global app
         print("**** Exit interface ****")
         if self.keyboard.shift_pressed:
             self.keyboard.release(Key.shift_l)
@@ -313,15 +324,51 @@ class Interface():
         if self.keyboard.ctrl_pressed:
             self.keyboard.release(Key.ctrl_l)
             print("release ctrl")
-
         self.controller.remove_listener(self.listener)
-        subprocess.call(["taskkill","/F","/IM",'Visualizer.exe'])
-        self.file_object.close()
-        self._thread  = None
+        subprocess.call(["taskkill", "/F", "/IM", 'Visualizer.exe'])
+        self._thread = None
         self.update_config_file()
-        mixer.quit()
+        date = self.timestr[6:8] + '/' + self.timestr[4:6] + '/' + self.timestr[:4] + ' ' + 'at' + ' ' + self.timestr[
+                                                                                                         9:11] + 'h' + self.timestr[
+                                                                                                                       11:13] + 'm' + ' :'
+        if self.hand2use == 'left':
+            self.popupmsg(
+                'Performance of the day is: \n Wrist: ' + str(int(self.performance[0])) + 'mm\n''Pinky: ' + str(
+                    int(self.performance[1])) + 'mm\n' 'Ring: ' + str(
+                    int(self.performance[2])) + 'mm\n' 'Middle: ' + str(
+                    int(self.performance[3])) + 'mm\n' 'Index: ' + str(
+                    int(self.performance[4])) + 'mm\n''Thumb: ' + str(int(self.performance[5])) + 'mm\n',
+                'Performance window')
+        else:
+            self.popupmsg(
+                'Performance of the day is: \n Wrist: ' + str(int(self.performance[5])) + 'mm\n''Pinky: ' + str(
+                    int(self.performance[4])) + 'mm\n' 'Ring: ' + str(
+                    int(self.performance[3])) + 'mm\n' 'Middle: ' + str(
+                    int(self.performance[2])) + 'mm\n' 'Index: ' + str(
+                    int(self.performance[1])) + 'mm\n''Thumb: ' + str(int(self.performance[0])) + 'mm\n',
+                'Performance window')
 
-        sys.exit(app.exec_())
+        destFile = r"performance.txt"
+        with open(destFile, 'a') as f:
+            if self.hand2use == 'left':
+                f.write(date)
+                f.write(str(round(self.performance[0], 2)) + '(W),')
+                f.write(str(round(self.performance[1], 2)) + '(P),')
+                f.write(str(round(self.performance[2], 2)) + '(R),')
+                f.write(str(round(self.performance[3], 2)) + '(M),')
+                f.write(str(round(self.performance[4], 2)) + '(I),')
+                f.write(str(round(self.performance[5], 2)) + "(T)\n")
+            else:
+                f.write(date)
+                f.write(str(round(self.performance[5], 2)) + '(W),')
+                f.write(str(round(self.performance[4], 2)) + '(P),')
+                f.write(str(round(self.performance[3], 2)) + '(R),')
+                f.write(str(round(self.performance[2], 2)) + '(M),')
+                f.write(str(round(self.performance[1], 2)) + '(I),')
+                f.write(str(round(self.performance[0], 2)) + "(T)\n")
+
+        mixer.quit()
+        sys.exit()
 
     def loading_sound_on_computer(self,OPTIONS):
         '''
@@ -430,10 +477,13 @@ class Interface():
         return listener,controller
 
     def read_values_from_devices(self,listener,controller):
-        palm, distance = listener.on_frame(controller)
-        print('read distance',distance)
+        palm, distance, advance_distance, distance_performance = listener.on_frame(controller)
+        print('read distance', distance)
         print('read palm position', palm)
-        return palm, distance
+        # if self.advanced_mode :
+        #    distance = advance_distance
+
+        return palm, distance, advance_distance, distance_performance
 
     def loading_pic_from_folder(self,pathFolderPicture,dim_pic):
         """NOT USED in this version"""
@@ -449,21 +499,26 @@ class Interface():
 
     def update_config_file(self):
         if self.hand2use == 'right':
-            data = "[" + str(self.slider_value[0]) + "," + str(self.slider_value[1]) + "," + str(self.slider_value[2]) + "," + str(self.slider_value[3])+"," + str(self.slider_value[4])+"]"
-            self.config.set("drawing", "bar_origin_threshold",data)
-        if self.hand2use =='left':
-            data = "[" + str(self.slider_value[4]) + "," + str(self.slider_value[3]) + "," + str(self.slider_value[2]) + "," + str(self.slider_value[1])+"," + str(self.slider_value[0])+"]"
-            self.config.set("drawing", "bar_origin_threshold",data)
-       
-        data = "['" + str(self.labels_buttons[0]) +"','"  + str(self.labels_buttons[1])  +"','" + str(self.labels_buttons[2])  +"','" + str(self.labels_buttons[3])+"','" + str(self.labels_buttons[4])+"']"
-        self.config.set("options", "labels_buttons",data)
+            data = "[" + str(self.slider_value[0]) + "," + str(self.slider_value[1]) + "," + str(
+                self.slider_value[2]) + "," + str(self.slider_value[3]) + "," + str(self.slider_value[4]) + "," + str(
+                self.slider_value[5]) + "]"
+            self.config.set("drawing", "bar_origin_threshold", data)
+        if self.hand2use == 'left':
+            data = "[" + str(self.slider_value[5]) + "," + str(self.slider_value[4]) + "," + str(
+                self.slider_value[3]) + "," + str(self.slider_value[2]) + "," + str(self.slider_value[1]) + "," + str(
+                self.slider_value[0]) + "]"
+            self.config.set("drawing", "bar_origin_threshold", data)
 
+        data = "['" + str(self.labels_buttons[0]) + "','" + str(self.labels_buttons[1]) + "','" + str(
+            self.labels_buttons[2]) + "','" + str(self.labels_buttons[3]) + "','" + str(
+            self.labels_buttons[4]) + "','" + str(self.labels_buttons[5]) + "']"
+        self.config.set("options", "labels_buttons", data)
 
-        with open(self.config_file+'.bak', 'w') as configfile:
+        with open(self.config_file + '.bak', 'w') as configfile:
             self.config.write(configfile)
         if os.path.exists(self.config_file):
             os.remove(self.config_file)  # else rename won't work when target exists
-        os.rename(self.config_file+'.bak',self.config_file)
+        os.rename(self.config_file + '.bak', self.config_file)
         print("[CONFIG_FILE] Ini file has been updated")
 
 
@@ -548,13 +603,7 @@ class Interface():
             #     print(self.distance_rest)
             #     self.calibrated = True
 
-            # USE PHASE
-            self.bar_h[0]=(self.subtracted[0] / self.distance_rest[0])*100
-            self.bar_h[1] = (self.subtracted[1] / self.distance_rest[1]) * 100
-            self.bar_h[2] = (self.subtracted[2] / self.distance_rest[2]) * 100
-            self.bar_h[3] = (self.subtracted[3] / self.distance_rest[3]) * 100
-            self.bar_h[4] = (self.subtracted[4] / self.distance_rest[4]) * 100
-            self.bar_h[5] = (self.subtracted[5] / self.distance_rest[5]) * 100
+
 
             #print(self.subtracted[0] / self.distance_rest[0])
             #External.value=int(self.bar_h[0]*100)
@@ -564,8 +613,12 @@ class Interface():
                 #cv2.putText(img,self.labels_fingers[i],(coord-30,self.circle_y-50),cv2.FONT_HERSHEY_SIMPLEX,0.8,self.text_color)
 
                 #Bar Plot Visualization - continuous
-                #self.bar_h[i] = self.subtracted[i]/self.distance_rest[i] # 1-self.distance_hand[i]/self.distance_rest[i] #generates a segmentation fault
-                mainwin.ext.NewFingerValues.emit(self.bar_h.tolist())
+                self.bar_h[i] = 100*(self.subtracted[i]/self.distance_rest[i]) # 1-self.distance_hand[i]/self.distance_rest[i] #generates a segmentation fault
+                if not None in self.distance_performance :
+                    if self.distance_performance[i] > self.performance[i]:
+                        self.performance[i] = self.distance_performance[i]
+
+            mainwin.ext.NewFingerValues.emit(self.bar_h.tolist())
                 #self.threshold[i] = (self.slider_value[i]/100.0)
                 #External.value=self.bar_h[0] #test
                 #cv2.rectangle(img, (coord-30,self.img_h), (coord+30,self.img_h-int(self.bar_h[i]*self.bar_max)), self.bar_color, -1)
@@ -618,4 +671,5 @@ if __name__=="__main__":
     mainwin.setupUi(AnglesValues)
     AnglesValues.show()
     interface = Interface(config_file)
-    sys.exit(app.exec_())
+    app.aboutToQuit.connect(interface.on_close)
+    app.exec_()

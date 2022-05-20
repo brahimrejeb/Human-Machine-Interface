@@ -254,7 +254,7 @@ class Ui_AnglesValues(object):
         self.thresh_middle = self.dia.MiddleThresh.value()
         self.thresh_ring = self.dia.RingThresh.value()
         self.thresh_pinky = self.dia.PinkyThresh.value()
-        self.thresh_wrist = self.dia.PinkyThresh.value()
+        self.thresh_wrist = self.dia.WristThresh.value()
         self.bar_origin_threshold = [self.thresh_thumb, self.thresh_index, self.thresh_middle, self.thresh_ring,
                                      self.thresh_pinky,self.thresh_wrist]
 
