@@ -2,9 +2,10 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="6b1578af-8641-40f5-849e-aa5768652184" name="Changes" comment="">
+      <change beforePath="$PROJECT_DIR$/.idea/LeapOrion.iml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/LeapOrion.iml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/misc.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/misc.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/2windows.ui" beforeDir="false" afterPath="$PROJECT_DIR$/2windows.ui" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/hand2keyPressedRehab-master/mainwindows.py" beforeDir="false" afterPath="$PROJECT_DIR$/hand2keyPressedRehab-master/mainwindows.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/hand2keyPressedRehab-master/hand2keyPressedRehab.py" beforeDir="false" afterPath="$PROJECT_DIR$/hand2keyPressedRehab-master/hand2keyPressedRehab.py" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -23,13 +24,6 @@
     <option name="hideEmptyMiddlePackages" value="true" />
     <option name="showLibraryContents" value="true" />
   </component>
-  <component name="PropertiesComponent">{
-  &quot;keyToString&quot;: {
-    &quot;RunOnceActivity.OpenProjectViewOnStart&quot;: &quot;true&quot;,
-    &quot;RunOnceActivity.ShowReadmeOnStart&quot;: &quot;true&quot;,
-    &quot;last_opened_file_path&quot;: &quot;C:/Users/Admin/Documents/EPFL/MA2/ATC/LeapOrion&quot;
-  }
-}</component>
   <component name="RunManager" selected="Python.main">
     <configuration name="hand2keyPressedRehab" type="PythonConfigurationType" factoryName="Python" temporary="true" nameIsGenerated="true">
       <option name="INTERPRETER_OPTIONS" value="" />

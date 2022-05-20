@@ -141,9 +141,9 @@ class Interface():
         # HAND USE
         self.labels_fingers = self.define_labels_fingers_based_onhand(DEFAULT_LABELS_FINGERS)
 
-        # [LEAP MOTION] INITIALIZATION 
-        if self.show_visualizer:
-            self.move_leap_motion_visualizer()
+        # [LEAP MOTION] INITIALIZATION
+        self.visualizer_open=False
+        self.visualizer_closed = False
         
         self.listener,self.controller = self.initialize_leap_motion()
         self.palm, self.distance  = self.read_values_from_devices(self.listener,self.controller)
@@ -256,9 +256,14 @@ class Interface():
         Boolean variable
         '''
         self.show_visualizer = mainwin.dia.Visualizer.isChecked()
-        if self.show_visualizer:
-            self.move_leap_motion_visualizer()
-        else: 
+        if self.show_visualizer :
+            if not self.visualizer_open:
+                self.move_leap_motion_visualizer()
+                self.visualizer_open=True
+                self.visualizer_closed = False
+        elif not self.visualizer_closed:
+            self.visualizer_closed = True
+            self.visualizer_open=False
             print("close visualization")
             subprocess.call(["taskkill","/F","/IM",'Visualizer.exe'])
     
@@ -470,10 +475,10 @@ class Interface():
         counter_no_data = 0
         counter_init = 0
         while self._thread is not None:
-
+            self.check_vis_use()
             if self.init and not None in self.distance :
                 counter_init +=1
-                if counter_init == 10:
+                if counter_init == 1:
                     self.distance_init=self.distance.copy()
                     self.palm_init = self.palm.copy()
                     counter_init = 0
