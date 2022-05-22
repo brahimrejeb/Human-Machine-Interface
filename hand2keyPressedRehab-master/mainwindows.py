@@ -117,32 +117,32 @@ class Ui_AnglesValues(object):
         self.ThumbValue = QtWidgets.QProgressBar(self.centralwidget)
         self.ThumbValue.setProperty("value", 24)
         self.ThumbValue.setObjectName("ThumbValue")
-        self.ThumbValue.setStyleSheet("QProgressBar::chunk {background: rgb(255, 0, 0, 60%);}")
+        self.ThumbValue.setStyleSheet("background:red")
         self.ProgessLayout.addWidget(self.ThumbValue)
         self.IndexValue = QtWidgets.QProgressBar(self.centralwidget)
         self.IndexValue.setProperty("value", 24)
         self.IndexValue.setObjectName("IndexValue")
-        self.IndexValue.setStyleSheet("QProgressBar::chunk {background: rgb(255, 0, 0, 60%);}")
+        self.IndexValue.setStyleSheet("background: red")
         self.ProgessLayout.addWidget(self.IndexValue)
         self.MiddleValue = QtWidgets.QProgressBar(self.centralwidget)
         self.MiddleValue.setProperty("value", 24)
         self.MiddleValue.setObjectName("MiddleValue")
-        self.MiddleValue.setStyleSheet("QProgressBar::chunk {background: rgb(255, 0, 0, 60%);}")
+        self.MiddleValue.setStyleSheet("background: red")
         self.ProgessLayout.addWidget(self.MiddleValue)
         self.RingValue = QtWidgets.QProgressBar(self.centralwidget)
         self.RingValue.setProperty("value", 24)
         self.RingValue.setObjectName("RingValue")
-        self.RingValue.setStyleSheet("QProgressBar::chunk {background: rgb(255, 0, 0, 60%);}")
+        self.RingValue.setStyleSheet("background: red")
         self.ProgessLayout.addWidget(self.RingValue)
         self.PinkyValue = QtWidgets.QProgressBar(self.centralwidget)
         self.PinkyValue.setProperty("value", 24)
         self.PinkyValue.setObjectName("PinkyValue")
-        self.PinkyValue.setStyleSheet("QProgressBar::chunk {background: rgb(255, 0, 0, 60%);}")
+        self.PinkyValue.setStyleSheet("background: red")
         self.ProgessLayout.addWidget(self.PinkyValue)
         self.WristValue = QtWidgets.QProgressBar(self.centralwidget)
         self.WristValue.setProperty("value", 24)
         self.WristValue.setObjectName("WristValue")
-        self.WristValue.setStyleSheet("QProgressBar::chunk {background: rgb(255, 0, 0, 60%);}")
+        self.WristValue.setStyleSheet("background: red")
         self.ProgessLayout.addWidget(self.WristValue)
         self.gridLayout.addLayout(self.ProgessLayout, 1, 0, 1, 1)
         self.FingersLayout = QtWidgets.QVBoxLayout()
@@ -233,12 +233,20 @@ class Ui_AnglesValues(object):
         self.update_mode()
         self.ModeSelector.currentIndexChanged.connect(self.update_mode)
 
+        #was the key activated before
+        self.ActivatedFinger=[False, False, False, False, False, False]
 
-
+        #change the bars value
         self.ext=External()
         self.ext.NewFingerValues.connect(self.ChangingValue)
 
-
+        #update the thresh values
+        self.dia.ThumbThresh.valueChanged.connect(self.update_threshold)
+        self.dia.IndexThresh.valueChanged.connect(self.update_threshold)
+        self.dia.MiddleThresh.valueChanged.connect(self.update_threshold)
+        self.dia.RingThresh.valueChanged.connect(self.update_threshold)
+        self.dia.PinkyThresh.valueChanged.connect(self.update_threshold)
+        self.dia.WristThresh.valueChanged.connect(self.update_threshold)
 
     def init_threshold_sliders(self,values):
         self.dia.ThumbThresh.setValue(values[0])
@@ -249,37 +257,72 @@ class Ui_AnglesValues(object):
         self.dia.WristThresh.setValue(values[5])
 
     def update_threshold(self):
-        self.thresh_thumb = self.dia.ThumbThresh.value()
-        self.thresh_index = self.dia.IndexThresh.value()
-        self.thresh_middle = self.dia.MiddleThresh.value()
-        self.thresh_ring = self.dia.RingThresh.value()
-        self.thresh_pinky = self.dia.PinkyThresh.value()
-        self.thresh_wrist = self.dia.WristThresh.value()
-        self.bar_origin_threshold = [self.thresh_thumb, self.thresh_index, self.thresh_middle, self.thresh_ring,
-                                     self.thresh_pinky,self.thresh_wrist]
 
-    #def update_progress(self):
-    #    self.calc= External()
-    #    self.calc.valueChanged.connect(self.onValueChanged)
-    #    self.calc.start()
+       self.thresh_thumb = self.dia.ThumbThresh.value()
+       self.thresh_index = self.dia.IndexThresh.value()
+       self.thresh_middle = self.dia.MiddleThresh.value()
+       self.thresh_ring = self.dia.RingThresh.value()
+       self.thresh_pinky = self.dia.PinkyThresh.value()
+       self.thresh_wrist = self.dia.WristThresh.value()
+       self.bar_origin_threshold = [self.thresh_thumb, self.thresh_index, self.thresh_middle, self.thresh_ring, self.thresh_pinky, self.thresh_wrist]
+
+
 
     def ChangingValue(self,value):
-        self.ThumbValue.setValue(value[5])
-        self.IndexValue.setValue(value[4])
-        self.MiddleValue.setValue(value[3])
-        self.RingValue.setValue(value[2])
-        self.PinkyValue.setValue(value[1])
-        self.WristValue.setValue(value[0])
+        self.ThumbValue.setValue(value[0])
+        self.IndexValue.setValue(value[1])
+        self.MiddleValue.setValue(value[2])
+        self.RingValue.setValue(value[3])
+        self.PinkyValue.setValue(value[4])
+        self.WristValue.setValue(value[5])
 
         if self.ModeSelector.currentText() == 'Simple Mode':
-            if value[self.FingerShifter.currentIndex()]>= self.bar_origin_threshold[self.FingerShifter.currentIndex()]:
-               self.currentKeyNumber+=1
+            if not self.ActivatedFinger[self.FingerShifter.currentIndex()]:
+                if value[self.FingerShifter.currentIndex()]>= self.bar_origin_threshold[self.FingerShifter.currentIndex()]:
+                    self.currentKeyNumber+=1
+                if self.currentKeyNumber>=len(OPTIONS):
+                    self.currentKeyNumber=0
+                self.CurrentKey.setText(OPTIONS[self.currentKeyNumber])
+
+        if self.ThumbValue.value() >=self.thresh_thumb:
+            self.ThumbValue.setStyleSheet("background: green")
+            self.ActivatedFinger[0]=True
+        else:
+            self.ThumbValue.setStyleSheet("background: red")
+            self.ActivatedFinger[0]= False
+        if self.IndexValue.value() >=self.thresh_index:
+            self.IndexValue.setStyleSheet("background: green")
+            self.ActivatedFinger[1]= True
+        else:
+            self.IndexValue.setStyleSheet("background: red")
+            self.ActivatedFinger[1]= False
+        if self.MiddleValue.value() >=self.thresh_middle:
+            self.MiddleValue.setStyleSheet("background:green")
+            self.ActivatedFinger[2]=True
+        else:
+            self.MiddleValue.setStyleSheet("background: red")
+            self.ActivatedFinger[2]= False
+        if self.RingValue.value() >=self.thresh_ring:
+            self.RingValue.setStyleSheet("background: green")
+            self.ActivatedFinger[3]= True
+        else:
+            self.RingValue.setStyleSheet("background: red")
+            self.ActivatedFinger[3]= False
+        if self.PinkyValue.value() >=self.thresh_pinky:
+            self.PinkyValue.setStyleSheet("background: green")
+            self.ActivatedFinger[4]= True
+        else:
+            self.PinkyValue.setStyleSheet("background: red")
+            self.ActivatedFinger[4]= False
+        if self.WristValue.value() >=self.thresh_wrist:
+            self.WristValue.setStyleSheet("background: green")
+            self.ActivatedFinger[5]= True
+        else:
+            self.WristValue.setStyleSheet("background: red")
+            self.ActivatedFinger[5] = False
 
 
 
-            if self.currentKeyNumber>=len(OPTIONS):
-                self.currentKeyNumber=0
-            self.CurrentKey.setText(OPTIONS[self.currentKeyNumber])
 
 
     def update_mode(self):

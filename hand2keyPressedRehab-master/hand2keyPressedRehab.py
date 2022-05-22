@@ -54,8 +54,8 @@ DICT_PYNPUT_KEYBOARD = {'none':None,'alt':Key.alt_l,'win': Key.cmd,
 # LABELS FINGERS
 NB_INPUTS=6
 DEFAULT_LABELS_FINGERS = ['thumb','index','middle','ring','pinky','wrist']
-DEFAULT_DATA_HEADER_LEFT = "WRIST,PINKY,RING,MIDDLE,INDEX,THUMB,TH_WR,TH_PK,TH_RG,TH_MID,TH_IN,TH_THB"
-DEFAULT_DATA_HEADER_RIGHT= "THUMB,INDEX,MIDDLE,RING,PINKY,WRIST,TH_THB,TH_IN,TH_MID,TH_RG,TH_PK,TH_WR"
+DEFAULT_DATA_HEADER_LEFT = "WRIST,PINKY,RING,MIDDLE,INDEX,THUMB,TH_WRIST, TH_PK,TH_RG,TH_MID,TH_IN,TH_THB"
+DEFAULT_DATA_HEADER_RIGHT= "THUMB,INDEX,MIDDLE,RING,PINKY,WRIST,TH_THB,TH_IN,TH_MID,TH_RG,TH_PK,TH_WRIST"
 
 
 class Interface():
@@ -92,7 +92,7 @@ class Interface():
         self.current_key= self.config.getint("options","current_key")
 
         # DRAWING PARAMS
-        self.bar_origin_threshold = ast.literal_eval(self.config.get("drawing", "bar_origin_threshold"))
+        mainwin.bar_origin_threshold = ast.literal_eval(self.config.get("drawing", "bar_origin_threshold"))
         self.bar_h = np.zeros((NB_INPUTS))
 
         # Initialisation our window:
@@ -164,9 +164,9 @@ class Interface():
         # [INTERFACE] - PARAMS INITIALIZATION
         self.nButton = len(self.labels_buttons)
         self.calibrated = False
-        self.slider_value = self.bar_origin_threshold[:] #100- threshold
-        mainwin.init_threshold_sliders(values=self.bar_origin_threshold)
-        self.threshold = self.bar_origin_threshold[:]
+        self.slider_value = mainwin.bar_origin_threshold[:] #100- threshold
+        mainwin.init_threshold_sliders(values=mainwin.bar_origin_threshold)
+        self.threshold = mainwin.bar_origin_threshold[:]
 
         self.key = 0
         self.solution2Use = 0
@@ -478,8 +478,8 @@ class Interface():
 
     def read_values_from_devices(self,listener,controller):
         palm, distance, advance_distance, distance_performance = listener.on_frame(controller)
-        print('read distance', distance)
-        print('read palm position', palm)
+        #print('read distance', distance)
+        #print('read palm position', palm)
         # if self.advanced_mode :
         #    distance = advance_distance
 
@@ -498,6 +498,7 @@ class Interface():
         return pic_img
 
     def update_config_file(self):
+        self.slider_value=mainwin.bar_origin_threshold
         if self.hand2use == 'right':
             data = "[" + str(self.slider_value[0]) + "," + str(self.slider_value[1]) + "," + str(
                 self.slider_value[2]) + "," + str(self.slider_value[3]) + "," + str(self.slider_value[4]) + "," + str(
@@ -531,6 +532,8 @@ class Interface():
         counter_init = 0
         while self._thread is not None:
             self.check_vis_use()
+            self.check_setup_use()
+            self.check_mode()
             if self.init and not None in self.distance :
                 counter_init +=1
                 if counter_init == 1:
@@ -540,8 +543,8 @@ class Interface():
 
                     self.init=False
 
-                    print('self.distance_init',self.distance_init)
-                    print('self.palm.init',self.palm_init)
+                    #print('self.distance_init',self.distance_init)
+                    #print('self.palm.init',self.palm_init)
 
             self.key = cv2.waitKeyEx(1)
 
@@ -578,7 +581,8 @@ class Interface():
                 self.calibrated = False
                 counter_no_data += 1
                 if counter_no_data == 1:
-                    print("Waiting for values from LeapMotion")
+                    pass
+                    #print("Waiting for values from LeapMotion")
                 elif counter_no_data == 5:
                     #cv2.putText(img,"Waiting for LeapMotion ...",(self.circle_first_coord+20,self.circle_y),cv2.FONT_HERSHEY_SIMPLEX,0.8,(255,255,255))
                     #img_ = Image.fromarray(img)
@@ -618,30 +622,31 @@ class Interface():
                     if self.distance_performance[i] > self.performance[i]:
                         self.performance[i] = self.distance_performance[i]
 
-            mainwin.ext.NewFingerValues.emit(self.bar_h.tolist())
-                #self.threshold[i] = (self.slider_value[i]/100.0)
+                self.threshold[i] = self.slider_value[i] #(self.slider_value[i] / 100.0)
+
+
                 #External.value=self.bar_h[0] #test
                 #cv2.rectangle(img, (coord-30,self.img_h), (coord+30,self.img_h-int(self.bar_h[i]*self.bar_max)), self.bar_color, -1)
                 #cv2.line(img, (coord-20,self.img_h-int(self.threshold[i]*self.bar_max)), (coord+20,self.img_h-int(self.threshold[i]*self.bar_max)), self.bar_color_th, 3)
 
                 # Boolean Visualization  - discrete
-            #if self.bar_h[i] >= self.threshold[i]:
+                if self.bar_h[i] >= self.threshold[i]:
             #    cv2.circle(img, (coord,self.circle_y), self.circle_radius, self.text_color_selec, self.circle_thickness)
-            #    self.decisionPressButton[i] = True
+                     self.decisionPressButton[i] = True
             #    cv2.putText(img,self.labels_buttons[i],(coord-30,self.circle_y-150),cv2.FONT_HERSHEY_SIMPLEX,1,self.text_color_selec)
             #    cv2.rectangle(img, (coord-30-30,self.circle_y-150-50), (coord-40+70,self.circle_y-150+50), self.text_color_selec, 3)
-            #else:
-            #    self.decisionPressButton[i] = False
+                else:
+                     self.decisionPressButton[i] = False
             #    cv2.putText(img,self.labels_buttons[i],(coord-30,self.circle_y-150),cv2.FONT_HERSHEY_SIMPLEX,1,self.text_color_selec)
             #    cv2.circle(img, (coord,self.circle_y), self.circle_radius, self.circle_color, self.circle_thickness)
 
-
+            mainwin.ext.NewFingerValues.emit(self.bar_h.tolist())
             # Keyboard Pressing/Release Process
-            if self.check_mode():
-                if self.decisionPressButton[4] and not self.last_decisionPressButton[4]:
+            if self.check_finger_use:
+                if self.decisionPressButton[5] and not self.last_decisionPressButton[5]:
                     self.current_key+=1
                     self.current_key= self.current_key % len(OPTIONS)
-                    self.labels_buttons[4]= OPTIONS[0]
+                    self.labels_buttons[5]= OPTIONS[0]
                     for index in range(0, len(self.labels_buttons)-1):
                         self.labels_buttons[index]= OPTIONS[self.current_key]
             #print('label button',self.labels_buttons)
