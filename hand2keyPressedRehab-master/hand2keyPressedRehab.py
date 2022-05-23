@@ -183,27 +183,6 @@ class Interface():
 
         #show visualizer or not
         mainwin.dia.Visualizer.setChecked(self.show_visualizer)
-        # check_button = Checkbutton(btm_frame4,bg='Sky Blue', text="Visualizer", variable=self.var3,command=self.check_vis_use).grid(row=0,column = 2,padx=10)
-
-
-        # check_button = Checkbutton(btm_frame4,bg='Sky Blue', text="Use shifter", variable=self.var4,command=self.check_finger_use).grid(row=0,column = 3,padx=10)
-
-        #labeling of the fingers hands depending on which hand is used
-        #+labeling each fingers with which key it is pressing
-        #if self.hand2use == 'right':
-        #    self._list = [self.on_button4, self.on_button3, self.on_button2, self.on_button1, self.on_button]
-        #    self.updata_value_list = [self.updata_value, self.updata_value1, self.updata_value2, self.updata_value3,
-        #                              self.updata_value4]
-
-        #elif self.hand2use == 'left':
-        #    self.on_button_list = [self.on_button, self.on_button1, self.on_button2, self.on_button3, self.on_button4]
-        #    self.updata_value_list = [self.updata_value4, self.updata_value3, self.updata_value2, self.updata_value1,
-        #                              self.updata_value]
-
-        # create the listmenu
-        #o_vars = []
-        #self.o_vars = []
-        #self.o = [None, None, None, None, None]
 
 
         mainwin.ThumbValue.setValue(self.slider_value[0])
