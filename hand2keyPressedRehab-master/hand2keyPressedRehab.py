@@ -81,6 +81,7 @@ class Interface():
         self.hand2use = self.config.get("options","hand2use")
         self.labels_buttons = ast.literal_eval(self.config.get("options", "labels_buttons"))
         # False only for checking script
+        #Maybe remove this
         self.use_setup = self.config.getboolean("options","use_setup") 
         self.close_cmd = self.config.getboolean("options","close_cmd")
         # by default the sound is on
@@ -146,6 +147,7 @@ class Interface():
         self.distance_rest = [None,None,None,None,None,None]
 
         self.advanced_mode = False
+
         if self.hand2use == 'left' :
             self.distance_rest_default = [-70,1.5,1.5,1.5,1.5,25.0]#[3.0,3.0,3.0,3.0,100.0]
             self.advance_distance_rest_default = [200,120,110,100,90,25.0]#[3.0,3.0,3.0,3.0,100.0]
@@ -167,8 +169,9 @@ class Interface():
         self.slider_value = mainwin.bar_origin_threshold[:] #100- threshold
         mainwin.init_threshold_sliders(values=mainwin.bar_origin_threshold)
         self.threshold = mainwin.bar_origin_threshold[:]
-
+        print('tresh :',self.threshold)
         self.key = 0
+        #it corresponds to what?
         self.solution2Use = 0
         self.firstTime = False
 
@@ -511,7 +514,7 @@ class Interface():
         counter_init = 0
         while self._thread is not None:
             self.check_vis_use()
-            self.check_setup_use()
+            self.check_setup_use() #button press
             self.check_mode()
             if self.init and not None in self.distance :
                 counter_init +=1
@@ -525,7 +528,7 @@ class Interface():
                     #print('self.distance_init',self.distance_init)
                     #print('self.palm.init',self.palm_init)
 
-            self.key = cv2.waitKeyEx(1)
+            self.key = cv2.waitKeyEx(1) #maybe remove this
 
 
             if self.hand2use == 'right':
@@ -628,7 +631,9 @@ class Interface():
                     self.labels_buttons[5]= OPTIONS[0]
                     for index in range(0, len(self.labels_buttons)-1):
                         self.labels_buttons[index]= OPTIONS[self.current_key]
-            #print('label button',self.labels_buttons)
+                
+            # get label button fron mainzwin 
+            #self.labels_buttons =
             self.press_key_on_keyboard(self.keyboard,self.decisionPressButton,self.last_decisionPressButton,self.labels_buttons)
             self.last_decisionPressButton = self.decisionPressButton[:]
 

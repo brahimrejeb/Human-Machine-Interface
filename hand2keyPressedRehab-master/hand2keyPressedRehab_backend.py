@@ -669,7 +669,7 @@ class Interface(Tk):
             #print('label button',self.labels_buttons)
             self.press_key_on_keyboard(self.keyboard,self.decisionPressButton,self.last_decisionPressButton,self.labels_buttons)
             self.last_decisionPressButton = self.decisionPressButton[:]
-            
+               
             if self.record_data:
                 # print(self.bar_h,self.threshold)
                 self.write_in_text_file(self.file_object,self.bar_h,self.threshold)

@@ -280,7 +280,6 @@ class Ui_AnglesValues(object):
        self.bar_origin_threshold = [self.thresh_thumb, self.thresh_index, self.thresh_middle, self.thresh_ring, self.thresh_pinky, self.thresh_wrist]
 
 
-
     def ChangingValue(self,value):
         self.ThumbValue.setValue(value[0])
         self.IndexValue.setValue(value[1])
@@ -293,8 +292,9 @@ class Ui_AnglesValues(object):
             if not self.ActivatedFinger[self.FingerShifter.currentIndex()]:
                 if value[self.FingerShifter.currentIndex()]>= self.bar_origin_threshold[self.FingerShifter.currentIndex()]:
                     self.currentKeyNumber+=1
-                if self.currentKeyNumber>=len(OPTIONS):
-                    self.currentKeyNumber=0
+                    self.currentKeyNumber = self.currentKeyNumber % len(OPTIONS)
+                #if self.currentKeyNumber>=len(OPTIONS):
+                 #   self.currentKeyNumber=0
                 self.CurrentKey.setText(OPTIONS[self.currentKeyNumber])
 
         if self.ThumbValue.value() >=self.thresh_thumb:
@@ -361,7 +361,7 @@ class Ui_AnglesValues(object):
             self.ThumbPinky.setHidden(True)
             self.Fist.setHidden(True)
             self.partingFingers.setHidden(True)
-        elif self.ModeSelector.currentText()=='Shifter Mode':
+        elif self.ModeSelector.currentText() =='Shifter Mode':
             self.CurrentKey.setHidden(False)
             self.ShifterLabel.setHidden(False)
             self.FingerShifter.show()
@@ -409,7 +409,7 @@ class Ui_AnglesValues(object):
 
     def retranslateUi(self, AnglesValues):
         _translate = QtCore.QCoreApplication.translate
-        AnglesValues.setWindowTitle(_translate("AnglesValues", "Angle Value"))
+        AnglesValues.setWindowTitle(_translate("AnglesValues", "Human Machine Interface"))
         self.ShifterLabel.setText(_translate("AnglesValues", "Shifter"))
         self.FingerShifter.setItemText(0, _translate("AnglesValues", "Thumb"))
         self.FingerShifter.setItemText(1, _translate("AnglesValues", "Index"))
