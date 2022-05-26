@@ -212,6 +212,9 @@ class Ui_AnglesValues(object):
         self.gridLayout.addLayout(self.KeysLayout, 1, 4, 1, 2)
         self.ComplexMouvLayout = QtWidgets.QVBoxLayout()
         self.ComplexMouvLayout.setObjectName("ComplexMouvLayout")
+        self.Thumb = QtWidgets.QLabel(self.centralwidget)
+        self.Thumb.setObjectName("Thumb")
+        self.ComplexMouvLayout.addWidget(self.Thumb)
         self.ThumbIndex = QtWidgets.QLabel(self.centralwidget)
         self.ThumbIndex.setObjectName("ThumbIndex")
         self.ComplexMouvLayout.addWidget(self.ThumbIndex)
@@ -227,9 +230,6 @@ class Ui_AnglesValues(object):
         self.Fist = QtWidgets.QLabel(self.centralwidget)
         self.Fist.setObjectName("Fist")
         self.ComplexMouvLayout.addWidget(self.Fist)
-        self.partingFingers = QtWidgets.QLabel(self.centralwidget)
-        self.partingFingers.setObjectName("partingFingers")
-        self.ComplexMouvLayout.addWidget(self.partingFingers)
         self.gridLayout.addLayout(self.ComplexMouvLayout, 1, 1, 1, 1)
         AnglesValues.setCentralWidget(self.centralwidget)
         self.menubar = QtWidgets.QMenuBar(AnglesValues)
@@ -293,6 +293,14 @@ class Ui_AnglesValues(object):
         self.dia.PinkyThresh.valueChanged.connect(self.update_threshold)
         self.dia.WristThresh.valueChanged.connect(self.update_threshold)
 
+        # update selected keys
+        self.ThumbKey.currentIndexChanged.connect(self.update_key)
+        self.IndexKey.currentIndexChanged.connect(self.update_key)
+        self.MiddleKey.currentIndexChanged.connect(self.update_key)
+        self.RingKey.currentIndexChanged.connect(self.update_key)
+        self.PinkyKey.currentIndexChanged.connect(self.update_key)
+        self.WristKey.currentIndexChanged.connect(self.update_key)
+
     def init_threshold_sliders(self,values):
         self.dia.ThumbThresh.setValue(values[0])
         self.dia.IndexThresh.setValue(values[1])
@@ -302,7 +310,6 @@ class Ui_AnglesValues(object):
         self.dia.WristThresh.setValue(values[5])
 
     def update_threshold(self):
-
        self.thresh_thumb = self.dia.ThumbThresh.value()
        self.thresh_index = self.dia.IndexThresh.value()
        self.thresh_middle = self.dia.MiddleThresh.value()
@@ -311,7 +318,10 @@ class Ui_AnglesValues(object):
        self.thresh_wrist = self.dia.WristThresh.value()
        self.bar_origin_threshold = [self.thresh_thumb, self.thresh_index, self.thresh_middle, self.thresh_ring, self.thresh_pinky, self.thresh_wrist]
 
-
+    def update_key(self, index):
+        self.FingerKeyNumber = [self.ThumbKey.currentIndex(), self.IndexKey.currentIndex(),
+                                self.MiddleKey.currentIndex(), self.RingKey.currentIndex(),
+                                self.PinkyKey.currentIndex(), self.WristKey.currentIndex()]
     def ChangingValue(self,value):
         self.ThumbValue.setValue(value[0])
         self.IndexValue.setValue(value[1])
@@ -331,11 +341,13 @@ class Ui_AnglesValues(object):
                 if int(value[self.FingerShifter.currentIndex()])> self.bar_origin_threshold[self.FingerShifter.currentIndex()]:
                     self.currentKeyNumber+=1
                     self.currentKeyNumber = self.currentKeyNumber % len(OPTIONS)
-                    self.FingerKeyNumber[1] = self.currentKeyNumber 
-                    self.FingerKeyNumber[2] = self.currentKeyNumber 
-                    self.FingerKeyNumber[3] = self.currentKeyNumber 
-                    self.FingerKeyNumber[4] = self.currentKeyNumber 
-                    self.FingerKeyNumber[5] = self.currentKeyNumber 
+                    self.FingerKeyNumber[0] = self.currentKeyNumber
+                    self.FingerKeyNumber[1] = self.currentKeyNumber
+                    self.FingerKeyNumber[2] = self.currentKeyNumber
+                    self.FingerKeyNumber[3] = self.currentKeyNumber
+                    self.FingerKeyNumber[4] = self.currentKeyNumber
+                    self.FingerKeyNumber[5] = self.currentKeyNumber
+                    self.FingerKeyNumber[self.FingerShifter.currentIndex()] = 0
                     self.ActivatedFinger[self.FingerShifter.currentIndex()] = True
                     #time.sleep(0.2)
                     #if self.currentKeyNumber>=len(OPTIONS):
@@ -399,7 +411,11 @@ class Ui_AnglesValues(object):
                                       "}")
             self.ActivatedFinger[3]= False
         if self.PinkyValue.value() >self.thresh_pinky:
-            self.PinkyValue.setStyleSheet("background: green")
+            self.PinkyValue.setStyleSheet("QProgressBar::chunk "
+                                      "{ "
+                                      "background-color: green;"
+                                      "text-align: right;"
+                                      "}")
             self.ActivatedFinger[4]= True
         else:
             self.PinkyValue.setStyleSheet("QProgressBar::chunk "
@@ -444,12 +460,12 @@ class Ui_AnglesValues(object):
             self.WristLabel.setHidden(False)
             self.ShifterLabel.setHidden(True)
             self.FingerShifter.hide()
+            self.Thumb.setHidden(True)
             self.ThumbIndex.setHidden(True)
             self.ThumbMiddle.setHidden(True)
             self.ThumbRing.setHidden(True)
             self.ThumbPinky.setHidden(True)
             self.Fist.setHidden(True)
-            self.partingFingers.setHidden(True)
         elif self.ModeSelector.currentText() =='Shifter Mode':
             self.CurrentKey.setHidden(False)
             self.ShifterLabel.setHidden(False)
@@ -460,12 +476,12 @@ class Ui_AnglesValues(object):
             self.RingKey.hide()
             self.PinkyKey.hide()
             self.WristKey.hide()
+            self.Thumb.setHidden(True)
             self.ThumbIndex.setHidden(True)
             self.ThumbMiddle.setHidden(True)
             self.ThumbRing.setHidden(True)
             self.ThumbPinky.setHidden(True)
             self.Fist.setHidden(True)
-            self.partingFingers.setHidden(True)
             self.ThumbLabel.setHidden(False)
             self.IndexLabel.setHidden(False)
             self.MiddleLabel.setHidden(False)
@@ -482,12 +498,12 @@ class Ui_AnglesValues(object):
             self.RingKey.show()
             self.PinkyKey.show()
             self.WristKey.show()
+            self.Thumb.setHidden(False)
             self.ThumbIndex.setHidden(False)
             self.ThumbMiddle.setHidden(False)
             self.ThumbRing.setHidden(False)
             self.ThumbPinky.setHidden(False)
             self.Fist.setHidden(False)
-            self.partingFingers.setHidden(False)
             self.ThumbLabel.setHidden(True)
             self.IndexLabel.setHidden(True)
             self.MiddleLabel.setHidden(True)
@@ -563,11 +579,11 @@ class Ui_AnglesValues(object):
         self.WristKey.setItemText(5, _translate("AnglesValues", "Shift"))
         self.WristKey.setItemText(6, _translate("AnglesValues", "Caps"))
         self.WristKey.setItemText(7, _translate("AnglesValues", "Esc"))
+        self.Thumb.setText(_translate("AnglesValues", "Thumb"))
         self.ThumbIndex.setText(_translate("AnglesValues", "Thumb-Index"))
         self.ThumbMiddle.setText(_translate("AnglesValues", "Thumb-Middle"))
         self.ThumbRing.setText(_translate("AnglesValues", "Thumb-Ring"))
         self.ThumbPinky.setText(_translate("AnglesValues", "Thumb-Pinky"))
         self.Fist.setText(_translate("AnglesValues", "Closed fist"))
-        self.partingFingers.setText(_translate("AnglesValues", "Parting Fingers"))
         self.menuSetting_2.setTitle(_translate("AnglesValues", "Setting"))
         self.actionAcces_setting.setText(_translate("AnglesValues", "Acces setting"))
