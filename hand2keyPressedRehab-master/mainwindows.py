@@ -59,27 +59,53 @@ class Ui_AnglesValues(object):
         self.ProgessLayout.setSpacing(20)
         self.ProgessLayout.setObjectName("ProgessLayout")
         self.ThumbValue = QtWidgets.QProgressBar(self.centralwidget)
-        self.ThumbValue.setProperty("value", 24)
+        self.ThumbValue.setProperty("value", 0)
+        self.ThumbValue.setStyleSheet("QProgressBar::chunk "
+                                      "{ "
+                                      "background-color: red;"
+                                      "text-align: right;"
+                                      "}")
         self.ThumbValue.setObjectName("ThumbValue")
         self.ProgessLayout.addWidget(self.ThumbValue)
         self.IndexValue = QtWidgets.QProgressBar(self.centralwidget)
-        self.IndexValue.setProperty("value", 24)
+        self.IndexValue.setProperty("value", 0)
+        self.IndexValue.setStyleSheet("background: red")
         self.IndexValue.setObjectName("IndexValue")
         self.ProgessLayout.addWidget(self.IndexValue)
         self.MiddleValue = QtWidgets.QProgressBar(self.centralwidget)
-        self.MiddleValue.setProperty("value", 24)
+        self.MiddleValue.setProperty("value", 0)
+        self.MiddleValue.setStyleSheet("QProgressBar::chunk "
+                                      "{ "
+                                      "background-color: red;"
+                                      "text-align: right;"
+                                      "}")
         self.MiddleValue.setObjectName("MiddleValue")
         self.ProgessLayout.addWidget(self.MiddleValue)
         self.RingValue = QtWidgets.QProgressBar(self.centralwidget)
-        self.RingValue.setProperty("value", 24)
+        self.RingValue.setProperty("value", 0)
+        self.RingValue.setStyleSheet("QProgressBar::chunk "
+                                      "{ "
+                                      "background-color: red;"
+                                      "text-align: right;"
+                                      "}")
         self.RingValue.setObjectName("RingValue")
         self.ProgessLayout.addWidget(self.RingValue)
         self.PinkyValue = QtWidgets.QProgressBar(self.centralwidget)
-        self.PinkyValue.setProperty("value", 24)
+        self.PinkyValue.setProperty("value", 0)
+        self.PinkyValue.setStyleSheet("QProgressBar::chunk "
+                                      "{ "
+                                      "background-color: red;"
+                                      "text-align: right;"
+                                      "}")
         self.PinkyValue.setObjectName("PinkyValue")
         self.ProgessLayout.addWidget(self.PinkyValue)
         self.WristValue = QtWidgets.QProgressBar(self.centralwidget)
-        self.WristValue.setProperty("value", 24)
+        self.WristValue.setProperty("value", 0)
+        self.IndexValue.setStyleSheet("QProgressBar::chunk "
+                                      "{ "
+                                      "background-color: red;"
+                                      "text-align: right;"
+                                      "}")
         self.WristValue.setObjectName("WristValue")
         self.ProgessLayout.addWidget(self.WristValue)
         self.gridLayout.addLayout(self.ProgessLayout, 1, 0, 1, 1)
@@ -288,6 +314,7 @@ class Ui_AnglesValues(object):
         self.PinkyValue.setValue(value[4])
         self.WristValue.setValue(value[5])
 
+
         if self.ModeSelector.currentText() == 'Shifter Mode':
             if not self.ActivatedFinger[self.FingerShifter.currentIndex()]:
                 if value[self.FingerShifter.currentIndex()]>= self.bar_origin_threshold[self.FingerShifter.currentIndex()]:
@@ -297,41 +324,85 @@ class Ui_AnglesValues(object):
                  #   self.currentKeyNumber=0
                 self.CurrentKey.setText(OPTIONS[self.currentKeyNumber])
 
-        if self.ThumbValue.value() >=self.thresh_thumb:
-            self.ThumbValue.setStyleSheet("background: green")
+        if self.ThumbValue.value() >self.thresh_thumb:
+            self.ThumbValue.setStyleSheet("QProgressBar::chunk "
+                                      "{ "
+                                      "background-color: green;"
+                                      "text-align: right;"
+                                      "}")
             self.ActivatedFinger[0]=True
         else:
-            self.ThumbValue.setStyleSheet("background: red")
+            self.ThumbValue.setStyleSheet("QProgressBar::chunk "
+                                      "{ "
+                                      "background-color: red;"
+                                      "text-align: right;"
+                                      "}")
             self.ActivatedFinger[0]= False
-        if self.IndexValue.value() >=self.thresh_index:
-            self.IndexValue.setStyleSheet("background: green")
+        if self.IndexValue.value() >self.thresh_index:
+            self.IndexValue.setStyleSheet("QProgressBar::chunk "
+                                      "{ "
+                                      "background-color: green;"
+                                      "text-align: right;"
+                                      "}")
             self.ActivatedFinger[1]= True
         else:
-            self.IndexValue.setStyleSheet("background: red")
+            self.IndexValue.setStyleSheet("QProgressBar::chunk "
+                                      "{ "
+                                      "background-color: red;"
+                                      "text-align: right;"
+                                      "}")
             self.ActivatedFinger[1]= False
-        if self.MiddleValue.value() >=self.thresh_middle:
-            self.MiddleValue.setStyleSheet("background:green")
+        if self.MiddleValue.value() >self.thresh_middle:
+            self.MiddleValue.setStyleSheet("QProgressBar::chunk "
+                                      "{ "
+                                      "background-color: green;"
+                                      "text-align: right;"
+                                      "}")
             self.ActivatedFinger[2]=True
         else:
-            self.MiddleValue.setStyleSheet("background: red")
+            self.MiddleValue.setStyleSheet("QProgressBar::chunk "
+                                      "{ "
+                                      "background-color: red;"
+                                      "text-align: right;"
+                                      "}")
             self.ActivatedFinger[2]= False
-        if self.RingValue.value() >=self.thresh_ring:
-            self.RingValue.setStyleSheet("background: green")
+        if self.RingValue.value() >self.thresh_ring:
+            self.RingValue.setStyleSheet("QProgressBar::chunk "
+                                      "{ "
+                                      "background-color: green;"
+                                      "text-align: right;"
+                                      "}")
             self.ActivatedFinger[3]= True
         else:
-            self.RingValue.setStyleSheet("background: red")
+            self.RingValue.setStyleSheet("QProgressBar::chunk "
+                                      "{ "
+                                      "background-color: red;"
+                                      "text-align: right;"
+                                      "}")
             self.ActivatedFinger[3]= False
-        if self.PinkyValue.value() >=self.thresh_pinky:
+        if self.PinkyValue.value() >self.thresh_pinky:
             self.PinkyValue.setStyleSheet("background: green")
             self.ActivatedFinger[4]= True
         else:
-            self.PinkyValue.setStyleSheet("background: red")
+            self.PinkyValue.setStyleSheet("QProgressBar::chunk "
+                                      "{ "
+                                      "background-color: red;"
+                                      "text-align: right;"
+                                      "}")
             self.ActivatedFinger[4]= False
-        if self.WristValue.value() >=self.thresh_wrist:
-            self.WristValue.setStyleSheet("background: green")
+        if self.WristValue.value() >self.thresh_wrist:
+            self.WristValue.setStyleSheet("QProgressBar::chunk "
+                                      "{ "
+                                      "background-color: green;"
+                                      "text-align: right;"
+                                      "}")
             self.ActivatedFinger[5]= True
         else:
-            self.WristValue.setStyleSheet("background: red")
+            self.WristValue.setStyleSheet("QProgressBar::chunk "
+                                      "{ "
+                                      "background-color: red;"
+                                      "text-align: right;"
+                                      "}")
             self.ActivatedFinger[5] = False
 
 
