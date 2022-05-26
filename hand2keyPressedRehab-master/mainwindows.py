@@ -69,7 +69,11 @@ class Ui_AnglesValues(object):
         self.ProgessLayout.addWidget(self.ThumbValue)
         self.IndexValue = QtWidgets.QProgressBar(self.centralwidget)
         self.IndexValue.setProperty("value", 0)
-        self.IndexValue.setStyleSheet("background: red")
+        self.IndexValue.setStyleSheet("QProgressBar::chunk "
+                                      "{ "
+                                      "background-color: red;"
+                                      "text-align: right;"
+                                      "}")
         self.IndexValue.setObjectName("IndexValue")
         self.ProgessLayout.addWidget(self.IndexValue)
         self.MiddleValue = QtWidgets.QProgressBar(self.centralwidget)
@@ -101,7 +105,7 @@ class Ui_AnglesValues(object):
         self.ProgessLayout.addWidget(self.PinkyValue)
         self.WristValue = QtWidgets.QProgressBar(self.centralwidget)
         self.WristValue.setProperty("value", 0)
-        self.IndexValue.setStyleSheet("QProgressBar::chunk "
+        self.WristValue.setStyleSheet("QProgressBar::chunk "
                                       "{ "
                                       "background-color: red;"
                                       "text-align: right;"
@@ -245,7 +249,10 @@ class Ui_AnglesValues(object):
         self.retranslateUi(AnglesValues)
         QtCore.QMetaObject.connectSlotsByName(AnglesValues)
 
-
+        #activated current key
+        self.FingerKeyNumber=[self.ThumbKey.currentIndex(), self.IndexKey.currentIndex(), self.MiddleKey.currentIndex(), self.RingKey.currentIndex(), self.PinkyKey.currentIndex(), self.WristKey.currentIndex()]
+        # Simple mode parameter
+        self.currentKeyNumber = 0
         #dialogue window
         self.Dialog = QtWidgets.QDialog()
         self.dia = Ui_Dialog()
@@ -265,8 +272,7 @@ class Ui_AnglesValues(object):
         self.bar_origin_threshold=[self.thresh_thumb, self.thresh_index, self.thresh_middle, self.thresh_ring, self.thresh_pinky, self.thresh_wrist]
 
 
-        #Simple mode parameter
-        self.currentKeyNumber=0
+
 
         #mode selector box
         self.update_mode()
@@ -319,10 +325,14 @@ class Ui_AnglesValues(object):
             if not self.ActivatedFinger[self.FingerShifter.currentIndex()]:
                 if value[self.FingerShifter.currentIndex()]>= self.bar_origin_threshold[self.FingerShifter.currentIndex()]:
                     self.currentKeyNumber+=1
-                    self.currentKeyNumber = self.currentKeyNumber % len(OPTIONS)
-                #if self.currentKeyNumber>=len(OPTIONS):
+                    self.FingerKeyNumber[1].setCurrentIndex(self.currentKeyNumber % len(OPTIONS))
+                    self.FingerKeyNumber[2].setCurrentIndex(self.currentKeyNumber % len(OPTIONS))
+                    self.FingerKeyNumber[3].setCurrentIndex(self.currentKeyNumber % len(OPTIONS))
+                    self.FingerKeyNumber[4].setCurrentIndex(self.currentKeyNumber % len(OPTIONS))
+                    self.FingerKeyNumber[5].setCurrentIndex(self.currentKeyNumber % len(OPTIONS))
+                    #if self.currentKeyNumber>=len(OPTIONS):
                  #   self.currentKeyNumber=0
-                self.CurrentKey.setText(OPTIONS[self.currentKeyNumber])
+                self.CurrentKey.setText(OPTIONS[self.currentKeyNumber% len(OPTIONS)])
 
         if self.ThumbValue.value() >self.thresh_thumb:
             self.ThumbValue.setStyleSheet("QProgressBar::chunk "
