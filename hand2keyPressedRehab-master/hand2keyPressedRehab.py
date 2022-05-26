@@ -624,16 +624,21 @@ class Interface():
 
             mainwin.ext.NewFingerValues.emit(self.bar_h.tolist())
             # Keyboard Pressing/Release Process
-            if self.check_finger_use:
+            '''if self.check_finger_use:
                 if self.decisionPressButton[5] and not self.last_decisionPressButton[5]:
                     self.current_key+=1
                     self.current_key= self.current_key % len(OPTIONS)
                     self.labels_buttons[5]= OPTIONS[0]
                     for index in range(0, len(self.labels_buttons)-1):
-                        self.labels_buttons[index]= OPTIONS[self.current_key]
-                
+                        self.labels_buttons[index]= OPTIONS[self.current_key]'''
+
+            #
+            # 
+            #print('mainwin : ',mainwin.FingerKeyNumber)   
             # get label button fron mainzwin 
-            #self.labels_buttons =
+            for index in range(0, len(self.labels_buttons)-1):
+                self.labels_buttons[index]= OPTIONS[mainwin.FingerKeyNumber[index]]
+            
             self.press_key_on_keyboard(self.keyboard,self.decisionPressButton,self.last_decisionPressButton,self.labels_buttons)
             self.last_decisionPressButton = self.decisionPressButton[:]
 

@@ -320,19 +320,27 @@ class Ui_AnglesValues(object):
         self.PinkyValue.setValue(value[4])
         self.WristValue.setValue(value[5])
 
+        #print('selfqctivstedfinger',self.ActivatedFinger[self.FingerShifter.currentIndex()])
+        ''' print('bar_tresh:', self.bar_origin_threshold[self.FingerShifter.currentIndex()])
+        print('tresh',self.thresh_thumb)
+        print('value',value[self.FingerShifter.currentIndex()])
+        print('thumb_value',self.ThumbValue.value())'''
 
         if self.ModeSelector.currentText() == 'Shifter Mode':
             if not self.ActivatedFinger[self.FingerShifter.currentIndex()]:
-                if value[self.FingerShifter.currentIndex()]>= self.bar_origin_threshold[self.FingerShifter.currentIndex()]:
+                if int(value[self.FingerShifter.currentIndex()])> self.bar_origin_threshold[self.FingerShifter.currentIndex()]:
                     self.currentKeyNumber+=1
-                    self.FingerKeyNumber[1].setCurrentIndex(self.currentKeyNumber % len(OPTIONS))
-                    self.FingerKeyNumber[2].setCurrentIndex(self.currentKeyNumber % len(OPTIONS))
-                    self.FingerKeyNumber[3].setCurrentIndex(self.currentKeyNumber % len(OPTIONS))
-                    self.FingerKeyNumber[4].setCurrentIndex(self.currentKeyNumber % len(OPTIONS))
-                    self.FingerKeyNumber[5].setCurrentIndex(self.currentKeyNumber % len(OPTIONS))
+                    self.currentKeyNumber = self.currentKeyNumber % len(OPTIONS)
+                    self.FingerKeyNumber[1] = self.currentKeyNumber 
+                    self.FingerKeyNumber[2] = self.currentKeyNumber 
+                    self.FingerKeyNumber[3] = self.currentKeyNumber 
+                    self.FingerKeyNumber[4] = self.currentKeyNumber 
+                    self.FingerKeyNumber[5] = self.currentKeyNumber 
+                    self.ActivatedFinger[self.FingerShifter.currentIndex()] = True
+                    #time.sleep(0.2)
                     #if self.currentKeyNumber>=len(OPTIONS):
                  #   self.currentKeyNumber=0
-                self.CurrentKey.setText(OPTIONS[self.currentKeyNumber% len(OPTIONS)])
+                self.CurrentKey.setText(OPTIONS[self.currentKeyNumber])
 
         if self.ThumbValue.value() >self.thresh_thumb:
             self.ThumbValue.setStyleSheet("QProgressBar::chunk "
