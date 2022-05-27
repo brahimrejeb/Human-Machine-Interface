@@ -32,6 +32,9 @@ import Settings
 from Settings import Ui_Dialog
 import mainwindows
 from mainwindows import Ui_AnglesValues
+
+import PerformanceWindow
+from PerformanceWindow import Ui_Rin
 #from mainwindows import External
 
 
@@ -295,6 +298,7 @@ class Interface():
         closing of the interface
         '''
         # stop the drawing thread.
+
         global app
         print("**** Exit interface ****")
         if self.keyboard.shift_pressed:
@@ -307,6 +311,13 @@ class Interface():
             self.keyboard.release(Key.ctrl_l)
             print("release ctrl")
         self.controller.remove_listener(self.listener)
+
+        Rin = QtWidgets.QWidget()
+        Rin.setWindowIcon(QtGui.QIcon('th.png'))
+        PerformancePopUp = Ui_Rin()
+        PerformancePopUp.setupUi(Rin, self.performance)
+        Rin.show()
+
         subprocess.call(["taskkill", "/F", "/IM", 'Visualizer.exe'])
         self._thread = None
         self.update_config_file()
@@ -330,6 +341,7 @@ class Interface():
                     int(self.performance[1])) + 'mm\n''Thumb: ' + str(int(self.performance[0])) + 'mm\n',
                 'Performance window')
 
+
         destFile = r"performance.txt"
         with open(destFile, 'a') as f:
             if self.hand2use == 'left':
@@ -349,8 +361,11 @@ class Interface():
                 f.write(str(round(self.performance[1], 2)) + '(I),')
                 f.write(str(round(self.performance[0], 2)) + "(T)\n")
 
+
+
         mixer.quit()
         sys.exit()
+
 
     def loading_sound_on_computer(self,OPTIONS):
         '''
