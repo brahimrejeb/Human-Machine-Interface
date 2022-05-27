@@ -72,33 +72,7 @@ class Ui_Rin(object):
         self.CountValue = QtWidgets.QLabel(self.verticalLayoutWidget_2)
         self.CountValue.setObjectName("CountValue")
         self.PerformancesLayout.addWidget(self.CountValue)
-        self.verticalLayoutWidget_3 = QtWidgets.QWidget(Rin)
-        self.verticalLayoutWidget_3.setGeometry(QtCore.QRect(270, 40, 81, 161))
-        self.verticalLayoutWidget_3.setObjectName("verticalLayoutWidget_3")
-        self.verticalLayout_2 = QtWidgets.QVBoxLayout(self.verticalLayoutWidget_3)
-        self.verticalLayout_2.setContentsMargins(0, 0, 0, 0)
-        self.verticalLayout_2.setObjectName("verticalLayout_2")
-        self.NewRecordWrist = QtWidgets.QLabel(self.verticalLayoutWidget_3)
-        self.NewRecordWrist.setObjectName("NewRecordWrist")
-        self.verticalLayout_2.addWidget(self.NewRecordWrist)
-        self.NewRecordPinky = QtWidgets.QLabel(self.verticalLayoutWidget_3)
-        self.NewRecordPinky.setObjectName("NewRecordPinky")
-        self.verticalLayout_2.addWidget(self.NewRecordPinky)
-        self.NewRecordRing = QtWidgets.QLabel(self.verticalLayoutWidget_3)
-        self.NewRecordRing.setObjectName("NewRecordRing")
-        self.verticalLayout_2.addWidget(self.NewRecordRing)
-        self.NewRecordMiddle = QtWidgets.QLabel(self.verticalLayoutWidget_3)
-        self.NewRecordMiddle.setObjectName("NewRecordMiddle")
-        self.verticalLayout_2.addWidget(self.NewRecordMiddle)
-        self.NewRecordIndex = QtWidgets.QLabel(self.verticalLayoutWidget_3)
-        self.NewRecordIndex.setObjectName("NewRecordIndex")
-        self.verticalLayout_2.addWidget(self.NewRecordIndex)
-        self.NewRecordThumb = QtWidgets.QLabel(self.verticalLayoutWidget_3)
-        self.NewRecordThumb.setObjectName("NewRecordThumb")
-        self.verticalLayout_2.addWidget(self.NewRecordThumb)
-        self.NewRecordThumb_2 = QtWidgets.QLabel(self.verticalLayoutWidget_3)
-        self.NewRecordThumb_2.setObjectName("NewRecordThumb_2")
-        self.verticalLayout_2.addWidget(self.NewRecordThumb_2)
+
         self.OK = QtWidgets.QPushButton(Rin)
         self.OK.setGeometry(QtCore.QRect(130, 210, 75, 23))
         self.OK.setObjectName("OK")
@@ -109,7 +83,7 @@ class Ui_Rin(object):
         QtCore.QMetaObject.connectSlotsByName(Rin)
 
         self.setValuesPerformance(performance)
-
+        
     def setValuesPerformance(self, performance):
         #init the values of the interface
         self.WristPerf.setText(str(int(performance[0]))+ 'mm')
@@ -118,7 +92,7 @@ class Ui_Rin(object):
         self.MiddlePerf.setText(str(int(performance[3]))+ 'mm')
         self.IndexPerf.setText(str(int(performance[4]))+ 'mm')
         self.ThumbPerf.setText(str(int(performance[5]))+ 'mm')
-
+        #self.CountValue.setText(str(int(performance[6])))
 
     def retranslateUi(self, Rin):
         _translate = QtCore.QCoreApplication.translate
@@ -138,13 +112,7 @@ class Ui_Rin(object):
         self.IndexPerf.setText(_translate("Rin", "IndexPerf"))
         self.ThumbPerf.setText(_translate("Rin", "ThumbPerf"))
         self.CountValue.setText(_translate("Rin", "CountValue"))
-        self.NewRecordWrist.setText(_translate("Rin", "New record!!"))
-        self.NewRecordPinky.setText(_translate("Rin", "New record!!"))
-        self.NewRecordRing.setText(_translate("Rin", "New record!!"))
-        self.NewRecordMiddle.setText(_translate("Rin", "New record!!"))
-        self.NewRecordIndex.setText(_translate("Rin", "New record!!"))
-        self.NewRecordThumb.setText(_translate("Rin", "New record!!"))
-        self.NewRecordThumb_2.setText(_translate("Rin", "New record!!"))
+
         self.OK.setText(_translate("Rin", "OK"))
 
 
