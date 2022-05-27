@@ -36,5 +36,8 @@ Load the code from the github: https://github.com/brahimrejeb/LeapOrion.git.
 Modify in the config.ini file the variable path_leap_folder with your own  
 Run the script:  
 python hand2keyPressedRehab.py  
+- .exe : 
+It is possible to convert this python code into a .exe file to make it more pleasant to use. You can follow this tutorial for that : [a link](https://www.youtube.com/watch?v=UZX5kH72Yx4)
+
 - How it works :  
 Leapmotion allows to measure the position in space of many specific points in the hand. We will use those measures to detect some specific movement. 
