@@ -7,7 +7,7 @@ The objective of our device is to detect the residual movement of the fingers of
 Windows
 Python 3.7  
 OrionV4: https://developer.leapmotion.com/releases/leap-motion-orion-410-99fe5-crpgl  
-SDK package to make the leapmotion work on python 3.7  
+SDK package to make the leapmotion work on python 3.7 (Already in the github folder) 
 Ananconda is recomended  
 The packages required are :  
 - PyQt5 
