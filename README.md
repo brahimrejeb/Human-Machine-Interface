@@ -15,10 +15,11 @@ The packages required are :
 - 
 
 # Installation
+- Install Anaconda
 - Create a new environment with python 3.7 using Anaconda: conda create --name myenv python=3.7 (to get python3.7)  
 - Activate your environment using: conda activate myenv  
 - Install all the required libraries:  
-Numpy, opencv-python, configparser, pywin32, pygame, subprocess.run, pynput, Pillow, ctypes-callable, tkintertable, AST, pyttsx3 gtts.  
+`Numpy, opencv-python, configparser, pywin32, pygame, subprocess.run, pynput, Pillow, ctypes-callable, tkintertable, AST, pyttsx3 gtts'.  
 - Code:  
 Load the code from the github: https://github.com/brahimrejeb/LeapOrion.git. 
 Modify in the config.ini file the variable path_leap_folder with your own  
