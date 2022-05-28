@@ -57,8 +57,9 @@ DICT_PYNPUT_KEYBOARD = {'none':None,'alt':Key.alt_l,'win': Key.cmd,
 # LABELS FINGERS
 NB_INPUTS=6
 DEFAULT_LABELS_FINGERS = ['thumb','index','middle','ring','pinky','wrist']
-DEFAULT_DATA_HEADER_LEFT = "WRIST,PINKY,RING,MIDDLE,INDEX,THUMB,TH_WRIST, TH_PK,TH_RG,TH_MID,TH_IN,TH_THB"
-DEFAULT_DATA_HEADER_RIGHT= "THUMB,INDEX,MIDDLE,RING,PINKY,WRIST,TH_THB,TH_IN,TH_MID,TH_RG,TH_PK,TH_WRIST"
+#DEFAULT_DATA_HEADER_LEFT = "WRIST,PINKY,RING,MIDDLE,INDEX,THUMB,TH_WRIST, TH_PK,TH_RG,TH_MID,TH_IN,TH_THB"
+DEFAULT_DATA_HEADER= "THUMB,INDEX,MIDDLE,RING,PINKY,WRIST,TH_THB,TH_IN,TH_MID,TH_RG,TH_PK,TH_WRIST"
+
 
 
 class Interface():
@@ -81,7 +82,7 @@ class Interface():
 
 
         # DEFAULT PARAMS
-        self.hand2use = self.config.get("options","hand2use")
+        #self.hand2use = self.config.get("options","hand2use")
         self.labels_buttons = ast.literal_eval(self.config.get("options", "labels_buttons"))
         # False only for checking script
         #Maybe remove this
@@ -110,10 +111,10 @@ class Interface():
                 os.makedirs(self.folderData)
             self.timestr = time.strftime("%Y%m%d-%H%M%S")
             self.file_object  = open(os.path.join(self.folderData,self.timestr + '.txt'), "w+")
-            if self.hand2use == 'left':
+            '''if self.hand2use == 'left':
                self.file_object.write(DEFAULT_DATA_HEADER_LEFT + "\n") 
-            else:
-                self.file_object.write(DEFAULT_DATA_HEADER_RIGHT + "\n")
+            else:'''
+            self.file_object.write(DEFAULT_DATA_HEADER + "\n")
 
         
         # SOUND FEEDBACK
@@ -134,7 +135,7 @@ class Interface():
         self.keyboard = Controller()
 
         # HAND USE
-        self.labels_fingers = self.define_labels_fingers_based_onhand(DEFAULT_LABELS_FINGERS)
+        self.labels_fingers = DEFAULT_LABELS_FINGERS
 
         # [LEAP MOTION] INITIALIZATION
         self.visualizer_open=False
@@ -149,22 +150,18 @@ class Interface():
         self.last_decisionPressButton = self.decisionPressButton[:]
         self.distance_rest = [None,None,None,None,None,None]
 
-        self.advanced_mode = False
+        
 
-        if self.hand2use == 'left' :
+        '''if self.hand2use == 'left' :
             self.distance_rest_default = [-70,1.5,1.5,1.5,1.5,25.0]#[3.0,3.0,3.0,3.0,100.0]
             self.advance_distance_rest_default = [200,120,110,100,90,25.0]#[3.0,3.0,3.0,3.0,100.0]
-        elif self.hand2use == 'right' :
-            self.distance_rest_default = [25.0,1.5,1.5,1.5,1.5,-70]#[3.0,3.0,3.0,3.0,100.0]
-            self.advance_distance_rest_default = [25.0,90,100,110,120,200]#[3.0,3.0,3.0,3.0,100.0]
-        if self.advanced_mode:
-            self.distance_rest = self.advance_distance_rest_default[:]
-        else:
-            self.distance_rest = self.distance_rest_default[:]
+        elif self.hand2use == 'right' :'''
+        self.distance_rest_default = [25.0,1.5,1.5,1.5,1.5,-70]#[3.0,3.0,3.0,3.0,100.0]
+        self.advance_distance_rest_default = [25.0,90,100,110,120,200]#[3.0,3.0,3.0,3.0,100.0]
         self.subtracted = [0.0,0.0,0.0,0.0,0.0,0.0]
 
         # Save best performance:
-        self.performance = [0.0,0.0,0.0,0.0,0.0,0.0]
+        self.performance = [0.0,0.0,0.0,0.0,0.0,0.0,0.0]
 
         # [INTERFACE] - PARAMS INITIALIZATION
         self.nButton = len(self.labels_buttons)
@@ -198,6 +195,8 @@ class Interface():
         mainwin.PinkyValue.setValue(self.slider_value[4])
         mainwin.WristValue.setValue(self.slider_value[5])
         #for i in range(NB_INPUTS):
+
+        
         #    l2 = Label(btm_frame2, bg='Sky Blue', text=self.slider_name[i].lower(),font=("Helvetica", 11))
         #    w2 = Scale(btm_frame2,bg='Sky Blue', from_=0, to=100, orient=HORIZONTAL,length=450,command=self.updata_value_list[i])
         #    w2.set(self.slider_value[i])
@@ -324,7 +323,7 @@ class Interface():
         date = self.timestr[6:8] + '/' + self.timestr[4:6] + '/' + self.timestr[:4] + ' ' + 'at' + ' ' + self.timestr[
                                                                                                          9:11] + 'h' + self.timestr[
                                                                                                                        11:13] + 'm' + ' :'
-        if self.hand2use == 'left':
+        '''if self.hand2use == 'left':
             self.popupmsg(
                 'Performance of the day is: \n Wrist: ' + str(int(self.performance[0])) + 'mm\n''Pinky: ' + str(
                     int(self.performance[1])) + 'mm\n' 'Ring: ' + str(
@@ -332,8 +331,8 @@ class Interface():
                     int(self.performance[3])) + 'mm\n' 'Index: ' + str(
                     int(self.performance[4])) + 'mm\n''Thumb: ' + str(int(self.performance[5])) + 'mm\n',
                 'Performance window')
-        else:
-            self.popupmsg(
+        else:'''
+        self.popupmsg(
                 'Performance of the day is: \n Wrist: ' + str(int(self.performance[5])) + 'mm\n''Pinky: ' + str(
                     int(self.performance[4])) + 'mm\n' 'Ring: ' + str(
                     int(self.performance[3])) + 'mm\n' 'Middle: ' + str(
@@ -344,7 +343,7 @@ class Interface():
 
         destFile = r"performance.txt"
         with open(destFile, 'a') as f:
-            if self.hand2use == 'left':
+            '''if self.hand2use == 'left':
                 f.write(date)
                 f.write(str(round(self.performance[0], 2)) + '(W),')
                 f.write(str(round(self.performance[1], 2)) + '(P),')
@@ -352,15 +351,15 @@ class Interface():
                 f.write(str(round(self.performance[3], 2)) + '(M),')
                 f.write(str(round(self.performance[4], 2)) + '(I),')
                 f.write(str(round(self.performance[5], 2)) + "(T)\n")
-            else:
-                f.write(date)
-                f.write(str(round(self.performance[5], 2)) + '(W),')
-                f.write(str(round(self.performance[4], 2)) + '(P),')
-                f.write(str(round(self.performance[3], 2)) + '(R),')
-                f.write(str(round(self.performance[2], 2)) + '(M),')
-                f.write(str(round(self.performance[1], 2)) + '(I),')
-                f.write(str(round(self.performance[0], 2)) + "(T)\n")
-
+            else:'''
+            f.write(date)
+            f.write(str(round(self.performance[5], 2)) + '(W),')
+            f.write(str(round(self.performance[4], 2)) + '(P),')
+            f.write(str(round(self.performance[3], 2)) + '(R),')
+            f.write(str(round(self.performance[2], 2)) + '(M),')
+            f.write(str(round(self.performance[1], 2)) + '(I),')
+            f.write(str(round(self.performance[0], 2)) + "(T)\n")
+            f.write(str(round(self.performance[6], 2)) + "(C)\n")
 
 
         mixer.quit()
@@ -389,20 +388,20 @@ class Interface():
         '''
         filehandle.write(",".join(str(item) for item in np.concatenate((distance,threshold))) + "\n")
 
-    def define_labels_fingers_based_onhand(self,DEFAULT_LABELS_FINGERS):
-        '''
+    '''def define_labels_fingers_based_onhand(self,DEFAULT_LABELS_FINGERS):
+        
         label each fingers based on which hand it is
         print which hand is used on the terminal
         return the fingers labels in the right way
-        '''
-        if self.hand2use == 'right':
-            print("R")
-            labels_fingers = DEFAULT_LABELS_FINGERS
-        elif self.hand2use == 'left':
-            print("L")
-            labels_fingers = DEFAULT_LABELS_FINGERS[::-1]
+        
+        #if self.hand2use == 'right':
+         #   print("R")
+        labels_fingers = DEFAULT_LABELS_FINGERS
+        #elif self.hand2use == 'left':
+         #   print("L")
+          #  labels_fingers = DEFAULT_LABELS_FINGERS[::-1]
         print(labels_fingers)
-        return labels_fingers
+        return labels_fingers'''
     
     def press_key_on_keyboard(self,keyboard,decisionPressButton,last_decisionPressButton,labels_buttons):
         '''
@@ -420,6 +419,7 @@ class Interface():
                     if self.use_setup:
                         keyboard.press(fn_button)
                         print(labels_buttons[index] + ' pressed')
+                        self.performance[6] += 1
                     if self.use_sound:
                         mixer.music.load(os.path.join(self.sound_path,labels_buttons[index]+'.mp3'))
                         mixer.music.play()
@@ -496,16 +496,16 @@ class Interface():
 
     def update_config_file(self):
         self.slider_value=mainwin.bar_origin_threshold
-        if self.hand2use == 'right':
-            data = "[" + str(self.slider_value[0]) + "," + str(self.slider_value[1]) + "," + str(
+        #if self.hand2use == 'right':
+        data = "[" + str(self.slider_value[0]) + "," + str(self.slider_value[1]) + "," + str(
                 self.slider_value[2]) + "," + str(self.slider_value[3]) + "," + str(self.slider_value[4]) + "," + str(
                 self.slider_value[5]) + "]"
-            self.config.set("drawing", "bar_origin_threshold", data)
-        if self.hand2use == 'left':
+        self.config.set("drawing", "bar_origin_threshold", data)
+        '''if self.hand2use == 'left':
             data = "[" + str(self.slider_value[5]) + "," + str(self.slider_value[4]) + "," + str(
                 self.slider_value[3]) + "," + str(self.slider_value[2]) + "," + str(self.slider_value[1]) + "," + str(
                 self.slider_value[0]) + "]"
-            self.config.set("drawing", "bar_origin_threshold", data)
+            self.config.set("drawing", "bar_origin_threshold", data)'''
 
         data = "['" + str(self.labels_buttons[0]) + "','" + str(self.labels_buttons[1]) + "','" + str(
             self.labels_buttons[2]) + "','" + str(self.labels_buttons[3]) + "','" + str(
@@ -523,17 +523,29 @@ class Interface():
     def run_loop(self):
         global mainwin
 
+
         print("**** Start Running interface ****")
         #img = np.zeros((self.img_h,self.img_v,3), np.uint8)
         counter_no_data = 0
         counter_init = 0
+        previous_index = 0
         while self._thread is not None:
+            if previous_index != mainwin.ModeSelector.currentIndex():
+                self.init = True
+            previous_index = mainwin.ModeSelector.currentIndex()
+            if mainwin.ModeSelector.currentIndex() == 2:
+                self.distance_rest = self.advance_distance_rest_default[:]
+                self.distance = self.advance_distance[:]
+            else:
+                self.distance_rest = self.distance_rest_default[:]
+           
+                
             self.check_vis_use()
             self.check_setup_use() #button press
             self.check_mode()
             if self.init and not None in self.distance :
                 counter_init +=1
-                if counter_init == 1:
+                if counter_init == 10:
                     self.distance_init=self.distance.copy()
                     self.palm_init = self.palm.copy()
                     counter_init = 0
@@ -546,22 +558,22 @@ class Interface():
             self.key = cv2.waitKeyEx(1) #maybe remove this
 
 
-            if self.hand2use == 'right':
-                self.distance_hand = self.distance[:] #- self.distance_init[:]
-                if not None in self.distance_hand and not self.init :
-                    self.subtracted = list()
+            #if self.hand2use == 'right':
+            self.distance_hand = self.distance[:] #- self.distance_init[:]
+            if not None in self.distance_hand and not self.init :
+                self.subtracted = list()
                     #print('distance_hand',self.distance_hand)
-                    for item1, item2 in zip(self.distance_init, self.distance_hand):
-                        item = item1 - item2
-                        self.subtracted.append(item)
-            elif self.hand2use == 'left':
+                for item1, item2 in zip(self.distance_init, self.distance_hand):
+                    item = item1 - item2
+                    self.subtracted.append(item)
+            '''elif self.hand2use == 'left':
                 self.distance_hand = self.distance[::-1]# - self.distance_init[::-1]
                 if not None in self.distance_hand and not self.init :
                     #print('distance_hand',self.distance_hand)
                     self.subtracted = list()
                     for item1, item2 in zip(self.distance_init[::-1], self.distance_hand):
                         item = item1 - item2
-                        self.subtracted.append(item)
+                        self.subtracted.append(item)'''
 
             # Check if we need to redo initialisation : 
             if not self.init:
@@ -651,7 +663,7 @@ class Interface():
             # 
             #print('mainwin : ',mainwin.FingerKeyNumber)   
             # get label button fron mainzwin 
-            for index in range(0, len(self.labels_buttons)-1):
+            for index in range(0, len(self.labels_buttons)):
                 self.labels_buttons[index]= OPTIONS[mainwin.FingerKeyNumber[index]]
             
             self.press_key_on_keyboard(self.keyboard,self.decisionPressButton,self.last_decisionPressButton,self.labels_buttons)

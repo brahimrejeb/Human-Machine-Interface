@@ -86,13 +86,13 @@ class Ui_Rin(object):
         
     def setValuesPerformance(self, performance):
         #init the values of the interface
-        self.WristPerf.setText(str(int(performance[0]))+ 'mm')
-        self.PinkyPerf.setText(str(int(performance[1]))+ 'mm')
-        self.RingPerf.setText(str(int(performance[2]))+ 'mm')
-        self.MiddlePerf.setText(str(int(performance[3]))+ 'mm')
-        self.IndexPerf.setText(str(int(performance[4]))+ 'mm')
-        self.ThumbPerf.setText(str(int(performance[5]))+ 'mm')
-        #self.CountValue.setText(str(int(performance[6])))
+        self.WristPerf.setText(str(int(performance[5]))+ 'mm')
+        self.PinkyPerf.setText(str(int(performance[4]))+ 'mm')
+        self.RingPerf.setText(str(int(performance[3]))+ 'mm')
+        self.MiddlePerf.setText(str(int(performance[2]))+ 'mm')
+        self.IndexPerf.setText(str(int(performance[1]))+ 'mm')
+        self.ThumbPerf.setText(str(int(performance[0]))+ 'mm')
+        self.CountValue.setText(str(int(performance[6])))
 
     def retranslateUi(self, Rin):
         _translate = QtCore.QCoreApplication.translate
