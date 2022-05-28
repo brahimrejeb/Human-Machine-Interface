@@ -188,12 +188,19 @@ class Interface():
         mainwin.dia.Visualizer.setChecked(self.show_visualizer)
 
 
-        mainwin.ThumbValue.setValue(self.slider_value[0])
-        mainwin.IndexValue.setValue(self.slider_value[1])
-        mainwin.MiddleValue.setValue(self.slider_value[2])
-        mainwin.RingValue.setValue(self.slider_value[3])
-        mainwin.PinkyValue.setValue(self.slider_value[4])
-        mainwin.WristValue.setValue(self.slider_value[5])
+        #mainwin.ThumbValue.setValue(self.slider_value[0])
+        #mainwin.IndexValue.setValue(self.slider_value[1])
+        #mainwin.MiddleValue.setValue(self.slider_value[2])
+        #mainwin.RingValue.setValue(self.slider_value[3])
+        #mainwin.PinkyValue.setValue(self.slider_value[4])
+        #mainwin.WristValue.setValue(self.slider_value[5])
+
+        mainwin.ThumbValue.setValue(0)
+        mainwin.IndexValue.setValue(0)
+        mainwin.MiddleValue.setValue(0)
+        mainwin.RingValue.setValue(0)
+        mainwin.PinkyValue.setValue(0)
+        mainwin.WristValue.setValue(0)
         #for i in range(NB_INPUTS):
 
         
