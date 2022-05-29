@@ -23,7 +23,8 @@ import pyttsx3
 import cv2
 from gtts import gTTS
 from LeapMotion_detection import LeapMotionListener
-from pynput.keyboard import Key,KeyCode, Controller
+from pynput.keyboard import Key,KeyCode, Controller, Listener
+from pynput import keyboard
 from PIL import Image, ImageTk
 from tkinter import *
 from PyQt5 import QtCore, QtGui, QtWidgets
@@ -59,7 +60,6 @@ NB_INPUTS=6
 DEFAULT_LABELS_FINGERS = ['thumb','index','middle','ring','pinky','wrist']
 #DEFAULT_DATA_HEADER_LEFT = "WRIST,PINKY,RING,MIDDLE,INDEX,THUMB,TH_WRIST, TH_PK,TH_RG,TH_MID,TH_IN,TH_THB"
 DEFAULT_DATA_HEADER= "THUMB,INDEX,MIDDLE,RING,PINKY,WRIST,TH_THB,TH_IN,TH_MID,TH_RG,TH_PK,TH_WRIST"
-
 
 
 class Interface():
@@ -220,6 +220,9 @@ class Interface():
         #Button(btm_frame4, text='Calibration',height=2,width=30).grid(row=0,padx=60)
 
         #mainwin.update_progress()
+        self.keyboard_listener = keyboard.Listener()
+        self.keyboard_listener.start()
+
 
         self._thread  = None
         self._thread = threading.Thread(target=self.run_loop)
@@ -229,6 +232,8 @@ class Interface():
         #self.protocol("WM_DELETE_WINDOW",self.on_close)
         # RUN MAIN LOOP
         #self.mainloop()
+
+
 
     def popupmsg(self,msg, title):
         root = Tk()
@@ -409,7 +414,7 @@ class Interface():
           #  labels_fingers = DEFAULT_LABELS_FINGERS[::-1]
         print(labels_fingers)
         return labels_fingers'''
-    
+
     def press_key_on_keyboard(self,keyboard,decisionPressButton,last_decisionPressButton,labels_buttons):
         '''
         Function to Emulate keyboard
