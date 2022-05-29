@@ -36,11 +36,26 @@ The packages required are :
 `conda install -c conda-forge typed-ast`
 - Clone the code from github link :  
 git clone: https://github.com/brahimrejeb/LeapOrion.git. 
-Modify in the config.ini file the variable path_leap_folder with your own  
-Run the script:  
+Modify in the config.ini file the variable path_leap_folder with your own (if needed)  
+- Run the script:  
 python hand2keyPressedRehab.py  
-- .exe : 
-It is possible to convert this python code into a .exe file to make it more pleasant to use. You can follow this tutorial for that : [a link](https://www.youtube.com/watch?v=UZX5kH72Yx4)
+# Convert to exe file
 
+It is possible to convert this python code into a .exe file to make it more pleasant to use. 
+- Switch to the new virtual environment, than type : 
+`pip install pyinstaller`
+- Go inside the right folder (`LeapOrion/hand2keyPressedRehab-master`)
+- run the command : `pyinstaller --onefile -w hand2keyPressedRehab.py`
+- The executable can be find into the dist folder, please put it one folder backward (copy paste it in hand2keyPressedRehab-master) to have access to all the dependecies. 
+You can also follow this tutorial for that : [a link](https://www.youtube.com/watch?v=UZX5kH72Yx4)
+# How to do the installation and create the executable in one step 
+- Install NSIS application from the web 
+- Compress the LeapOrion folder
+- On the NSIS menu: click on `install based on .ZIP file`
+- Select the compressed folder (`LeapOrion`)
+- Click on `Generate`
+- An application will be generated on your folder, you can send this application to an other computer and open it then it will install all the folders and the dependencies and make it work on the new computer even if python is not installed. 
+
+You can also follow this tutorial for that : [a link](https://www.youtube.com/watch?v=UZX5kH72Yx4)
 - How it works :  
 Leapmotion allows to measure the position in space of many specific points in the hand. We will use those measures to detect some specific movement. 
