@@ -548,19 +548,19 @@ class Interface():
             previous_index = mainwin.ModeSelector.currentIndex()
             if mainwin.ModeSelector.currentIndex() == 2:
                 self.distance_rest = self.advance_distance_rest_default[:]
-                self.distance = self.advance_distance[:]
+                self.distance_hand  = self.advance_distance[:]
             else:
                 self.distance_rest = self.distance_rest_default[:]
-           
-                
+                self.distance_hand = self.distance[:]
+
             self.check_vis_use()
             self.check_setup_use() #button press
             self.check_mode()
             self.check_sound_use()
-            if self.init and not None in self.distance :
+            if self.init and not None in self.distance_hand :
                 counter_init +=1
                 if counter_init == 10:
-                    self.distance_init=self.distance.copy()
+                    self.distance_init=self.distance_hand.copy()
                     self.palm_init = self.palm.copy()
                     counter_init = 0
 
@@ -573,21 +573,13 @@ class Interface():
 
 
             #if self.hand2use == 'right':
-            self.distance_hand = self.distance[:] #- self.distance_init[:]
+            
             if not None in self.distance_hand and not self.init :
                 self.subtracted = list()
                     #print('distance_hand',self.distance_hand)
                 for item1, item2 in zip(self.distance_init, self.distance_hand):
                     item = item1 - item2
                     self.subtracted.append(item)
-            '''elif self.hand2use == 'left':
-                self.distance_hand = self.distance[::-1]# - self.distance_init[::-1]
-                if not None in self.distance_hand and not self.init :
-                    #print('distance_hand',self.distance_hand)
-                    self.subtracted = list()
-                    for item1, item2 in zip(self.distance_init[::-1], self.distance_hand):
-                        item = item1 - item2
-                        self.subtracted.append(item)'''
 
             # Check if we need to redo initialisation : 
             if not self.init:
