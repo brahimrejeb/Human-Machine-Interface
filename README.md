@@ -48,7 +48,7 @@ It is possible to convert this python code into a .exe file to make it more plea
 - run the command : `pyinstaller --onefile -w hand2keyPressedRehab.py`
 - The executable can be find into the dist folder, please put it one folder backward (copy paste it in hand2keyPressedRehab-master) to have access to all the dependecies. 
 You can also follow this tutorial for that : [a link](https://www.youtube.com/watch?v=UZX5kH72Yx4)
-# How to do the installation and create the executable in one step 
+# How to do the installation and create the executable file in one step 
 - Install NSIS application from the web 
 - Compress the LeapOrion folder
 - On the NSIS menu: click on `install based on .ZIP file`
