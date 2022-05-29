@@ -57,5 +57,5 @@ You can also follow this tutorial for that : [a link](https://www.youtube.com/wa
 - An application will be generated on your folder, you can send this application to an other computer and open it then it will install all the folders and the dependencies and make it work on the new computer even if python is not installed. 
 
 You can also follow this tutorial for that : [a link](https://www.youtube.com/watch?v=UZX5kH72Yx4)
-- How it works :  
+# How it works :  
 Leapmotion allows to measure the position in space of many specific points in the hand. We will use those measures to detect some specific movement. 
