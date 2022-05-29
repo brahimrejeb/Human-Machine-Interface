@@ -273,7 +273,7 @@ class Interface():
             self.visualizer_closed = True
             self.visualizer_open=False
             print("close visualization")
-            subprocess.call(["taskkill","/F","/IM",'Visualizer.exe'])
+            subprocess.call(["taskkill","/F","/IM",'VRVisualizer.exe'])
     
     def check_mode(self):
         global mainwin
@@ -329,7 +329,7 @@ class Interface():
         PerformancePopUp.setupUi(Rin, self.performance)
         Rin.show()
 
-        subprocess.call(["taskkill", "/F", "/IM", 'Visualizer.exe'])
+        subprocess.call(["taskkill", "/F", "/IM", 'VRVisualizer.exe'])
         self._thread = None
         self.update_config_file()
         date = self.timestr[6:8] + '/' + self.timestr[4:6] + '/' + self.timestr[:4] + ' ' + 'at' + ' ' + self.timestr[
@@ -451,11 +451,12 @@ class Interface():
         user32.SetProcessDPIAware()
         res = (user32.GetSystemMetrics(0), user32.GetSystemMetrics(1))
         # res is now (3440, 1440) for 3440x1440 display at 150% scaling
-        handle = user32.FindWindowW(None, u'Leap Motion Diagnostic Visualizer')
+        handle = user32.FindWindowW(None, u'VRVisualizer')
         user32.ShowWindow(handle, 6)
         user32.ShowWindow(handle, 9)
         user32.ShowWindow(handle, 1)
         user32.MoveWindow(handle, 5, 0, 705, 620, True)
+
         print("Moving Leap Motion Visualizer on predefined position")
         
         for i in range(3):
@@ -555,6 +556,7 @@ class Interface():
             self.check_vis_use()
             self.check_setup_use() #button press
             self.check_mode()
+            self.check_sound_use()
             if self.init and not None in self.distance :
                 counter_init +=1
                 if counter_init == 10:
