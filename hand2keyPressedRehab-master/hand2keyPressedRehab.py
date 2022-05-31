@@ -33,9 +33,9 @@ import Settings
 from Settings import Ui_Dialog
 import mainwindows
 from mainwindows import Ui_AnglesValues
-
 import PerformanceWindow
 from PerformanceWindow import Ui_Rin
+
 #from mainwindows import External
 
 
@@ -152,10 +152,7 @@ class Interface():
 
         
 
-        '''if self.hand2use == 'left' :
-            self.distance_rest_default = [-70,1.5,1.5,1.5,1.5,25.0]#[3.0,3.0,3.0,3.0,100.0]
-            self.advance_distance_rest_default = [200,120,110,100,90,25.0]#[3.0,3.0,3.0,3.0,100.0]
-        elif self.hand2use == 'right' :'''
+
         self.distance_rest_default = [25.0,1.5,1.5,1.5,1.5,-70]#[3.0,3.0,3.0,3.0,100.0]
         self.advance_distance_rest_default = [25.0,90,100,110,120,200]#[3.0,3.0,3.0,3.0,100.0]
         self.subtracted = [0.0,0.0,0.0,0.0,0.0,0.0]
@@ -187,37 +184,13 @@ class Interface():
         #show visualizer or not
         mainwin.dia.Visualizer.setChecked(self.show_visualizer)
 
-
-        #mainwin.ThumbValue.setValue(self.slider_value[0])
-        #mainwin.IndexValue.setValue(self.slider_value[1])
-        #mainwin.MiddleValue.setValue(self.slider_value[2])
-        #mainwin.RingValue.setValue(self.slider_value[3])
-        #mainwin.PinkyValue.setValue(self.slider_value[4])
-        #mainwin.WristValue.setValue(self.slider_value[5])
-
         mainwin.ThumbValue.setValue(0)
         mainwin.IndexValue.setValue(0)
         mainwin.MiddleValue.setValue(0)
         mainwin.RingValue.setValue(0)
         mainwin.PinkyValue.setValue(0)
         mainwin.WristValue.setValue(0)
-        #for i in range(NB_INPUTS):
 
-        
-        #    l2 = Label(btm_frame2, bg='Sky Blue', text=self.slider_name[i].lower(),font=("Helvetica", 11))
-        #    w2 = Scale(btm_frame2,bg='Sky Blue', from_=0, to=100, orient=HORIZONTAL,length=450,command=self.updata_value_list[i])
-        #    w2.set(self.slider_value[i])
-        #    l2.grid(row=i, column=0,padx=10)
-        #    w2.grid(row=i, column=1,padx=50)
-        #    for i in range(5):
-        #        var = StringVar(value=self.labels_fingers[i])
-        #        o_vars.append(var)
-        #        self.o[i] = OptionMenu(btm_frame3, var, *OPTIONS,command=self.on_button_list[i])
-        #        self.o[i].grid(row=0, column=i)
-
-        #var2 = IntVar()
-        #Checkbutton(btm_frame4, text="Button", variable=var2).grid(row=0,column = 2)
-        #Button(btm_frame4, text='Calibration',height=2,width=30).grid(row=0,padx=60)
 
         #mainwin.update_progress()
         self.keyboard_listener = keyboard.Listener()
@@ -323,34 +296,14 @@ class Interface():
             print("release ctrl")
         self.controller.remove_listener(self.listener)
 
-        Rin = QtWidgets.QWidget()
-        Rin.setWindowIcon(QtGui.QIcon('th.png'))
-        PerformancePopUp = Ui_Rin()
-        PerformancePopUp.setupUi(Rin, self.performance)
-        Rin.show()
+
 
         subprocess.call(["taskkill", "/F", "/IM", 'VRVisualizer.exe'])
         self._thread = None
         self.update_config_file()
-        date = self.timestr[6:8] + '/' + self.timestr[4:6] + '/' + self.timestr[:4] + ' ' + 'at' + ' ' + self.timestr[
-                                                                                                         9:11] + 'h' + self.timestr[
-                                                                                                                       11:13] + 'm' + ' :'
-        '''if self.hand2use == 'left':
-            self.popupmsg(
-                'Performance of the day is: \n Wrist: ' + str(int(self.performance[0])) + 'mm\n''Pinky: ' + str(
-                    int(self.performance[1])) + 'mm\n' 'Ring: ' + str(
-                    int(self.performance[2])) + 'mm\n' 'Middle: ' + str(
-                    int(self.performance[3])) + 'mm\n' 'Index: ' + str(
-                    int(self.performance[4])) + 'mm\n''Thumb: ' + str(int(self.performance[5])) + 'mm\n',
-                'Performance window')
-        else:'''
-        self.popupmsg(
-                'Performance of the day is: \n Wrist: ' + str(int(self.performance[5])) + 'mm\n''Pinky: ' + str(
-                    int(self.performance[4])) + 'mm\n' 'Ring: ' + str(
-                    int(self.performance[3])) + 'mm\n' 'Middle: ' + str(
-                    int(self.performance[2])) + 'mm\n' 'Index: ' + str(
-                    int(self.performance[1])) + 'mm\n''Thumb: ' + str(int(self.performance[0])) + 'mm\n',
-                'Performance window')
+        date = self.timestr[6:8] + '/' + self.timestr[4:6] + '/' + self.timestr[:4] + ' ' + 'at' + ' ' \
+               + self.timestr[9:11] + 'h' + self.timestr[11:13] + 'm' + ' :'
+        mainwin.ext.Performance.emit(self.performance)
 
 
         destFile = r"performance.txt"
@@ -698,5 +651,10 @@ if __name__=="__main__":
     mainwin.setupUi(AnglesValues)
     AnglesValues.show()
     interface = Interface(config_file)
-    app.aboutToQuit.connect(interface.on_close)
+    Rin = QtWidgets.QWidget()
+    Rin.setWindowIcon(QtGui.QIcon('th.png'))
+    PerformancePopUp = Ui_Rin()
+    PerformancePopUp.setupUi(Rin)
+    PerformancePopUp.setValuesPerformance(interface.performance)
+    app.aboutToQuit.connect(Rin.show)
     app.exec_()

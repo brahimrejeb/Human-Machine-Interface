@@ -12,7 +12,7 @@ from PyQt5 import QtCore, QtGui, QtWidgets
 
 
 class Ui_Rin(object):
-    def setupUi(self, Rin, performance):
+    def setupUi(self, Rin):
         Rin.setObjectName("Rin")
         Rin.resize(364, 253)
         self.verticalLayoutWidget = QtWidgets.QWidget(Rin)
@@ -73,6 +73,8 @@ class Ui_Rin(object):
         self.CountValue.setObjectName("CountValue")
         self.PerformancesLayout.addWidget(self.CountValue)
 
+
+
         self.OK = QtWidgets.QPushButton(Rin)
         self.OK.setGeometry(QtCore.QRect(130, 210, 75, 23))
         self.OK.setObjectName("OK")
@@ -82,10 +84,10 @@ class Ui_Rin(object):
         self.retranslateUi(Rin)
         QtCore.QMetaObject.connectSlotsByName(Rin)
 
-        self.setValuesPerformance(performance)
-        
+
     def setValuesPerformance(self, performance):
         #init the values of the interface
+        print("coincée ici")
         self.WristPerf.setText(str(int(performance[5]))+ 'mm')
         self.PinkyPerf.setText(str(int(performance[4]))+ 'mm')
         self.RingPerf.setText(str(int(performance[3]))+ 'mm')
@@ -93,6 +95,7 @@ class Ui_Rin(object):
         self.IndexPerf.setText(str(int(performance[1]))+ 'mm')
         self.ThumbPerf.setText(str(int(performance[0]))+ 'mm')
         self.CountValue.setText(str(int(performance[6])))
+
 
     def retranslateUi(self, Rin):
         _translate = QtCore.QCoreApplication.translate

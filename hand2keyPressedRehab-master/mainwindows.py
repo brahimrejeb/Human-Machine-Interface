@@ -14,6 +14,10 @@ import Settings
 from Settings import Ui_Dialog
 import time
 
+
+
+
+
 class External(QObject):
     NewFingerValues = QtCore.pyqtSignal(list)
 
@@ -277,12 +281,13 @@ class Ui_AnglesValues(object):
         #mode selector box
         self.update_mode()
         self.ModeSelector.currentIndexChanged.connect(self.update_mode)
+        self.ModeSelector.currentIndexChanged.connect(self.dia.print_names)
 
         #was the key activated before
         self.ActivatedFinger=[False, False, False, False, False, False]
 
         #change the bars value
-        self.ext=External()
+        self.ext = External()
         self.ext.NewFingerValues.connect(self.ChangingValue)
 
         #update the thresh values
@@ -300,6 +305,13 @@ class Ui_AnglesValues(object):
         self.RingKey.currentIndexChanged.connect(self.update_key)
         self.PinkyKey.currentIndexChanged.connect(self.update_key)
         self.WristKey.currentIndexChanged.connect(self.update_key)
+
+        # performance window
+        # opening on close
+
+
+
+
 
     def init_threshold_sliders(self,values):
         self.dia.ThumbThresh.setValue(values[0])

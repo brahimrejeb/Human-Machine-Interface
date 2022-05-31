@@ -9,10 +9,9 @@
 
 
 from PyQt5 import QtCore, QtGui, QtWidgets
-from PyQt5.QtCore import QThread, pyqtSignal, QObject
+
 
 class Ui_Dialog(object):
-
     def setupUi(self, Dialog):
         Dialog.setObjectName("Dialog")
         Dialog.resize(299, 324)
@@ -140,9 +139,9 @@ class Ui_Dialog(object):
         self.RingLabel = QtWidgets.QLabel(Dialog)
         self.RingLabel.setObjectName("RingLabel")
         self.SimpleModeLayout.addWidget(self.RingLabel)
-        self.PinkyLabel = QtWidgets.QLabel(Dialog)
-        self.PinkyLabel.setObjectName("PinkyLabel")
-        self.SimpleModeLayout.addWidget(self.PinkyLabel)
+        self.Pinky = QtWidgets.QLabel(Dialog)
+        self.Pinky.setObjectName("Pinky")
+        self.SimpleModeLayout.addWidget(self.Pinky)
         self.WristLabel = QtWidgets.QLabel(Dialog)
         self.WristLabel.setObjectName("WristLabel")
         self.SimpleModeLayout.addWidget(self.WristLabel)
@@ -214,59 +213,8 @@ class Ui_Dialog(object):
         self.Ok.setObjectName("Ok")
         self.gridLayout.addWidget(self.Ok, 2, 1, 1, 1)
 
-        self.Ok.clicked.connect(Dialog.reject)
-
-        self.ThumbLabel.setHidden(False)
-        self.IndexLabel.setHidden(False)
-        self.MiddleLabel.setHidden(False)
-        self.RingLabel.setHidden(False)
-        self.PinkyLabel.setHidden(False)
-        self.WristLabel.setHidden(False)
-        self.space.setHidden(False)
-        self.ThumbAdvanced.setHidden(True)
-        self.ThumbIndex.setHidden(True)
-        self.ThumbMiddle.setHidden(True)
-        self.ThumbRing.setHidden(True)
-        self.ThumbPinky.setHidden(True)
-        self.space_2.setHidden(True)
-        self.Fist.setHidden(True)
-
-
         self.retranslateUi(Dialog)
         QtCore.QMetaObject.connectSlotsByName(Dialog)
-
-    def print_names(self, signal):
-        if signal==0 or signal==1:
-            self.ThumbLabel.setHidden(False)
-            self.IndexLabel.setHidden(False)
-            self.MiddleLabel.setHidden(False)
-            self.RingLabel.setHidden(False)
-            self.space.setHidden(False)
-            self.PinkyLabel.setHidden(False)
-            self.WristLabel.setHidden(False)
-            self.ThumbAdvanced.setHidden(True)
-            self.ThumbIndex.setHidden(True)
-            self.ThumbMiddle.setHidden(True)
-            self.ThumbRing.setHidden(True)
-            self.ThumbPinky.setHidden(True)
-            self.Fist.setHidden(True)
-            self.space_2.setHidden(True)
-        else:
-            self.ThumbLabel.setHidden(True)
-            self.IndexLabel.setHidden(True)
-            self.MiddleLabel.setHidden(True)
-            self.RingLabel.setHidden(True)
-            self.PinkyLabel.setHidden(True)
-            self.WristLabel.setHidden(True)
-            self.space.setHidden(True)
-            self.ThumbAdvanced.setHidden(False)
-            self.ThumbIndex.setHidden(False)
-            self.ThumbMiddle.setHidden(False)
-            self.ThumbRing.setHidden(False)
-            self.ThumbPinky.setHidden(False)
-            self.Fist.setHidden(False)
-            self.space_2.setHidden(False)
-
 
     def retranslateUi(self, Dialog):
         _translate = QtCore.QCoreApplication.translate
@@ -280,7 +228,7 @@ class Ui_Dialog(object):
         self.IndexLabel.setText(_translate("Dialog", "Index"))
         self.MiddleLabel.setText(_translate("Dialog", "Middle"))
         self.RingLabel.setText(_translate("Dialog", "Ring"))
-        self.PinkyLabel.setText(_translate("Dialog", "Pinky"))
+        self.Pinky.setText(_translate("Dialog", "Pinky"))
         self.WristLabel.setText(_translate("Dialog", "Wrist"))
         self.ThumbAdvanced.setText(_translate("Dialog", "Thumb"))
         self.ThumbIndex.setText(_translate("Dialog", "Thumb-Index"))
@@ -291,6 +239,11 @@ class Ui_Dialog(object):
         self.Ok.setText(_translate("Dialog", "Ok"))
 
 
-
-
-
+if __name__ == "__main__":
+    import sys
+    app = QtWidgets.QApplication(sys.argv)
+    Dialog = QtWidgets.QDialog()
+    ui = Ui_Dialog()
+    ui.setupUi(Dialog)
+    Dialog.show()
+    sys.exit(app.exec_())
