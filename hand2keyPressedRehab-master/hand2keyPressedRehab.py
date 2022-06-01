@@ -41,7 +41,7 @@ from PerformanceWindow import Ui_Rin
 
 # LIST CMD 
 OPTIONS = ['None','Alt','Win',
-   'Ctrl','Tab','Shift','Caps','Esc']
+   'Ctrl','Tab','Shift','Caps','Esc','AltGr']
 # DICTIONARY TO USE 
 DICT_PYNPUT_KEYBOARD = {'none':None,'alt':Key.alt_l,'win': Key.cmd,
    'del': Key.delete,'down':Key.down,'ctrl':Key.ctrl_l,
@@ -52,7 +52,7 @@ DICT_PYNPUT_KEYBOARD = {'none':None,'alt':Key.alt_l,'win': Key.cmd,
    'f11':Key.f11,'f12':Key.f12,'end':Key.end,
    'bksp':Key.backspace,'enter':Key.enter,
    'caps': Key.caps_lock,'esc':Key.esc,
-   'up': Key.up,'left': Key.left,'right':Key.right
+   'up': Key.up,'left': Key.left,'right':Key.right, 'altgr':Key.alt_r
 }
 
 # LABELS FINGERS

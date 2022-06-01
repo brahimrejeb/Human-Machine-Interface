@@ -259,7 +259,7 @@ class Ui_Dialog(object):
             self.IndexLabel.setHidden(False)
             self.MiddleLabel.setHidden(False)
             self.RingLabel.setHidden(False)
-            self.space.setHidden(False)
+
             self.PinkyLabel.setHidden(False)
             self.WristLabel.setHidden(False)
             self.ThumbAdvanced.setHidden(True)
@@ -268,7 +268,7 @@ class Ui_Dialog(object):
             self.ThumbRing.setHidden(True)
             self.ThumbPinky.setHidden(True)
             self.Fist.setHidden(True)
-            self.space_2.setHidden(True)
+
         else:
             self.ThumbLabel.setHidden(True)
             self.IndexLabel.setHidden(True)
@@ -276,14 +276,14 @@ class Ui_Dialog(object):
             self.RingLabel.setHidden(True)
             self.PinkyLabel.setHidden(True)
             self.WristLabel.setHidden(True)
-            self.space.setHidden(True)
+
             self.ThumbAdvanced.setHidden(False)
             self.ThumbIndex.setHidden(False)
             self.ThumbMiddle.setHidden(False)
             self.ThumbRing.setHidden(False)
             self.ThumbPinky.setHidden(False)
             self.Fist.setHidden(False)
-            self.space_2.setHidden(False)
+          
 
 
     def retranslateUi(self, Dialog):
