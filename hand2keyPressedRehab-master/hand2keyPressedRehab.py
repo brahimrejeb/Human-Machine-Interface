@@ -321,10 +321,11 @@ class Interface():
         date = self.timestr
       
         self.run_time = (time.time() - self.start_time)
-        print('runtimeis', self.run_time)
+        #print('runtimeis', self.run_time)
         #mainwin.ext.Performance.emit(self.performance)
-
-
+        write_title  = False
+        if not os.path.exists(".\performance.txt"):
+            write_title  = True
         destFile = r"performance.txt"
         with open(destFile, 'a') as f:
             '''if self.hand2use == 'left':
@@ -336,25 +337,27 @@ class Interface():
                 f.write(str(round(self.performance[4], 2)) + '(I),')
                 f.write(str(round(self.performance[5], 2)) + "(T)\n")
             else:'''
+            if write_title  == True:
+                f.write('Date; Wrist; Pinky; Ring; Middle; Index; Thumb; Count Value; Run Time\n')
             f.write(date + ';')
-            f.write(str(round(self.performance[5], 2)) + '(Wrist);')
-            f.write(str(round(self.performance[4], 2)) + '(Pinky);')
-            f.write(str(round(self.performance[3], 2)) + '(Ring);')
-            f.write(str(round(self.performance[2], 2)) + '(Middle);')
-            f.write(str(round(self.performance[1], 2)) + '(Index);')
-            f.write(str(round(self.performance[0], 2)) + "(Thumb);")
-            f.write(str(round(self.performance[6], 2)) + "(Count Value);")
-            f.write(str(int(self.run_time)) + "(Run Time)\n")
+            f.write(str(round(self.performance[5], 2)) + ';')
+            f.write(str(round(self.performance[4], 2)) + ';')
+            f.write(str(round(self.performance[3], 2)) + ';')
+            f.write(str(round(self.performance[2], 2)) + ';')
+            f.write(str(round(self.performance[1], 2)) + ';')
+            f.write(str(round(self.performance[0], 2)) + ";")
+            f.write(str(round(self.performance[6], 2)) + ";")
+            f.write(str(int(self.run_time)) + "\n")
 
             self.popupmsg(
-            'Performance of the day is: \n Wrist: ' + str(int(self.performance[5])) + 'mm\n''Pinky: ' + str(
-                int(self.performance[4])) + 'mm\n' 'Ring: ' + str(
-                int(self.performance[3])) + 'mm\n' 'Middle: ' + str(
-                int(self.performance[2])) + 'mm\n' 'Index: ' + str(
-                int(self.performance[1])) + 'mm\n''Thumb: ' + str(int(self.performance[0])) + 'mm\n''Count Value: ' + str(int(self.performance[6])),
+            'Performance of the day is: \n Wrist: ' + str(int(self.performance[5])) + ' [mm]\n''Pinky: ' + str(
+                int(self.performance[4])) + ' [mm]\n' 'Ring: ' + str(
+                int(self.performance[3])) + ' [mm]\n' 'Middle: ' + str(
+                int(self.performance[2])) + ' [mm]\n' 'Index: ' + str(
+                int(self.performance[1])) + ' [mm]\n''Thumb: ' + str(int(self.performance[0])) + ' [mm]\n''Count Value: ' + str(int(self.performance[6])) + '\n' 'Run Time: ' + str(int(self.run_time)) + ' [s]\n',
             'Performance window')
             
-        mixer.quit()
+        mixer.quit()        
         sys.exit()
 
 
