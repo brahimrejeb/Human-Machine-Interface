@@ -150,13 +150,14 @@ class Interface():
         self.last_decisionPressButton = self.decisionPressButton[:]
         self.distance_rest = [None,None,None,None,None,None]
 
-        
-
-
+        self.prev_condition_press = [0,0,0,0,0,0]
+        self.condition_pressed = [0,0,0,0,0,0]
+        self.count_slider= [0.0,0.0,0.0,0.0,0.0,0.0]
+        self.distance_init = [0.0,0.0,0.0,0.0,0.0,0.0]
         self.distance_rest_default = [25.0,1.5,1.5,1.5,1.5,-70]#[3.0,3.0,3.0,3.0,100.0]
         self.advance_distance_rest_default = [25.0,90,100,110,120,200]#[3.0,3.0,3.0,3.0,100.0]
         self.subtracted = [0.0,0.0,0.0,0.0,0.0,0.0]
-
+        self.distance_hand = [0.0,0.0,0.0,0.0,0.0,0.0]
         # Save best performance:
         self.performance = [0.0,0.0,0.0,0.0,0.0,0.0,0.0]
 
@@ -303,7 +304,7 @@ class Interface():
         self.update_config_file()
         date = self.timestr[6:8] + '/' + self.timestr[4:6] + '/' + self.timestr[:4] + ' ' + 'at' + ' ' \
                + self.timestr[9:11] + 'h' + self.timestr[11:13] + 'm' + ' :'
-        mainwin.ext.Performance.emit(self.performance)
+        #mainwin.ext.Performance.emit(self.performance)
 
 
         destFile = r"performance.txt"
@@ -326,7 +327,13 @@ class Interface():
             f.write(str(round(self.performance[0], 2)) + "(T)\n")
             f.write(str(round(self.performance[6], 2)) + "(C)\n")
 
-
+            self.popupmsg(
+            'Performance of the day is: \n Wrist: ' + str(int(self.performance[5])) + 'mm\n''Pinky: ' + str(
+                int(self.performance[4])) + 'mm\n' 'Ring: ' + str(
+                int(self.performance[3])) + 'mm\n' 'Middle: ' + str(
+                int(self.performance[2])) + 'mm\n' 'Index: ' + str(
+                int(self.performance[1])) + 'mm\n''Thumb: ' + str(int(self.performance[0])) + 'mm\n',
+            'Performance window')
         mixer.quit()
         sys.exit()
 
@@ -368,7 +375,7 @@ class Interface():
         print(labels_fingers)
         return labels_fingers'''
 
-    def press_key_on_keyboard(self,keyboard,decisionPressButton,last_decisionPressButton,labels_buttons):
+    def press_key_on_keyboard(self,keyboard,decisionPressButton,last_decisionPressButton,labels_buttons,condition_press, prev_condition_press):
         '''
         Function to Emulate keyboard
         input: 
@@ -381,7 +388,8 @@ class Interface():
             fn_button = DICT_PYNPUT_KEYBOARD[labels_buttons[index].lower()]
             if fn_button is not None:
                 if n_choice and not o_choice:
-                    if self.use_setup:
+                    if self.use_setup and condition_press[index] == 1:
+
                         keyboard.press(fn_button)
                         print(labels_buttons[index] + ' pressed')
                         self.performance[6] += 1
@@ -389,13 +397,13 @@ class Interface():
                         mixer.music.load(os.path.join(self.sound_path,labels_buttons[index]+'.mp3'))
                         mixer.music.play()
                 elif not n_choice and o_choice:
-                    if self.use_setup:
+                    if self.use_setup and prev_condition_press[index] == 1:
                         keyboard.release(fn_button)
                         print(labels_buttons[index] + ' released')
 
     def move_leap_motion_visualizer(self):
         subprocess.Popen([self.path_leap_folder , '-new-tab'])
-        time.sleep(2)
+        time.sleep(4)
         # # [LEAP MOTION VISUALIZER] - moving window 
         user32 = ctypes.windll.user32
         # get screen resolution of primary monitor
@@ -441,10 +449,7 @@ class Interface():
 
     def read_values_from_devices(self,listener,controller):
         palm, distance, advance_distance, distance_performance = listener.on_frame(controller)
-        #print('read distance', distance)
-        #print('read palm position', palm)
-        # if self.advanced_mode :
-        #    distance = advance_distance
+
 
         return palm, distance, advance_distance, distance_performance
 
@@ -495,21 +500,38 @@ class Interface():
         counter_no_data = 0
         counter_init = 0
         previous_index = 0
+        
         while self._thread is not None:
+
+
+            if mainwin.reInit == True:
+                self.init = True 
+                mainwin.reInit = False
+
             if previous_index != mainwin.ModeSelector.currentIndex():
                 self.init = True
+                counter_init = 0
             previous_index = mainwin.ModeSelector.currentIndex()
             if mainwin.ModeSelector.currentIndex() == 2:
                 self.distance_rest = self.advance_distance_rest_default[:]
+                self.previous_distance_hand = self.distance_hand
                 self.distance_hand  = self.advance_distance[:]
+                if self.distance_hand == self.previous_distance_hand:
+                    self.distance_hand = self.distance_init
+                
             else:
                 self.distance_rest = self.distance_rest_default[:]
+                self.previous_distance_hand = self.distance_hand
                 self.distance_hand = self.distance[:]
+                
+                if self.distance_hand[:] == self.previous_distance_hand[:]:
+                    self.distance_hand = self.distance_init
 
             self.check_vis_use()
             self.check_setup_use() #button press
             self.check_mode()
             self.check_sound_use()
+
             if self.init and not None in self.distance_hand :
                 counter_init +=1
                 if counter_init == 10:
@@ -596,15 +618,24 @@ class Interface():
                 #External.value=self.bar_h[0] #test
                 #cv2.rectangle(img, (coord-30,self.img_h), (coord+30,self.img_h-int(self.bar_h[i]*self.bar_max)), self.bar_color, -1)
                 #cv2.line(img, (coord-20,self.img_h-int(self.threshold[i]*self.bar_max)), (coord+20,self.img_h-int(self.threshold[i]*self.bar_max)), self.bar_color_th, 3)
-
+                self.prev_condition_press[i] = self.condition_pressed[i]
                 # Boolean Visualization  - discrete
                 if self.bar_h[i] >= self.threshold[i]:
+                    if sum(self.condition_pressed) == 0 :
+                       
+                        self.condition_pressed[i] = 1
+                    self.count_slider[i] += 1 
             #    cv2.circle(img, (coord,self.circle_y), self.circle_radius, self.text_color_selec, self.circle_thickness)
-                     self.decisionPressButton[i] = True
+                    self.decisionPressButton[i] = True
+                    if self.count_slider[i] > 400:
+                        self.init = True
+                        self.count_slider[i]= 0
             #    cv2.putText(img,self.labels_buttons[i],(coord-30,self.circle_y-150),cv2.FONT_HERSHEY_SIMPLEX,1,self.text_color_selec)
             #    cv2.rectangle(img, (coord-30-30,self.circle_y-150-50), (coord-40+70,self.circle_y-150+50), self.text_color_selec, 3)
                 else:
-                     self.decisionPressButton[i] = False
+                    self.decisionPressButton[i] = False
+                    self.count_slider[i] = 0
+                    self.condition_pressed[i] = 0
             #    cv2.putText(img,self.labels_buttons[i],(coord-30,self.circle_y-150),cv2.FONT_HERSHEY_SIMPLEX,1,self.text_color_selec)
             #    cv2.circle(img, (coord,self.circle_y), self.circle_radius, self.circle_color, self.circle_thickness)
 
@@ -625,14 +656,14 @@ class Interface():
             for index in range(0, len(self.labels_buttons)):
                 self.labels_buttons[index]= OPTIONS[mainwin.FingerKeyNumber[index]]
             
-            self.press_key_on_keyboard(self.keyboard,self.decisionPressButton,self.last_decisionPressButton,self.labels_buttons)
+            self.press_key_on_keyboard(self.keyboard,self.decisionPressButton,self.last_decisionPressButton,self.labels_buttons,self.condition_pressed,self.prev_condition_press)
             self.last_decisionPressButton = self.decisionPressButton[:]
 
             if self.record_data:
                 # print(self.bar_h,self.threshold)
                 self.write_in_text_file(self.file_object,self.bar_h,self.threshold)
 
-
+            time.sleep(0.02) # Use to make sure that at each iteration of the run_loop we have the time to extract new values from the leapmotion
             #img_ = Image.fromarray(img)
             #nimg = ImageTk.PhotoImage(image=img_)
             #self.v1.n_img = nimg
@@ -653,8 +684,8 @@ if __name__=="__main__":
     interface = Interface(config_file)
     Rin = QtWidgets.QWidget()
     Rin.setWindowIcon(QtGui.QIcon('logo_app.jpg'))
-    PerformancePopUp = Ui_Rin()
-    PerformancePopUp.setupUi(Rin)
-    PerformancePopUp.setValuesPerformance(interface.performance)
-    app.aboutToQuit.connect(Rin.show)
+    #PerformancePopUp = Ui_Rin()
+    #PerformancePopUp.setupUi(Rin)
+    #PerformancePopUp.setValuesPerformance(interface.performance)
+    app.aboutToQuit.connect(interface.on_close)
     sys.exit(app.exec_())

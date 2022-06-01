@@ -316,11 +316,12 @@ class Ui_AnglesValues(object):
         self.PinkyKey.currentIndexChanged.connect(self.update_key)
         self.WristKey.currentIndexChanged.connect(self.update_key)
 
-        # performance window
-        # opening on close
+        # Re-initialization of measures : 
+        self.reInit = False
+        self.Initialization.clicked.connect(self.set_reInit)
 
-
-
+    def set_reInit(self):
+        self.reInit = True
 
 
     def init_threshold_sliders(self,values):
