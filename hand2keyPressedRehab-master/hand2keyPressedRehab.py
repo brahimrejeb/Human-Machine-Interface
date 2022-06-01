@@ -652,7 +652,7 @@ class Interface():
             #
             # 
             #print('mainwin : ',mainwin.FingerKeyNumber)   
-            # get label button fron mainzwin 
+            # get label button fron mainwin
             for index in range(0, len(self.labels_buttons)):
                 self.labels_buttons[index]= OPTIONS[mainwin.FingerKeyNumber[index]]
             

@@ -286,7 +286,9 @@ class Ui_AnglesValues(object):
         self.bar_origin_threshold=[self.thresh_thumb, self.thresh_index, self.thresh_middle, self.thresh_ring, self.thresh_pinky, self.thresh_wrist]
 
 
-
+        # Save the states of the keys' functions to init them each time we change the mode
+        self.KeyShifterInit = [self.ThumbKey.currentIndex(), self.IndexKey.currentIndex(), self.MiddleKey.currentIndex(), self.RingKey.currentIndex(), self.PinkyKey.currentIndex(), self.WristKey.currentIndex()]
+        self.KeyAllFingersUsedInit = [self.ThumbKey.currentIndex(), self.IndexKey.currentIndex(), self.MiddleKey.currentIndex(), self.RingKey.currentIndex(), self.PinkyKey.currentIndex(), self.WristKey.currentIndex()]
 
         #mode selector box
         self.update_mode()
@@ -315,10 +317,11 @@ class Ui_AnglesValues(object):
         self.RingKey.currentIndexChanged.connect(self.update_key)
         self.PinkyKey.currentIndexChanged.connect(self.update_key)
         self.WristKey.currentIndexChanged.connect(self.update_key)
-
         # Re-initialization of measures : 
         self.reInit = False
         self.Initialization.clicked.connect(self.set_reInit)
+
+
 
     def set_reInit(self):
         self.reInit = True
@@ -345,6 +348,12 @@ class Ui_AnglesValues(object):
         self.FingerKeyNumber = [self.ThumbKey.currentIndex(), self.IndexKey.currentIndex(),
                                 self.MiddleKey.currentIndex(), self.RingKey.currentIndex(),
                                 self.PinkyKey.currentIndex(), self.WristKey.currentIndex()]
+        if self.ModeSelector.currentText() == 'Shifter Mode':
+            self.KeyShifterInit=self.FingerKeyNumber
+        else:
+            self.KeyAllFingersUsedInit=self.FingerKeyNumber
+
+
     def ChangingValue(self,value):
         self.ThumbValue.setValue(value[0])
         self.IndexValue.setValue(value[1])
@@ -468,6 +477,7 @@ class Ui_AnglesValues(object):
 
     def update_mode(self):
         if self.ModeSelector.currentText() == 'All fingers used':
+            self.FingerKeyNumber=self.KeyAllFingersUsedInit
             self.CurrentKey.setHidden(True)
             self.ThumbKey.show()
             self.IndexKey.show()
@@ -490,6 +500,7 @@ class Ui_AnglesValues(object):
             self.ThumbPinky.setHidden(True)
             self.Fist.setHidden(True)
         elif self.ModeSelector.currentText() =='Shifter Mode':
+            self.FingerKeyNumber = self.KeyShifterInit
             self.CurrentKey.setHidden(False)
             self.ShifterLabel.setHidden(False)
             self.FingerShifter.show()
@@ -512,6 +523,7 @@ class Ui_AnglesValues(object):
             self.PinkyLabel.setHidden(False)
             self.WristLabel.setHidden(False)
         else:
+            self.FingerKeyNumber = self.KeyAllFingersUsedInit
             self.CurrentKey.setHidden(True)
             self.ShifterLabel.setHidden(True)
             self.FingerShifter.hide()
