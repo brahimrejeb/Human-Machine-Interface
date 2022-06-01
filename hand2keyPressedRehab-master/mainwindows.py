@@ -360,6 +360,12 @@ class Ui_AnglesValues(object):
         else:
             self.KeyAllFingersUsedInit=self.FingerKeyNumber
 
+    def check_no_other_finger_pressed(self, value):
+        key_released = True
+        for i in range(6):
+            if i != self.FingerShifter.currentIndex() and int(value[i])> self.bar_origin_threshold[i]:
+                key_released = False
+        return key_released
 
     def ChangingValue(self,value):
         self.ThumbValue.setValue(value[0])
@@ -378,16 +384,17 @@ class Ui_AnglesValues(object):
         if self.ModeSelector.currentText() == 'Shifter Mode':
             if not self.ActivatedFinger[self.FingerShifter.currentIndex()]:
                 if int(value[self.FingerShifter.currentIndex()])> self.bar_origin_threshold[self.FingerShifter.currentIndex()]:
-                    self.currentKeyNumber+=1
-                    self.currentKeyNumber = self.currentKeyNumber % len(OPTIONS)
-                    self.FingerKeyNumber[0] = self.currentKeyNumber
-                    self.FingerKeyNumber[1] = self.currentKeyNumber
-                    self.FingerKeyNumber[2] = self.currentKeyNumber
-                    self.FingerKeyNumber[3] = self.currentKeyNumber
-                    self.FingerKeyNumber[4] = self.currentKeyNumber
-                    self.FingerKeyNumber[5] = self.currentKeyNumber
-                    self.FingerKeyNumber[self.FingerShifter.currentIndex()] = 0
-                    self.ActivatedFinger[self.FingerShifter.currentIndex()] = True
+                    if self.check_no_other_finger_pressed(value):
+                        self.currentKeyNumber+=1
+                        self.currentKeyNumber = self.currentKeyNumber % len(OPTIONS)
+                        self.FingerKeyNumber[0] = self.currentKeyNumber
+                        self.FingerKeyNumber[1] = self.currentKeyNumber
+                        self.FingerKeyNumber[2] = self.currentKeyNumber
+                        self.FingerKeyNumber[3] = self.currentKeyNumber
+                        self.FingerKeyNumber[4] = self.currentKeyNumber
+                        self.FingerKeyNumber[5] = self.currentKeyNumber
+                        self.FingerKeyNumber[self.FingerShifter.currentIndex()] = 0
+                        self.ActivatedFinger[self.FingerShifter.currentIndex()] = True
                     #time.sleep(0.2)
                     #if self.currentKeyNumber>=len(OPTIONS):
                  #   self.currentKeyNumber=0
