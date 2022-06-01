@@ -76,6 +76,9 @@ class Ui_Dialog(object):
         self.SettingTitle.setFont(font)
         self.SettingTitle.setObjectName("SettingTitle")
         self.SettingLayout.addWidget(self.SettingTitle)
+        self.Initialisation = QtWidgets.QCheckBox(Dialog)
+        self.Initialisation.setObjectName("Initialisation")
+        self.SettingLayout.addWidget(self.Initialisation)
         self.PressButton = QtWidgets.QCheckBox(Dialog)
         self.PressButton.setObjectName("PressButton")
         self.SettingLayout.addWidget(self.PressButton)
@@ -271,6 +274,7 @@ class Ui_Dialog(object):
     def retranslateUi(self, Dialog):
         _translate = QtCore.QCoreApplication.translate
         Dialog.setWindowTitle(_translate("Dialog", "Dialog"))
+        self.Initialisation.setText(_translate("Dialog", "Initilization"))
         self.SettingTitle.setText(_translate("Dialog", "Setting"))
         self.PressButton.setText(_translate("Dialog", "Press Button"))
         self.Sound.setText(_translate("Dialog", "Sound"))
