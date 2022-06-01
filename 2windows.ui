@@ -6,8 +6,8 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>424</width>
-    <height>637</height>
+    <width>435</width>
+    <height>365</height>
    </rect>
   </property>
   <property name="windowTitle">
@@ -18,51 +18,6 @@
   </property>
   <widget class="QWidget" name="centralwidget">
    <layout class="QGridLayout" name="gridLayout">
-    <item row="2" column="2" colspan="4">
-     <layout class="QFormLayout" name="ShifterLayout">
-      <item row="0" column="0">
-       <widget class="QLabel" name="ShifterLabel">
-        <property name="text">
-         <string>Shifter</string>
-        </property>
-       </widget>
-      </item>
-      <item row="1" column="0">
-       <widget class="QComboBox" name="FingerShifter">
-        <item>
-         <property name="text">
-          <string>Thumb</string>
-         </property>
-        </item>
-        <item>
-         <property name="text">
-          <string>Index</string>
-         </property>
-        </item>
-        <item>
-         <property name="text">
-          <string>Middle</string>
-         </property>
-        </item>
-        <item>
-         <property name="text">
-          <string>Ring</string>
-         </property>
-        </item>
-        <item>
-         <property name="text">
-          <string>Pinky</string>
-         </property>
-        </item>
-        <item>
-         <property name="text">
-          <string>Wrist</string>
-         </property>
-        </item>
-       </widget>
-      </item>
-     </layout>
-    </item>
     <item row="0" column="0" colspan="6">
      <widget class="QComboBox" name="ModeSelector">
       <item>
@@ -131,61 +86,47 @@
       </item>
      </layout>
     </item>
-    <item row="2" column="0">
-     <layout class="QVBoxLayout" name="verticalLayout">
+    <item row="1" column="1">
+     <layout class="QVBoxLayout" name="verticalLayout_4">
       <item>
-       <widget class="QLabel" name="CurrentKey">
+       <widget class="QLabel" name="ThumbIndex">
         <property name="text">
-         <string>None</string>
-        </property>
-       </widget>
-      </item>
-     </layout>
-    </item>
-    <item row="1" column="2">
-     <layout class="QVBoxLayout" name="FingersLayout">
-      <property name="spacing">
-       <number>20</number>
-      </property>
-      <item>
-       <widget class="QLabel" name="ThumbLabel">
-        <property name="text">
-         <string>Thumb</string>
+         <string>Thumb-Index</string>
         </property>
        </widget>
       </item>
       <item>
-       <widget class="QLabel" name="IndexLabel">
+       <widget class="QLabel" name="ThumbMiddle">
         <property name="text">
-         <string>Index</string>
+         <string>Thumb-Middle</string>
         </property>
        </widget>
       </item>
       <item>
-       <widget class="QLabel" name="MiddleLabel">
+       <widget class="QLabel" name="ThumbRing">
         <property name="text">
-         <string>Middle</string>
+         <string>Thumb-Ring</string>
         </property>
        </widget>
       </item>
       <item>
-       <widget class="QLabel" name="RingLabel">
+       <widget class="QLabel" name="ThumbPinky">
         <property name="text">
-         <string>Ring</string>
+         <string>Thumb-Pinky</string>
         </property>
        </widget>
       </item>
       <item>
-       <widget class="QLabel" name="PinkyLabel">
+       <widget class="QLabel" name="Fist">
         <property name="text">
-         <string>Pinky</string>
+         <string>Closed fist</string>
         </property>
        </widget>
       </item>
       <item>
-       <widget class="QLabel" name="WristLabel">
+       <widget class="QLabel" name="partingFingers">
         <property name="text">
-         <string>Wrist</string>
+         <string>Parting Fingers</string>
         </property>
        </widget>
       </item>
@@ -457,58 +398,113 @@
       </item>
      </layout>
     </item>
-    <item row="1" column="1">
-     <layout class="QVBoxLayout" name="verticalLayout_4">
-      <item>
-       <widget class="QLabel" name="ThumbIndex">
-        <property name="text">
-         <string>Thumb-Index</string>
-        </property>
+    <item row="2" column="4">
+     <layout class="QGridLayout" name="gridLayout_2">
+      <item row="0" column="1">
+       <widget class="QComboBox" name="FingerShifter">
+        <item>
+         <property name="text">
+          <string>Thumb</string>
+         </property>
+        </item>
+        <item>
+         <property name="text">
+          <string>Index</string>
+         </property>
+        </item>
+        <item>
+         <property name="text">
+          <string>Middle</string>
+         </property>
+        </item>
+        <item>
+         <property name="text">
+          <string>Ring</string>
+         </property>
+        </item>
+        <item>
+         <property name="text">
+          <string>Pinky</string>
+         </property>
+        </item>
+        <item>
+         <property name="text">
+          <string>Wrist</string>
+         </property>
+        </item>
        </widget>
       </item>
-      <item>
-       <widget class="QLabel" name="ThumbMiddle">
+      <item row="0" column="0">
+       <widget class="QLabel" name="ShifterLabel">
         <property name="text">
-         <string>Thumb-Middle</string>
-        </property>
-       </widget>
-      </item>
-      <item>
-       <widget class="QLabel" name="ThumbRing">
-        <property name="text">
-         <string>Thumb-Ring</string>
-        </property>
-       </widget>
-      </item>
-      <item>
-       <widget class="QLabel" name="ThumbPinky">
-        <property name="text">
-         <string>Thumb-Pinky</string>
-        </property>
-       </widget>
-      </item>
-      <item>
-       <widget class="QLabel" name="Fist">
-        <property name="text">
-         <string>Closed fist</string>
-        </property>
-       </widget>
-      </item>
-      <item>
-       <widget class="QLabel" name="partingFingers">
-        <property name="text">
-         <string>Parting Fingers</string>
+         <string>Shifter</string>
         </property>
        </widget>
       </item>
      </layout>
     </item>
-    <item row="2" column="1">
-     <layout class="QVBoxLayout" name="verticalLayout_2">
+    <item row="2" column="0">
+     <layout class="QVBoxLayout" name="verticalLayout">
+      <item>
+       <widget class="QLabel" name="CurrentKey">
+        <property name="text">
+         <string>None</string>
+        </property>
+       </widget>
+      </item>
       <item>
        <widget class="QPushButton" name="Initialization">
         <property name="text">
          <string>Initialization</string>
+        </property>
+       </widget>
+      </item>
+     </layout>
+    </item>
+    <item row="1" column="2">
+     <layout class="QVBoxLayout" name="FingersLayout">
+      <property name="spacing">
+       <number>20</number>
+      </property>
+      <item>
+       <widget class="QLabel" name="ThumbLabel">
+        <property name="text">
+         <string>Thumb</string>
+        </property>
+       </widget>
+      </item>
+      <item>
+       <widget class="QLabel" name="IndexLabel">
+        <property name="text">
+         <string>Index</string>
+        </property>
+       </widget>
+      </item>
+      <item>
+       <widget class="QLabel" name="MiddleLabel">
+        <property name="text">
+         <string>Middle</string>
+        </property>
+       </widget>
+      </item>
+      <item>
+       <widget class="QLabel" name="RingLabel">
+        <property name="text">
+         <string>Ring</string>
+        </property>
+       </widget>
+      </item>
+      <item>
+       <widget class="QLabel" name="PinkyLabel">
+        <property name="text">
+         <string>Pinky</string>
+        </property>
+       </widget>
+      </item>
+      <item>
+       <widget class="QLabel" name="WristLabel">
+        <property name="text">
+         <string>Wrist</string>
         </property>
        </widget>
       </item>
@@ -521,8 +517,8 @@
     <rect>
      <x>0</x>
      <y>0</y>
-     <width>424</width>
-     <height>21</height>
+     <width>435</width>
+     <height>22</height>
     </rect>
    </property>
    <widget class="QMenu" name="menuSetting_2">
