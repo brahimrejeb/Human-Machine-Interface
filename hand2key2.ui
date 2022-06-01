@@ -6,14 +6,60 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>299</width>
-    <height>331</height>
+    <width>336</width>
+    <height>340</height>
    </rect>
   </property>
   <property name="windowTitle">
    <string>Dialog</string>
   </property>
   <layout class="QGridLayout" name="gridLayout">
+   <item row="2" column="4">
+    <layout class="QVBoxLayout" name="AdvancedLayout">
+     <item>
+      <widget class="QLabel" name="ThumbAdvanced">
+       <property name="text">
+        <string>Thumb</string>
+       </property>
+      </widget>
+     </item>
+     <item>
+      <widget class="QLabel" name="ThumbIndex">
+       <property name="text">
+        <string>Thumb-Index</string>
+       </property>
+      </widget>
+     </item>
+     <item>
+      <widget class="QLabel" name="ThumbMiddle">
+       <property name="text">
+        <string>Thumb-Middle</string>
+       </property>
+      </widget>
+     </item>
+     <item>
+      <widget class="QLabel" name="ThumbRing">
+       <property name="text">
+        <string>Thumb-Ring</string>
+       </property>
+      </widget>
+     </item>
+     <item>
+      <widget class="QLabel" name="ThumbPinky">
+       <property name="text">
+        <string>Thumb-Pinky</string>
+       </property>
+      </widget>
+     </item>
+     <item>
+      <widget class="QLabel" name="Fist">
+       <property name="text">
+        <string>Fist</string>
+       </property>
+      </widget>
+     </item>
+    </layout>
+   </item>
    <item row="0" column="0">
     <layout class="QVBoxLayout" name="SettingLayout">
      <item>
@@ -206,23 +252,54 @@
      </item>
     </layout>
    </item>
-   <item row="2" column="0" colspan="2">
-    <layout class="QVBoxLayout" name="verticalLayout">
+   <item row="2" column="3">
+    <layout class="QVBoxLayout" name="SimpleModeLayout">
      <item>
-      <widget class="QLabel" name="label">
-       <property name="font">
-        <font>
-         <family>Calibri</family>
-         <pointsize>10</pointsize>
-         <weight>75</weight>
-         <bold>true</bold>
-        </font>
-       </property>
+      <widget class="QLabel" name="ThumbLabel">
        <property name="text">
-        <string>Thresholds</string>
+        <string>Thumb</string>
        </property>
       </widget>
      </item>
+     <item>
+      <widget class="QLabel" name="IndexLabel">
+       <property name="text">
+        <string>Index</string>
+       </property>
+      </widget>
+     </item>
+     <item>
+      <widget class="QLabel" name="MiddleLabel">
+       <property name="text">
+        <string>Middle</string>
+       </property>
+      </widget>
+     </item>
+     <item>
+      <widget class="QLabel" name="RingLabel">
+       <property name="text">
+        <string>Ring</string>
+       </property>
+      </widget>
+     </item>
+     <item>
+      <widget class="QLabel" name="PinkyLabel">
+       <property name="text">
+        <string>Pinky</string>
+       </property>
+      </widget>
+     </item>
+     <item>
+      <widget class="QLabel" name="WristLabel">
+       <property name="text">
+        <string>Wrist</string>
+       </property>
+      </widget>
+     </item>
+    </layout>
+   </item>
+   <item row="2" column="0" colspan="2">
+    <layout class="QVBoxLayout" name="verticalLayout">
      <item>
       <widget class="QSlider" name="ThumbThresh">
        <property name="orientation">
@@ -268,112 +345,71 @@
     </layout>
    </item>
    <item row="2" column="2">
-    <layout class="QVBoxLayout" name="SimpleModeLayout">
+    <layout class="QVBoxLayout" name="verticalLayout_2">
      <item>
-      <widget class="QLabel" name="space">
+      <widget class="QLabel" name="ThumbThreshValue">
        <property name="text">
-        <string/>
+        <string>0</string>
        </property>
       </widget>
      </item>
      <item>
-      <widget class="QLabel" name="ThumbLabel">
+      <widget class="QLabel" name="IndexThreshValue">
        <property name="text">
-        <string>Thumb</string>
+        <string>0</string>
        </property>
       </widget>
      </item>
      <item>
-      <widget class="QLabel" name="IndexLabel">
+      <widget class="QLabel" name="MiddleThreshValue">
        <property name="text">
-        <string>Index</string>
+        <string>0</string>
        </property>
       </widget>
      </item>
      <item>
-      <widget class="QLabel" name="MiddleLabel">
+      <widget class="QLabel" name="label_7">
        <property name="text">
-        <string>Middle</string>
+        <string>0</string>
        </property>
       </widget>
      </item>
      <item>
-      <widget class="QLabel" name="RingLabel">
+      <widget class="QLabel" name="PinkyThreshValue">
        <property name="text">
-        <string>Ring</string>
+        <string>0</string>
        </property>
       </widget>
      </item>
      <item>
-      <widget class="QLabel" name="Pinky">
+      <widget class="QLabel" name="WristThreshValue">
        <property name="text">
-        <string>Pinky</string>
-       </property>
-      </widget>
-     </item>
-     <item>
-      <widget class="QLabel" name="WristLabel">
-       <property name="text">
-        <string>Wrist</string>
+        <string>0</string>
        </property>
       </widget>
      </item>
     </layout>
    </item>
-   <item row="2" column="3">
-    <layout class="QVBoxLayout" name="AdvancedLayout">
+   <item row="1" column="0">
+    <layout class="QVBoxLayout" name="verticalLayout_3">
      <item>
-      <widget class="QLabel" name="space_2">
-       <property name="text">
-        <string/>
+      <widget class="QLabel" name="label">
+       <property name="font">
+        <font>
+         <family>Calibri</family>
+         <pointsize>10</pointsize>
+         <weight>75</weight>
+         <bold>true</bold>
+        </font>
        </property>
-      </widget>
-     </item>
-     <item>
-      <widget class="QLabel" name="ThumbAdvanced">
        <property name="text">
-        <string>Thumb</string>
-       </property>
-      </widget>
-     </item>
-     <item>
-      <widget class="QLabel" name="ThumbIndex">
-       <property name="text">
-        <string>Thumb-Index</string>
-       </property>
-      </widget>
-     </item>
-     <item>
-      <widget class="QLabel" name="ThumbMiddle">
-       <property name="text">
-        <string>Thumb-Middle</string>
-       </property>
-      </widget>
-     </item>
-     <item>
-      <widget class="QLabel" name="ThumbRing">
-       <property name="text">
-        <string>Thumb-Ring</string>
-       </property>
-      </widget>
-     </item>
-     <item>
-      <widget class="QLabel" name="ThumbPinky">
-       <property name="text">
-        <string>Thumb-Pinky</string>
-       </property>
-      </widget>
-     </item>
-     <item>
-      <widget class="QLabel" name="Fist">
-       <property name="text">
-        <string>Fist</string>
+        <string>Thresholds</string>
        </property>
       </widget>
      </item>
     </layout>
    </item>
-   <item row="3" column="1">
+   <item row="3" column="2">
     <widget class="QPushButton" name="Ok">
      <property name="palette">
       <palette>
