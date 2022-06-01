@@ -332,7 +332,7 @@ class Interface():
                 int(self.performance[4])) + 'mm\n' 'Ring: ' + str(
                 int(self.performance[3])) + 'mm\n' 'Middle: ' + str(
                 int(self.performance[2])) + 'mm\n' 'Index: ' + str(
-                int(self.performance[1])) + 'mm\n''Thumb: ' + str(int(self.performance[0])) + 'mm\n',
+                int(self.performance[1])) + 'mm\n''Thumb: ' + str(int(self.performance[0])) + 'mm\n''Count Value: ' + str(int(self.performance[6])),
             'Performance window')
         mixer.quit()
         sys.exit()
