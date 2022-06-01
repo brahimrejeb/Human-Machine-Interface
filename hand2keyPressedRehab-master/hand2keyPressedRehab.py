@@ -35,6 +35,7 @@ import mainwindows
 from mainwindows import Ui_AnglesValues
 import PerformanceWindow
 from PerformanceWindow import Ui_Rin
+import time
 
 #from mainwindows import External
 
@@ -316,8 +317,11 @@ class Interface():
         
        
         self.update_config_file()
-        date = self.timestr[6:8] + '/' + self.timestr[4:6] + '/' + self.timestr[:4] + ' ' + 'at' + ' ' \
-               + self.timestr[9:11] + 'h' + self.timestr[11:13] + 'm' + ' :'
+    
+        date = self.timestr
+      
+        self.run_time = (time.time() - self.start_time)
+        print('runtimeis', self.run_time)
         #mainwin.ext.Performance.emit(self.performance)
 
 
@@ -332,14 +336,15 @@ class Interface():
                 f.write(str(round(self.performance[4], 2)) + '(I),')
                 f.write(str(round(self.performance[5], 2)) + "(T)\n")
             else:'''
-            f.write(date)
-            f.write(str(round(self.performance[5], 2)) + '(W),')
-            f.write(str(round(self.performance[4], 2)) + '(P),')
-            f.write(str(round(self.performance[3], 2)) + '(R),')
-            f.write(str(round(self.performance[2], 2)) + '(M),')
-            f.write(str(round(self.performance[1], 2)) + '(I),')
-            f.write(str(round(self.performance[0], 2)) + "(T)\n")
-            f.write(str(round(self.performance[6], 2)) + "(C)\n")
+            f.write(date + ';')
+            f.write(str(round(self.performance[5], 2)) + '(Wrist);')
+            f.write(str(round(self.performance[4], 2)) + '(Pinky);')
+            f.write(str(round(self.performance[3], 2)) + '(Ring);')
+            f.write(str(round(self.performance[2], 2)) + '(Middle);')
+            f.write(str(round(self.performance[1], 2)) + '(Index);')
+            f.write(str(round(self.performance[0], 2)) + "(Thumb);")
+            f.write(str(round(self.performance[6], 2)) + "(Count Value);")
+            f.write(str(int(self.run_time)) + "(Run Time)\n")
 
             self.popupmsg(
             'Performance of the day is: \n Wrist: ' + str(int(self.performance[5])) + 'mm\n''Pinky: ' + str(
@@ -507,7 +512,10 @@ class Interface():
 
 
     def run_loop(self):
+        
+        self.start_time = time.time()
         global mainwin
+
 
 
         print("**** Start Running interface ****")
