@@ -395,7 +395,7 @@ class Interface():
 
     def move_leap_motion_visualizer(self):
         subprocess.Popen([self.path_leap_folder , '-new-tab'])
-        time.sleep(0.1)
+        time.sleep(2)
         # # [LEAP MOTION VISUALIZER] - moving window 
         user32 = ctypes.windll.user32
         # get screen resolution of primary monitor
@@ -405,13 +405,13 @@ class Interface():
         res = (user32.GetSystemMetrics(0), user32.GetSystemMetrics(1))
         # res is now (3440, 1440) for 3440x1440 display at 150% scaling
         handle = user32.FindWindowW(None, u'VRVisualizer')
-        user32.ShowWindow(handle, 6)
-        user32.ShowWindow(handle, 9)
-        user32.ShowWindow(handle, 1)
-        user32.MoveWindow(handle, 5, 0, 705, 620, True)
-
+        #user32.ShowWindow(handle, 6)
+        #user32.ShowWindow(handle, 9)
+        #user32.ShowWindow(handle, 1)
+        #user32.ShowWindow(handle, 9)
+        test=user32.MoveWindow(handle, 5, 0, 705, 620, True)
         print("Moving Leap Motion Visualizer on predefined position")
-        
+    '''
         for i in range(3):
            self.keyboard.press('v')
            self.keyboard.release('v')
@@ -422,7 +422,7 @@ class Interface():
         self.keyboard.press('c')
         self.keyboard.release('c')
         self.keyboard.press('g')
-        self.keyboard.release('g')
+        self.keyboard.release('g') '''
     #     self.keyboard.press(KeyCode.from_char('='))
     #     self.keyboard.release(KeyCode.from_char('='))
     #     self.keyboard.press(KeyCode.from_char('='))
@@ -646,13 +646,13 @@ if __name__=="__main__":
     app = QtWidgets.QApplication(sys.argv)
 
     AnglesValues = QtWidgets.QMainWindow()
-    AnglesValues.setWindowIcon(QtGui.QIcon('th.png'))
+    AnglesValues.setWindowIcon(QtGui.QIcon('logo_app.jpg'))
     mainwin = Ui_AnglesValues()
     mainwin.setupUi(AnglesValues)
     AnglesValues.show()
     interface = Interface(config_file)
     Rin = QtWidgets.QWidget()
-    Rin.setWindowIcon(QtGui.QIcon('th.png'))
+    Rin.setWindowIcon(QtGui.QIcon('logo_app.jpg'))
     PerformancePopUp = Ui_Rin()
     PerformancePopUp.setupUi(Rin)
     PerformancePopUp.setValuesPerformance(interface.performance)

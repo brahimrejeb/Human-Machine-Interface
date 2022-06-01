@@ -261,7 +261,7 @@ class Ui_AnglesValues(object):
         self.Dialog = QtWidgets.QDialog()
         self.dia = Ui_Dialog()
         self.dia.setupUi(self.Dialog)
-        self.Dialog.setWindowIcon(QtGui.QIcon('th.png'))
+        self.Dialog.setWindowIcon(QtGui.QIcon('logo_app.jpg'))
         self.actionAcces_setting.triggered.connect(self.Dialog.show)
 
         self.progress_bars=[self.ThumbValue,self.IndexValue,self.MiddleValue,self.RingValue,self.PinkyValue,self.WristValue]
