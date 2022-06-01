@@ -6,7 +6,7 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>423</width>
+    <width>424</width>
     <height>637</height>
    </rect>
   </property>
@@ -503,6 +503,17 @@
       </item>
      </layout>
     </item>
+    <item row="2" column="1">
+     <layout class="QVBoxLayout" name="verticalLayout_2">
+      <item>
+       <widget class="QPushButton" name="Initialization">
+        <property name="text">
+         <string>Initialization</string>
+        </property>
+       </widget>
+      </item>
+     </layout>
+    </item>
    </layout>
   </widget>
   <widget class="QMenuBar" name="menubar">
@@ -510,7 +521,7 @@
     <rect>
      <x>0</x>
      <y>0</y>
-     <width>423</width>
+     <width>424</width>
      <height>21</height>
     </rect>
    </property>

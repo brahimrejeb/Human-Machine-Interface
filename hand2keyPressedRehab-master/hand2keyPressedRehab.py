@@ -657,4 +657,4 @@ if __name__=="__main__":
     PerformancePopUp.setupUi(Rin)
     PerformancePopUp.setValuesPerformance(interface.performance)
     app.aboutToQuit.connect(Rin.show)
-    app.exec_()
+    sys.exit(app.exec_())

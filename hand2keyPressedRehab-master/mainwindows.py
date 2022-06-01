@@ -234,8 +234,17 @@ class Ui_AnglesValues(object):
         self.Fist = QtWidgets.QLabel(self.centralwidget)
         self.Fist.setObjectName("Fist")
         self.ComplexMouvLayout.addWidget(self.Fist)
+
         self.gridLayout.addLayout(self.ComplexMouvLayout, 1, 1, 1, 1)
+        self.verticalLayout_2 = QtWidgets.QVBoxLayout()
+        self.verticalLayout_2.setObjectName("verticalLayout_2")
+        self.Initialization = QtWidgets.QPushButton(self.centralwidget)
+        self.Initialization.setObjectName("Initialization")
+        self.verticalLayout_2.addWidget(self.Initialization)
         AnglesValues.setCentralWidget(self.centralwidget)
+        self.gridLayout.addLayout(self.verticalLayout_2, 2, 1, 1, 1)
+        AnglesValues.setCentralWidget(self.centralwidget)
+
         self.menubar = QtWidgets.QMenuBar(AnglesValues)
         self.menubar.setGeometry(QtCore.QRect(0, 0, 423, 21))
         self.menubar.setObjectName("menubar")
@@ -249,6 +258,7 @@ class Ui_AnglesValues(object):
         self.actionAcces_setting.setObjectName("actionAcces_setting")
         self.menuSetting_2.addAction(self.actionAcces_setting)
         self.menubar.addAction(self.menuSetting_2.menuAction())
+
 
         self.retranslateUi(AnglesValues)
         QtCore.QMetaObject.connectSlotsByName(AnglesValues)
@@ -597,5 +607,6 @@ class Ui_AnglesValues(object):
         self.ThumbRing.setText(_translate("AnglesValues", "Thumb-Ring"))
         self.ThumbPinky.setText(_translate("AnglesValues", "Thumb-Pinky"))
         self.Fist.setText(_translate("AnglesValues", "Closed fist"))
+        self.Initialization.setText(_translate("AnglesValues", "Initialization"))
         self.menuSetting_2.setTitle(_translate("AnglesValues", "Setting"))
         self.actionAcces_setting.setText(_translate("AnglesValues", "Acces setting"))
