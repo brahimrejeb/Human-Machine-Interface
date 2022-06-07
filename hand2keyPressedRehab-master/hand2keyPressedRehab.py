@@ -224,14 +224,14 @@ class Interface():
         '''
         Boolean variable, determine whether sound is ON or OFF
         '''
-        self.use_sound = mainwin.dia.Sound.isChecked()
+        self.use_sound = mainwin.Sound.isChecked()
         
     def check_setup_use(self):
         global mainwin
         '''
         Boolean variable, determine whether button is pressed or not
         '''
-        self.use_setup = mainwin.dia.PressButton.isChecked()
+        self.use_setup = mainwin.PressButton.isChecked()
         
     def check_vis_use(self):
         global mainwin
