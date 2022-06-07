@@ -6,8 +6,8 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>435</width>
-    <height>365</height>
+    <width>507</width>
+    <height>387</height>
    </rect>
   </property>
   <property name="windowTitle">
@@ -89,6 +89,13 @@
     <item row="1" column="1">
      <layout class="QVBoxLayout" name="verticalLayout_4">
       <item>
+       <widget class="QLabel" name="Thumb">
+        <property name="text">
+         <string>Thumb</string>
+        </property>
+       </widget>
+      </item>
+      <item>
        <widget class="QLabel" name="ThumbIndex">
         <property name="text">
          <string>Thumb-Index</string>
@@ -120,13 +127,6 @@
        <widget class="QLabel" name="Fist">
         <property name="text">
          <string>Closed fist</string>
-        </property>
-       </widget>
-      </item>
-      <item>
-       <widget class="QLabel" name="partingFingers">
-        <property name="text">
-         <string>Parting Fingers</string>
         </property>
        </widget>
       </item>
@@ -179,6 +179,11 @@
           <string>Esc</string>
          </property>
         </item>
+        <item>
+         <property name="text">
+          <string>AltGr</string>
+         </property>
+        </item>
        </widget>
       </item>
       <item>
@@ -223,6 +228,11 @@
           <string>Esc</string>
          </property>
         </item>
+        <item>
+         <property name="text">
+          <string>AltGr</string>
+         </property>
+        </item>
        </widget>
       </item>
       <item>
@@ -244,6 +254,11 @@
         </item>
         <item>
          <property name="text">
+          <string>Ctrl</string>
+         </property>
+        </item>
+        <item>
+         <property name="text">
           <string>Tab</string>
          </property>
         </item>
@@ -260,6 +275,11 @@
         <item>
          <property name="text">
           <string>Esc</string>
+         </property>
+        </item>
+        <item>
+         <property name="text">
+          <string>AltGr</string>
          </property>
         </item>
        </widget>
@@ -306,6 +326,11 @@
           <string>Esc</string>
          </property>
         </item>
+        <item>
+         <property name="text">
+          <string>AltGr</string>
+         </property>
+        </item>
        </widget>
       </item>
       <item>
@@ -348,6 +373,11 @@
         <item>
          <property name="text">
           <string>Esc</string>
+         </property>
+        </item>
+        <item>
+         <property name="text">
+          <string>AltGr</string>
          </property>
         </item>
        </widget>
@@ -394,69 +424,11 @@
           <string>Esc</string>
          </property>
         </item>
-       </widget>
-      </item>
-     </layout>
-    </item>
-    <item row="2" column="4">
-     <layout class="QGridLayout" name="gridLayout_2">
-      <item row="0" column="1">
-       <widget class="QComboBox" name="FingerShifter">
         <item>
          <property name="text">
-          <string>Thumb</string>
+          <string>AltGr</string>
          </property>
         </item>
-        <item>
-         <property name="text">
-          <string>Index</string>
-         </property>
-        </item>
-        <item>
-         <property name="text">
-          <string>Middle</string>
-         </property>
-        </item>
-        <item>
-         <property name="text">
-          <string>Ring</string>
-         </property>
-        </item>
-        <item>
-         <property name="text">
-          <string>Pinky</string>
-         </property>
-        </item>
-        <item>
-         <property name="text">
-          <string>Wrist</string>
-         </property>
-        </item>
-       </widget>
-      </item>
-      <item row="0" column="0">
-       <widget class="QLabel" name="ShifterLabel">
-        <property name="text">
-         <string>Shifter</string>
-        </property>
-       </widget>
-      </item>
-     </layout>
-    </item>
-    <item row="2" column="0">
-     <layout class="QVBoxLayout" name="verticalLayout">
-      <item>
-       <widget class="QLabel" name="CurrentKey">
-        <property name="text">
-         <string>None</string>
-        </property>
-       </widget>
-      </item>
-      <item>
-       <widget class="QPushButton" name="Initialization">
-        <property name="text">
-         <string>Initialization</string>
-        </property>
        </widget>
       </item>
      </layout>
@@ -510,6 +482,101 @@
       </item>
      </layout>
     </item>
+    <item row="4" column="0" colspan="2">
+     <layout class="QHBoxLayout" name="LayoutSettings">
+      <item>
+       <widget class="QCheckBox" name="PressButton">
+        <property name="text">
+         <string>Press Button</string>
+        </property>
+       </widget>
+      </item>
+      <item>
+       <widget class="QCheckBox" name="Sound">
+        <property name="text">
+         <string>Sound</string>
+        </property>
+       </widget>
+      </item>
+      <item>
+       <widget class="QCheckBox" name="Visualizer">
+        <property name="text">
+         <string>Visualizer</string>
+        </property>
+       </widget>
+      </item>
+      <item>
+       <widget class="QPushButton" name="Initialization">
+        <property name="text">
+         <string>Initialization</string>
+        </property>
+       </widget>
+      </item>
+     </layout>
+    </item>
+    <item row="2" column="0">
+     <layout class="QHBoxLayout" name="LayoutFirstMode">
+      <item>
+       <widget class="QLabel" name="PressedKeyLabel">
+        <property name="text">
+         <string>Pressed Key:</string>
+        </property>
+       </widget>
+      </item>
+      <item>
+       <widget class="QLabel" name="CurrentKey">
+        <property name="text">
+         <string>None</string>
+        </property>
+       </widget>
+      </item>
+      <item>
+       <layout class="QGridLayout" name="gridLayout_2">
+        <item row="0" column="1">
+         <widget class="QComboBox" name="FingerShifter">
+          <item>
+           <property name="text">
+            <string>Thumb</string>
+           </property>
+          </item>
+          <item>
+           <property name="text">
+            <string>Index</string>
+           </property>
+          </item>
+          <item>
+           <property name="text">
+            <string>Middle</string>
+           </property>
+          </item>
+          <item>
+           <property name="text">
+            <string>Ring</string>
+           </property>
+          </item>
+          <item>
+           <property name="text">
+            <string>Pinky</string>
+           </property>
+          </item>
+          <item>
+           <property name="text">
+            <string>Wrist</string>
+           </property>
+          </item>
+         </widget>
+        </item>
+        <item row="0" column="0">
+         <widget class="QLabel" name="ShifterLabel">
+          <property name="text">
+           <string>Shifter</string>
+          </property>
+         </widget>
+        </item>
+       </layout>
+      </item>
+     </layout>
+    </item>
    </layout>
   </widget>
   <widget class="QMenuBar" name="menubar">
@@ -517,8 +584,8 @@
     <rect>
      <x>0</x>
      <y>0</y>
-     <width>435</width>
-     <height>22</height>
+     <width>507</width>
+     <height>21</height>
     </rect>
    </property>
    <widget class="QMenu" name="menuSetting_2">

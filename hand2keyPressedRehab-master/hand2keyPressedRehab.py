@@ -176,15 +176,15 @@ class Interface():
 
         # selection buttons of the interface
         # sound
-        mainwin.dia.Sound.setChecked(self.use_sound)
+        mainwin.Sound.setChecked(self.use_sound)
         # check_button = Checkbutton(btm_frame4,bg='Sky Blue', text="Sound", variable=self.var1,command=self.check_sound_use).grid(row=0,column = 0,padx=10)
 
         # which button is pressed
-        mainwin.dia.PressButton.setChecked(self.use_setup)
+        mainwin.PressButton.setChecked(self.use_setup)
         # check_button = Checkbutton(btm_frame4,bg='Sky Blue', text="Press Button", variable=self.var2,command=self.check_setup_use).grid(row=0,column = 1,padx=80)
 
         #show visualizer or not
-        mainwin.dia.Visualizer.setChecked(self.show_visualizer)
+        mainwin.Visualizer.setChecked(self.show_visualizer)
 
         mainwin.ThumbValue.setValue(0)
         mainwin.IndexValue.setValue(0)
@@ -238,7 +238,7 @@ class Interface():
         '''
         Boolean variable
         '''
-        self.show_visualizer = mainwin.dia.Visualizer.isChecked()
+        self.show_visualizer = mainwin.Visualizer.isChecked()
         if self.show_visualizer :
             if not self.visualizer_open:
                 self.move_leap_motion_visualizer()
