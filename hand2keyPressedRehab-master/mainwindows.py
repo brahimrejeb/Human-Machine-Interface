@@ -1,5 +1,6 @@
 # -*- coding: utf-8 -*-
-
+#Authors: Odile Andres, Nada Guerraoui, Thomas Peeters, Brahim Rejeb (V2)
+# (include your names if you do any collaboration in the code)
 # Form implementation generated from reading ui file '2windows.ui'
 #
 # Created by: PyQt5 UI code generator 5.15.6

@@ -2,7 +2,8 @@
 # hand2keyPressedRehab 
 # LeapMotion Solution 
 # Contact: hackahealth.geneva@gmail.com 
-# Autors: Bastien Orset (include your names if you do any collaboration in the code)
+# Authors: Bastien Orset (V1), Odile Andres, Nada Guerraoui, Thomas Peeters, Brahim Rejeb (V2)
+# (include your names if you do any collaboration in the code)
 ###########################################################
 
 

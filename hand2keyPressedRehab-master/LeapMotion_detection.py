@@ -3,7 +3,8 @@
 # 16/07/2020 Lausanne,Switzerland
 # LeapMotion Solution
 # Contact: hackahealth.geneva@gmail.com
-# Autors: Sixto Alcoba-Banqueri (include your names if you do any collaboration in the code)
+# Authors: Sixto Alcoba-Banqueri (V1), Odile Andres, Nada Guerraoui, Thomas Peeters, Brahim Rejeb (V2)
+# (include your names if you do any collaboration in the code)
 ###########################################################
 
 import sys
