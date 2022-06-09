@@ -15,11 +15,16 @@ from PyQt5.QtCore import QThread, pyqtSignal, QObject
 class Ui_Dialog(object):
 
     def setupUi(self, Dialog):
+        '''
+        creation of the elements of the setting window
+        '''
         Dialog.setObjectName("Dialog")
         Dialog.resize(336, 243)
         self.gridLayout = QtWidgets.QGridLayout(Dialog)
         self.gridLayout.setObjectName("gridLayout")
         self.SimpleModeLayout = QtWidgets.QVBoxLayout()
+
+        #finger labels for simple and all fingers modes
         self.SimpleModeLayout.setObjectName("SimpleModeLayout")
         self.ThumbLabel = QtWidgets.QLabel(Dialog)
         self.ThumbLabel.setObjectName("ThumbLabel")
@@ -40,6 +45,8 @@ class Ui_Dialog(object):
         self.WristLabel.setObjectName("WristLabel")
         self.SimpleModeLayout.addWidget(self.WristLabel)
         self.gridLayout.addLayout(self.SimpleModeLayout, 1, 3, 1, 1)
+
+        #movements label for advanced mode
         self.AdvancedLayout = QtWidgets.QVBoxLayout()
         self.AdvancedLayout.setObjectName("AdvancedLayout")
         self.ThumbAdvanced = QtWidgets.QLabel(Dialog)
@@ -61,6 +68,8 @@ class Ui_Dialog(object):
         self.Fist.setObjectName("Fist")
         self.AdvancedLayout.addWidget(self.Fist)
         self.gridLayout.addLayout(self.AdvancedLayout, 1, 4, 1, 1)
+
+        #threshold value label
         self.verticalLayout_2 = QtWidgets.QVBoxLayout()
         self.verticalLayout_2.setObjectName("verticalLayout_2")
         self.ThumbThreshValue = QtWidgets.QLabel(Dialog)
@@ -82,9 +91,13 @@ class Ui_Dialog(object):
         self.WristThreshValue.setObjectName("WristThreshValue")
         self.verticalLayout_2.addWidget(self.WristThreshValue)
         self.gridLayout.addLayout(self.verticalLayout_2, 1, 2, 1, 1)
+
+        #OK button
         self.horizontalLayout = QtWidgets.QHBoxLayout()
         self.horizontalLayout.setObjectName("horizontalLayout")
         self.Ok = QtWidgets.QPushButton(Dialog)
+
+        #color code of the window
         palette = QtGui.QPalette()
         brush = QtGui.QBrush(QtGui.QColor(0, 0, 0))
         brush.setStyle(QtCore.Qt.SolidPattern)
@@ -137,6 +150,8 @@ class Ui_Dialog(object):
         self.label.setFont(font)
         self.label.setObjectName("label")
         self.verticalLayout_3.addWidget(self.label)
+
+        # threshold slider
         self.gridLayout.addLayout(self.verticalLayout_3, 0, 0, 1, 1)
         self.verticalLayout = QtWidgets.QVBoxLayout()
         self.verticalLayout.setObjectName("verticalLayout")
@@ -165,8 +180,11 @@ class Ui_Dialog(object):
         self.WristThresh.setObjectName("WristThresh")
         self.verticalLayout.addWidget(self.WristThresh)
         self.gridLayout.addLayout(self.verticalLayout, 1, 0, 1, 2)
+
+        #when OK clicked, the window closed
         self.Ok.clicked.connect(Dialog.reject)
 
+        #by default the setting window present the simple and all fingers design
         self.ThumbLabel.setHidden(False)
         self.IndexLabel.setHidden(False)
         self.MiddleLabel.setHidden(False)
@@ -184,6 +202,9 @@ class Ui_Dialog(object):
         QtCore.QMetaObject.connectSlotsByName(Dialog)
 
     def print_names(self, signal):
+        '''
+        Change the design of the window depending on the chosen mode in mainwindow
+        '''
         if signal==0 or signal==1:
             self.ThumbLabel.setHidden(False)
             self.IndexLabel.setHidden(False)
@@ -217,6 +238,9 @@ class Ui_Dialog(object):
 
 
     def retranslateUi(self, Dialog):
+        '''
+        set the values of the label of the simulation
+        '''
         _translate = QtCore.QCoreApplication.translate
         Dialog.setWindowTitle(_translate("Dialog", "Dialog"))
         self.ThumbLabel.setText(_translate("Dialog", "Thumb"))

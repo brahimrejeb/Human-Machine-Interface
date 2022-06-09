@@ -20,6 +20,9 @@ import time
 
 
 class External(QObject):
+    '''
+    class to exchange information between hand2key and mainwindow
+    '''
     NewFingerValues = QtCore.pyqtSignal(list)
 
 #    value=0
@@ -32,6 +35,9 @@ OPTIONS = ['None','Alt','Win',
 
 class Ui_AnglesValues(object):
     def setupUi(self, AnglesValues):
+        '''
+        creation of the elements of the mainwindow
+        '''
         AnglesValues.setObjectName("AnglesValues")
         AnglesValues.resize(507, 387)
         AnglesValues.setAnimated(True)
@@ -39,12 +45,16 @@ class Ui_AnglesValues(object):
         self.centralwidget.setObjectName("centralwidget")
         self.gridLayout = QtWidgets.QGridLayout(self.centralwidget)
         self.gridLayout.setObjectName("gridLayout")
+
+        #combo box of the different proposed modes
         self.ModeSelector = QtWidgets.QComboBox(self.centralwidget)
         self.ModeSelector.setObjectName("ModeSelector")
         self.ModeSelector.addItem("")
         self.ModeSelector.addItem("")
         self.ModeSelector.addItem("")
         self.gridLayout.addWidget(self.ModeSelector, 0, 0, 1, 6)
+
+        #Progress bars for each movements
         self.ProgessLayout = QtWidgets.QVBoxLayout()
         self.ProgessLayout.setSpacing(20)
         self.ProgessLayout.setObjectName("ProgessLayout")
@@ -103,6 +113,8 @@ class Ui_AnglesValues(object):
         self.WristValue.setObjectName("WristValue")
         self.ProgessLayout.addWidget(self.WristValue)
         self.gridLayout.addLayout(self.ProgessLayout, 1, 0, 1, 1)
+
+        #labels of the advanced mode
         self.verticalLayout_4 = QtWidgets.QVBoxLayout()
         self.verticalLayout_4.setObjectName("verticalLayout_4")
         self.Thumb = QtWidgets.QLabel(self.centralwidget)
@@ -124,6 +136,8 @@ class Ui_AnglesValues(object):
         self.Fist.setObjectName("Fist")
         self.verticalLayout_4.addWidget(self.Fist)
         self.gridLayout.addLayout(self.verticalLayout_4, 1, 1, 1, 1)
+
+        #ComboBoxes to chose which key for which finger in all fingers and advanced modes
         self.KeysLayout = QtWidgets.QVBoxLayout()
         self.KeysLayout.setSpacing(20)
         self.KeysLayout.setObjectName("KeysLayout")
@@ -200,6 +214,8 @@ class Ui_AnglesValues(object):
         self.WristKey.addItem("")
         self.KeysLayout.addWidget(self.WristKey)
         self.gridLayout.addLayout(self.KeysLayout, 1, 4, 1, 2)
+
+        #fingers labels simple and all fingers mode
         self.FingersLayout = QtWidgets.QVBoxLayout()
         self.FingersLayout.setSpacing(20)
         self.FingersLayout.setObjectName("FingersLayout")
@@ -222,6 +238,8 @@ class Ui_AnglesValues(object):
         self.WristLabel.setObjectName("WristLabel")
         self.FingersLayout.addWidget(self.WristLabel)
         self.gridLayout.addLayout(self.FingersLayout, 1, 2, 1, 1)
+
+        #seting button
         self.LayoutSettings = QtWidgets.QHBoxLayout()
         self.LayoutSettings.setObjectName("LayoutSettings")
         self.PressButton = QtWidgets.QCheckBox(self.centralwidget)
@@ -247,6 +265,8 @@ class Ui_AnglesValues(object):
         self.LayoutFirstMode.addWidget(self.CurrentKey)
         self.gridLayout_2 = QtWidgets.QGridLayout()
         self.gridLayout_2.setObjectName("gridLayout_2")
+
+        #finger shifter parameters
         self.FingerShifter = QtWidgets.QComboBox(self.centralwidget)
         self.FingerShifter.setObjectName("FingerShifter")
         self.FingerShifter.addItem("")
@@ -260,6 +280,8 @@ class Ui_AnglesValues(object):
         self.ShifterLabel.setObjectName("ShifterLabel")
         self.gridLayout_2.addWidget(self.ShifterLabel, 0, 0, 1, 1)
         self.LayoutFirstMode.addLayout(self.gridLayout_2)
+
+
         self.gridLayout.addLayout(self.LayoutFirstMode, 2, 0, 1, 1)
         AnglesValues.setCentralWidget(self.centralwidget)
         self.menubar = QtWidgets.QMenuBar(AnglesValues)
@@ -340,10 +362,16 @@ class Ui_AnglesValues(object):
 
 
     def set_reInit(self):
+        '''
+        reinitialization of the window
+        '''
         self.reInit = True
 
 
     def init_threshold_sliders(self,values):
+        '''
+        initialiaze the values of the threshold based on the values of the config file
+        '''
         self.dia.ThumbThresh.setValue(values[0])
         self.dia.IndexThresh.setValue(values[1])
         self.dia.MiddleThresh.setValue(values[2])
@@ -352,23 +380,30 @@ class Ui_AnglesValues(object):
         self.dia.WristThresh.setValue(values[5])
 
     def update_threshold(self):
-       self.thresh_thumb = self.dia.ThumbThresh.value()
-       self.thresh_index = self.dia.IndexThresh.value()
-       self.thresh_middle = self.dia.MiddleThresh.value()
-       self.thresh_ring = self.dia.RingThresh.value()
-       self.thresh_pinky = self.dia.PinkyThresh.value()
-       self.thresh_wrist = self.dia.WristThresh.value()
+        '''
+        initialiaze the values of the threshold based on the values of the setting window
+        '''
 
-       self.dia.ThumbThreshValue.setText(str(self.thresh_thumb))
-       self.dia.IndexThreshValue.setText(str(self.thresh_index))
-       self.dia.MiddleThreshValue.setText(str(self.thresh_middle))
-       self.dia.RingThreshValue.setText(str(self.thresh_ring))
-       self.dia.PinkyThreshValue.setText(str(self.thresh_pinky))
-       self.dia.WristThreshValue.setText(str(self.thresh_wrist))
+        self.thresh_thumb = self.dia.ThumbThresh.value()
+        self.thresh_index = self.dia.IndexThresh.value()
+        self.thresh_middle = self.dia.MiddleThresh.value()
+        self.thresh_ring = self.dia.RingThresh.value()
+        self.thresh_pinky = self.dia.PinkyThresh.value()
+        self.thresh_wrist = self.dia.WristThresh.value()
 
-       self.bar_origin_threshold = [self.thresh_thumb, self.thresh_index, self.thresh_middle, self.thresh_ring, self.thresh_pinky, self.thresh_wrist]
+        self.dia.ThumbThreshValue.setText(str(self.thresh_thumb))
+        self.dia.IndexThreshValue.setText(str(self.thresh_index))
+        self.dia.MiddleThreshValue.setText(str(self.thresh_middle))
+        self.dia.RingThreshValue.setText(str(self.thresh_ring))
+        self.dia.PinkyThreshValue.setText(str(self.thresh_pinky))
+        self.dia.WristThreshValue.setText(str(self.thresh_wrist))
+
+        self.bar_origin_threshold = [self.thresh_thumb, self.thresh_index, self.thresh_middle, self.thresh_ring, self.thresh_pinky, self.thresh_wrist]
 
     def update_key(self, index):
+        '''
+        change the parameter of the simulation depending on the mode
+        '''
         self.FingerKeyNumber = [self.ThumbKey.currentIndex(), self.IndexKey.currentIndex(),
                                 self.MiddleKey.currentIndex(), self.RingKey.currentIndex(),
                                 self.PinkyKey.currentIndex(), self.WristKey.currentIndex()]
@@ -378,6 +413,9 @@ class Ui_AnglesValues(object):
             self.KeyAllFingersUsedInit=self.FingerKeyNumber
 
     def check_no_other_finger_pressed(self, value):
+        '''
+        checks that no other finger is pressed
+        '''
         key_released = True
         for i in range(6):
             if i != self.FingerShifter.currentIndex() and int(value[i])> self.bar_origin_threshold[i]:
@@ -385,18 +423,15 @@ class Ui_AnglesValues(object):
         return key_released
 
     def ChangingValue(self,value):
+        '''
+        change the value of the evolution bar and check whether an action needs to be done or not
+        '''
         self.ThumbValue.setValue(value[0])
         self.IndexValue.setValue(value[1])
         self.MiddleValue.setValue(value[2])
         self.RingValue.setValue(value[3])
         self.PinkyValue.setValue(value[4])
         self.WristValue.setValue(value[5])
-
-        #print('selfqctivstedfinger',self.ActivatedFinger[self.FingerShifter.currentIndex()])
-        ''' print('bar_tresh:', self.bar_origin_threshold[self.FingerShifter.currentIndex()])
-        print('tresh',self.thresh_thumb)
-        print('value',value[self.FingerShifter.currentIndex()])
-        print('thumb_value',self.ThumbValue.value())'''
 
         if self.ModeSelector.currentText() == 'Shifter Mode':
             if not self.ActivatedFinger[self.FingerShifter.currentIndex()]:
@@ -507,6 +542,9 @@ class Ui_AnglesValues(object):
 
 
     def update_mode(self):
+        '''
+        change the design of the window depending on the used mode
+        '''
         if self.ModeSelector.currentText() == 'All Fingers Mode':
             self.FingerKeyNumber=self.KeyAllFingersUsedInit
             self.CurrentKey.setHidden(True)
@@ -582,6 +620,9 @@ class Ui_AnglesValues(object):
 
 
     def retranslateUi(self, AnglesValues):
+        '''
+        labels
+        '''
         _translate = QtCore.QCoreApplication.translate
         AnglesValues.setWindowTitle(_translate("AnglesValues", "Angle Value"))
         self.ModeSelector.setItemText(0, _translate("AnglesValues", "Shifter Mode"))
