@@ -86,6 +86,7 @@ class Interface():
         # DEFAULT PARAMS
         #self.hand2use = self.config.get("options","hand2use")
         self.labels_buttons = ast.literal_eval(self.config.get("options", "labels_buttons"))
+        self.index_buttons = ast.literal_eval(self.config.get("options", "index_buttons"))
         # False only for checking script
         #Maybe remove this
         self.use_setup = self.config.getboolean("options","use_setup") 
@@ -103,6 +104,7 @@ class Interface():
         self.bar_h = np.zeros((NB_INPUTS))
 
         # Initialisation our window:
+        mainwin.KeyAllFingersUsedInit = self.index_buttons
         mainwin.CurrentKey.setText(OPTIONS[self.current_key])
 
 
@@ -186,6 +188,7 @@ class Interface():
 
         #show visualizer or not
         mainwin.Visualizer.setChecked(self.show_visualizer)
+        
 
         mainwin.ThumbValue.setValue(0)
         mainwin.IndexValue.setValue(0)
@@ -501,11 +504,16 @@ class Interface():
                 self.slider_value[3]) + "," + str(self.slider_value[2]) + "," + str(self.slider_value[1]) + "," + str(
                 self.slider_value[0]) + "]"
             self.config.set("drawing", "bar_origin_threshold", data)'''
-
+        mainwin.KeyAllFingersUsedInit
         data = "['" + str(self.labels_buttons[0]) + "','" + str(self.labels_buttons[1]) + "','" + str(
             self.labels_buttons[2]) + "','" + str(self.labels_buttons[3]) + "','" + str(
             self.labels_buttons[4]) + "','" + str(self.labels_buttons[5]) + "']"
         self.config.set("options", "labels_buttons", data)
+
+        data = "[" + str(mainwin.KeyAllFingersUsedInit[0]) + "," + str(mainwin.KeyAllFingersUsedInit[1]) + "," + str(
+            mainwin.KeyAllFingersUsedInit[2]) + "," + str(mainwin.KeyAllFingersUsedInit[3]) + "," + str(
+            mainwin.KeyAllFingersUsedInit[4]) + "," + str(mainwin.KeyAllFingersUsedInit[5]) + "]"
+        self.config.set("options", "index_buttons", data)
 
         with open(self.config_file + '.bak', 'w') as configfile:
             self.config.write(configfile)
