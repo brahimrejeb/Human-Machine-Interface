@@ -38,7 +38,7 @@ class LeapMotionListener(Leap.Listener):
     finger_rest_ring = None
     finger_rest_pinky = None
     finger_rest_wrist = None
-
+    count_init = 0
     # Check if init
     init = True
 
@@ -144,7 +144,9 @@ class LeapMotionListener(Leap.Listener):
                         self.finger_rest_ring = Ring_distal_bone.next_joint - hand.palm_position
                         self.finger_rest_pinky = Pinky_distal_bone.next_joint - hand.palm_position
                         self.finger_rest_wrist = hand.palm_position.y
-                        self.init = False
+                        self.count_init+=1
+                        if self.count_init>20:
+                            self.init = False
 
                     # SIMPLE MODE METRICS (distance to the palm for the thumb and angles for the other fingers see report for more information)
                     self.distance[0] = Thumb_distal_bone.center.distance_to(
@@ -192,7 +194,7 @@ class LeapMotionListener(Leap.Listener):
                     self.distance_performance[4] = self.finger_rest_pinky.distance_to(
                         Pinky_distal_bone.next_joint - hand.palm_position)
                     self.distance_performance[5] = hand.palm_position.y - self.finger_rest_wrist
-  
+                    print(self.distance_performance[0])
         return self.palm, self.distance, self.advance_distance, self.distance_performance
 
 
