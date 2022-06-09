@@ -194,7 +194,7 @@ class LeapMotionListener(Leap.Listener):
                     self.distance_performance[4] = self.finger_rest_pinky.distance_to(
                         Pinky_distal_bone.next_joint - hand.palm_position)
                     self.distance_performance[5] = hand.palm_position.y - self.finger_rest_wrist
-                    print(self.distance_performance[0])
+
         return self.palm, self.distance, self.advance_distance, self.distance_performance
 
 
