@@ -626,8 +626,8 @@ class Ui_AnglesValues(object):
         _translate = QtCore.QCoreApplication.translate
         AnglesValues.setWindowTitle(_translate("AnglesValues", "Angle Value"))
         self.ModeSelector.setItemText(0, _translate("AnglesValues", "Shifter Mode"))
-        self.ModeSelector.setItemText(1, _translate("AnglesValues", "All fingers used"))
-        self.ModeSelector.setItemText(2, _translate("AnglesValues", "Advanced Movements"))
+        self.ModeSelector.setItemText(1, _translate("AnglesValues", "All fingers used mode"))
+        self.ModeSelector.setItemText(2, _translate("AnglesValues", "Advanced Movements mode"))
         self.Thumb.setText(_translate("AnglesValues", "Thumb"))
         self.ThumbIndex.setText(_translate("AnglesValues", "Thumb-Index"))
         self.ThumbMiddle.setText(_translate("AnglesValues", "Thumb-Middle"))

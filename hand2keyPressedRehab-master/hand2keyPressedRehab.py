@@ -106,6 +106,12 @@ class Interface():
         mainwin.KeyAllFingersUsedInit = self.index_buttons
         mainwin.CurrentKey.setText(OPTIONS[self.current_key])
 
+        mainwin.ThumbKey.setCurrentIndex(self.index_buttons[0])
+        mainwin.IndexKey.setCurrentIndex(self.index_buttons[1])
+        mainwin.MiddleKey.setCurrentIndex(self.index_buttons[2])
+        mainwin.RingKey.setCurrentIndex(self.index_buttons[3])
+        mainwin.PinkyKey.setCurrentIndex(self.index_buttons[4])
+        mainwin.WristKey.setCurrentIndex(self.index_buttons[5])
 
         # DATA RECORDING
         if self.record_data:
