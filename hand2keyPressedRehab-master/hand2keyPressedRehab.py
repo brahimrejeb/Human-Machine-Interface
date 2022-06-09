@@ -16,7 +16,6 @@ import time
 import configparser
 import ast
 import sys
-import win32process
 from pygame import mixer
 from tkinter import *
 import subprocess
@@ -88,7 +87,6 @@ class Interface():
         self.labels_buttons = ast.literal_eval(self.config.get("options", "labels_buttons"))
         self.index_buttons = ast.literal_eval(self.config.get("options", "index_buttons"))
         self.use_setup = self.config.getboolean("options","use_setup") 
-        self.close_cmd = self.config.getboolean("options","close_cmd")
 
         # by default the sound is off
         self.use_sound = self.config.getboolean("options","use_sound")
@@ -128,15 +126,7 @@ class Interface():
         self.sound_path = r'.\Sound'
         if not os.path.exists(self.sound_path) and self.use_sound:
             self.loading_sound_on_computer(OPTIONS)
-        
-        # CLOSE TERMINAL 
-        hwnd = ctypes.windll.kernel32.GetConsoleWindow()
-        if hwnd != 0 and self.close_cmd:
-            ctypes.windll.user32.ShowWindow(hwnd, 0)
-            ctypes.windll.kernel32.CloseHandle(hwnd)
-            _, pid = win32process.GetWindowThreadProcessId(hwnd)
-            os.system('taskkill /PID ' + str(pid) + ' /f')
-        
+
         # READING KEYBOARD
         self.keyboard = Controller()
 
