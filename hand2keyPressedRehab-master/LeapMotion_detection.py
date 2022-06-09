@@ -1,34 +1,48 @@
 ###########################################################
 # hand2keyPressedRehab
-# 16/07/2020 Lausanne,Switzerland
+# 10/06/2022 Lausanne,Switzerland
 # LeapMotion Solution
 # Contact: hackahealth.geneva@gmail.com
 # Authors: Sixto Alcoba-Banqueri (V1), Odile Andres, Nada Guerraoui, Thomas Peeters, Brahim Rejeb (V2)
 # (include your names if you do any collaboration in the code)
 ###########################################################
-
+ 
+#Import required librairies
 import sys
 import Leap
-import _thread
-import time
-import numpy as np
 
+
+#Define LeapMotion Listener using the API see the link for more informations : https://developer-archive.leapmotion.com/documentation/python/api/Leap.Listener.html
 
 class LeapMotionListener(Leap.Listener):
+
     finger_names = ['Thumb', 'Index', 'Middle', 'Ring', 'Pinky', 'Wrist']
     bone_names = ['Metacarpal', 'Proximal', 'Intermediate', 'Distal']
+    #metrics for simple mode
     distance = [None, None, None, None, None, None]
+    #metrics for advanced mode
     advance_distance = [None, None, None, None, None, None]
+    #distance to the palm (index, middle, ring, pinky)
     palm_distance = [None, None, None, None]
+    #palm coordinates
     palm = [None, None, None]
+
     print_one = True
+
+    # Data used for performance :
+
+    # Get coordinates of each finger at rest
     finger_rest_thumb = None
     finger_rest_index = None
     finger_rest_middle = None
     finger_rest_ring = None
     finger_rest_pinky = None
     finger_rest_wrist = None
+
+    # Check if init
     init = True
+
+    # Save the actual distance between the tip of each finger at rest and the actual position of the tip
     distance_performance = [None, None, None, None, None, None]
 
     def on_init(self, controller):
@@ -40,13 +54,22 @@ class LeapMotionListener(Leap.Listener):
     def on_exit(self, controller):
         print("Exited")
 
+    
     def on_frame(self, controller):
+        '''
+        Function call at each new frame to extract data of the hand
+
+        '''
+        #get the frame
         frame = controller.frame()
+
+        #Initialisation
         Index_found = False
         Thumb_found = False
         Middle_found = False
         Pinky_found = False
         Ring_found = False
+
         self.distance[0] = None
         self.distance[1] = None
         self.distance[2] = None
@@ -77,12 +100,12 @@ class LeapMotionListener(Leap.Listener):
         self.palm[1] = None
         self.palm[2] = None
 
+        #Extract hand informations if detected 
         for finger in frame.fingers:
 
             if finger.type == Leap.Finger.TYPE_THUMB:
                 Thumb_distal_bone = finger.bone(Leap.Bone.TYPE_DISTAL)
-                Thumb_proximal_bone = finger.bone(
-                    Leap.Bone.TYPE_INTERMEDIATE)  # for thumb we use intermediate and proximal because there is no metacarpal
+                Thumb_proximal_bone = finger.bone(Leap.Bone.TYPE_INTERMEDIATE)  # for thumb we use intermediate and proximal because there is no metacarpal
                 Thumb_meta_bone = finger.bone(Leap.Bone.TYPE_PROXIMAL)
                 Thumb_found = True
 
@@ -111,11 +134,6 @@ class LeapMotionListener(Leap.Listener):
                 Pinky_found = True
 
             if (Index_found and Thumb_found and Middle_found and Pinky_found and Ring_found):
-                #					self.distance[0]= Thumb_distal_bone.center.distance_to(Thumb_distal_bone.center)
-                #					self.distance[1]= Thumb_distal_bone.center.distance_to(Index_distal_bone.center)
-                #					self.distance[2]= Thumb_distal_bone.center.distance_to(Middle_distal_bone.center)
-                #					self.distance[3]= Thumb_distal_bone.center.distance_to(Ring_distal_bone.center)
-                #					self.distance[4]= Thumb_distal_bone.center.distance_to(Pinky_distal_bone.center)
 
                 for hand in frame.hands:
 
@@ -127,7 +145,8 @@ class LeapMotionListener(Leap.Listener):
                         self.finger_rest_pinky = Pinky_distal_bone.next_joint - hand.palm_position
                         self.finger_rest_wrist = hand.palm_position.y
                         self.init = False
-                    # SIMPLE MODE
+
+                    # SIMPLE MODE METRICS (distance to the palm for the thumb and angles for the other fingers see report for more information)
                     self.distance[0] = Thumb_distal_bone.center.distance_to(
                         hand.palm_position)  # distance between tip of the thumb and palm position
                     self.distance[1] = (Index_distal_bone.next_joint - Index_proximal_bone.prev_joint).angle_to(
@@ -140,26 +159,27 @@ class LeapMotionListener(Leap.Listener):
                         Pinky_meta_bone.prev_joint - Pinky_proximal_bone.prev_joint)
                     self.distance[5] = (hand.palm_position.y)
 
+                    # ADVANCED MODE METRICS (distance from the thumb to the other fingers see report for more information )
+
                     self.palm_distance[0] = Index_distal_bone.center.distance_to(hand.palm_position)
                     self.palm_distance[1] = Middle_distal_bone.center.distance_to(hand.palm_position)
                     self.palm_distance[2] = Ring_distal_bone.center.distance_to(hand.palm_position)
                     self.palm_distance[3] = Pinky_distal_bone.center.distance_to(hand.palm_position)
-                    # ADVANCED MODE
-                    # self.advance_distance[0] = Thumb_distal_bone.next_joint.distance_to(Thumb_proximal_bone.prev_joint) # distance between tip of the thumb and palm position
+                    
                     self.advance_distance[0] = Thumb_distal_bone.center.distance_to(hand.palm_position)
                     self.advance_distance[1] = Thumb_distal_bone.center.distance_to(Index_distal_bone.next_joint)
                     self.advance_distance[2] = Thumb_distal_bone.center.distance_to(Middle_distal_bone.next_joint)
                     self.advance_distance[3] = Thumb_distal_bone.center.distance_to(Ring_distal_bone.next_joint)
                     self.advance_distance[4] = Thumb_distal_bone.center.distance_to(Pinky_distal_bone.next_joint)
-                    self.advance_distance[5] = self.palm_distance[0] + self.palm_distance[1] + self.palm_distance[2] + \
-                                               self.palm_distance[3]
-
-                    # print(Thumb_distal_bone.next_joint)
+                    self.advance_distance[5] = self.palm_distance[0] + self.palm_distance[1] + self.palm_distance[2] + self.palm_distance[3]
+                    
+                    #get the coordinates of the center of the palm
 
                     self.palm[0] = hand.palm_position.x
                     self.palm[1] = hand.palm_position.y
                     self.palm[2] = hand.palm_position.z
-                    #
+                    
+                    #Get performance distance (how much finger has move from the rest position)
 
                     self.distance_performance[0] = self.finger_rest_thumb.distance_to(
                         Thumb_distal_bone.next_joint - hand.palm_position)
@@ -172,9 +192,7 @@ class LeapMotionListener(Leap.Listener):
                     self.distance_performance[4] = self.finger_rest_pinky.distance_to(
                         Pinky_distal_bone.next_joint - hand.palm_position)
                     self.distance_performance[5] = hand.palm_position.y - self.finger_rest_wrist
-                    #print(self.distance_performance[0])
-        # print('distance-leap fichier', self.distance)
-        # print('palm-leap fichier', self.palm)
+  
         return self.palm, self.distance, self.advance_distance, self.distance_performance
 
 
