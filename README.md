@@ -61,5 +61,5 @@ You can also follow this tutorial for that : [a link](https://www.youtube.com/wa
 Leapmotion allows to measure the position in space of many specific points in the hand. We will use those measures to detect some specific movement. 
 
 <img src="interface.jpg" width="500" height="500">
-<img src="device.jpg)" width="500" height="500">
+<img src="device.jpg" width="500" height="500">
 
