@@ -63,7 +63,7 @@ Leapmotion allows to measure the position in space of many specific points in th
 
 
 <p align="center">
-  <img width="500" height="500" src="interface.jpg">
+  <img width="500" height="500" src="final_solution.jpg">
 </p>
 <p align="center">
   <img width="500" height="600" src="device.jpg">
