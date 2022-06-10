@@ -624,7 +624,7 @@ class Ui_AnglesValues(object):
         labels
         '''
         _translate = QtCore.QCoreApplication.translate
-        AnglesValues.setWindowTitle(_translate("AnglesValues", "Angle Value"))
+        AnglesValues.setWindowTitle(_translate("AnglesValues", "Human Machine Interface"))
         self.ModeSelector.setItemText(0, _translate("AnglesValues", "Shifter Mode"))
         self.ModeSelector.setItemText(1, _translate("AnglesValues", "All Fingers Mode"))
         self.ModeSelector.setItemText(2, _translate("AnglesValues", "Advanced Mode"))
